@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.rhcloud.jop.formfactor.views.CreateActivity" >
+
+    <item android:id="@+id/menu_open_import_form_settings"
+		android:title="@string/settings_title"
+		android:icon="@drawable/ic_action_overflow"
+		android:showAsAction="always" />
+
+</menu>

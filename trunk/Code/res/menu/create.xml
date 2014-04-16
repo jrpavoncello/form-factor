@@ -1,0 +1,32 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.rhcloud.jop.formfactor.CreateActivity" >
+
+    <item android:id="@+id/menu_create_edit_question_new"
+		android:title="@string/menu_create_add_new"
+		android:icon="@drawable/ic_action_new"
+		android:showAsAction="always" >
+
+	  	<menu>
+		    <item android:id="@+id/menu_create_edit_response_delete"
+				android:title="@string/menu_create_add_new_multiple_choice"
+				android:icon="@drawable/ic_action_multiple_choice"
+				android:showAsAction="never" />
+		    
+		    <item android:id="@+id/activity_create_add_new_free_response"
+				android:title="@string/menu_create_add_new_free_response"
+				android:icon="@drawable/ic_action_free_response"
+				android:showAsAction="never" />
+		
+		    <item android:id="@+id/activity_create_add_new_free_draw"
+				android:title="@string/menu_create_add_new_free_draw"
+				android:icon="@drawable/ic_action_free_draw"
+				android:showAsAction="never" />
+		</menu>
+	</item>
+
+    <item android:id="@+id/menu_create_settings"
+		android:title="@string/settings_title"
+		android:icon="@drawable/ic_action_overflow"
+		android:showAsAction="always" />
+</menu>

@@ -1,0 +1,93 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+        Base application theme, dependent on API level. This theme is replaced
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+    -->
+    <style name="AppBaseTheme" parent="@style/Theme.AppCompat">
+        <!--
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+        -->
+        <item name="android:popupMenuStyle">@style/form_factor_popup_menu_style</item>
+	
+	    <item name="popupMenuStyle">@style/form_factor_popup_menu_style</item>
+	    <item name="android:popupMenuStyle">@style/form_factor_popup_menu_style</item>
+        
+        <item name="android:itemTextAppearance">@style/form_factor_item_text_appearance</item>
+    </style>
+
+    <!-- Application theme. -->
+    <style name="AppTheme" parent="AppBaseTheme">
+        <item name="android:actionBarStyle">@style/form_factor_action_bar_style</item>
+        <item name="android:actionBarTabTextStyle">@style/form_factor_action_bar_tab_text</item>
+        <item name="android:windowBackground">@color/window_background</item>
+        <item name="android:textViewStyle">@style/form_factor_text_view_style</item>
+        <item name="android:editTextStyle">@style/form_factor_edit_text_style</item>
+        <item name="android:imageButtonStyle">@style/form_factor_image_button_style</item>
+        <item name="android:buttonStyle">@style/form_factor_button_style</item>
+        <item name="android:checkboxStyle">@style/form_factor_checkbox_style</item>
+    </style>
+    
+    <style name="form_factor_text_view_style" parent="@android:style/Widget.TextView">
+        <item name="android:textColor">@color/text_view_text_plain</item>
+    </style>
+    
+    <style name="form_factor_checkbox_style" parent="@android:style/Widget.Holo.CompoundButton.CheckBox">
+    </style>
+    
+    <style name="form_factor_item_text_appearance" parent="@android:style/Widget.TextView">
+        <item name="android:textColor">@color/text_view_text_menu</item>
+    </style>
+
+    <style name="form_factor_popup_menu_style" parent="@style/Widget.AppCompat.PopupMenu">
+        <item name="android:popupBackground">@color/drawer_background</item>
+        
+        <item name="android:dropDownListViewStyle">@style/form_factor_drop_down_list_view_style</item>
+        <item name="dropDownListViewStyle">@style/form_factor_drop_down_list_view_style</item>
+        
+        <item name="android:listPopupWindowStyle">@style/form_factor_drop_down_list_view_style</item>
+        <item name="listPopupWindowStyle">@style/form_factor_drop_down_list_view_style</item>
+        <item name="android:textColor">@color/text_view_text_menu</item>
+    </style>
+    
+    <style name="form_factor_drop_down_list_view_style" parent="@style/Widget.AppCompat.ListView.DropDown">
+        <item name="android:popupBackground">@color/drawer_background</item>
+        <item name="android:textColor">@color/text_view_text_menu</item>
+    </style>
+    
+    <style name="form_factor_edit_text_style" parent="@android:style/Widget.EditText">
+        <item name="android:textColor">@color/text_view_text_plain</item>
+        <item name="android:background">@color/text_view_text_background</item>
+    </style>
+    
+    <style name="form_factor_button_style" parent="@android:style/Widget.Holo.Light.Button">
+        <item name="android:background">@drawable/button_selector</item>
+        <item name="android:textColor">@color/action_bar_title</item>
+    </style>
+    
+    <style name="form_factor_image_button_style" parent="@android:style/Widget.Holo.Light.ImageButton">
+        <item name="android:background">@drawable/button_selector</item>
+        <item name="android:textColor">@color/action_bar_title</item>
+    </style>
+
+    <style name="form_factor_action_bar_style" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
+        <item name="android:titleTextStyle">@style/form_factor_action_bar_title</item>
+        <item name="android:icon">@drawable/ic_form_factor</item>
+        <item name="android:background">@color/action_bar_background</item>
+        <item name="android:backgroundStacked">@color/action_bar_background</item>
+    </style>
+
+    <style name="form_factor_action_bar_title"
+           parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/action_bar_title</item>
+        <item name="android:background">@color/action_bar_background</item>
+    </style>
+
+    <style name="form_factor_action_bar_tab_text"
+           parent="@android:style/Widget.Holo.ActionBar.TabText">
+        <item name="android:textColor">@color/action_bar_title</item>
+    </style>
+    
+</resources>

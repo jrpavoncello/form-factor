@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_multiple_choice_response_edit"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="left">
+    
+    <include layout="@layout/drawer_menu" />
+    
+	<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	    xmlns:tools="http://schemas.android.com/tools"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:orientation="vertical"
+	    android:id="@+id/activity_multiple_choice_response_edit_container" >
+	    
+	    <LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+	    	android:id="@+id/activity_multiple_choice_response_edit_items_container"
+			android:layout_gravity="top" >
+		    
+		    <LinearLayout 
+			    android:layout_width="fill_parent"
+			    android:layout_height="84dp"
+			    android:orientation="horizontal"
+			    android:background="@color/activity_main_recent_background"
+			    android:layout_gravity="left|center_vertical" >
+		    
+			   	<FrameLayout
+				    android:layout_width="124dp"
+				    android:layout_height="fill_parent"
+				    android:paddingBottom="5dp"
+				    android:paddingTop="5dp"
+			        android:background="@color/action_bar_background_secondary" >
+				    
+				    <TextView 
+				        android:layout_width="124dp"
+				        android:layout_height="wrap_content"
+	   					android:paddingLeft="10dp"
+				    	android:layout_gravity="left|center_vertical"
+				        android:id="@+id/activity_multiple_choice_response_edit_text"
+			   			android:textAppearance="?android:attr/textAppearanceMedium"
+				        android:text="@string/multiple_choice_settings_response_text"
+				        android:textColor="@android:color/white" />
+			   	</FrameLayout>
+		
+			   	<View
+				    android:layout_width="3dp"
+				    android:layout_height="fill_parent"
+				    android:background="@color/drawer_menu_divider" />
+			    
+			    <EditText 
+			        android:id="@+id/activity_multiple_choice_response_edit_response"
+			        android:layout_width="fill_parent"
+			        android:layout_height="fill_parent"
+			        android:inputType=""
+					android:textCursorDrawable="@null"
+			        android:paddingLeft="10dp"
+			        android:lines="2" />
+		   	</LinearLayout>
+		
+		   	<View
+			    android:layout_width="fill_parent"
+			    android:layout_height="1dp"
+			    android:background="@color/drawer_menu_divider" />
+		
+		   	<View
+			    android:layout_width="fill_parent"
+			    android:layout_height="1dp"
+			    android:background="@color/drawer_menu_divider" />
+	   	
+		    <View
+			    android:layout_width="fill_parent"
+			    android:layout_height="fill_parent"
+			    android:background="@color/window_background"/>
+	   	</LinearLayout>
+	   	
+	   	<LinearLayout
+		    android:layout_width="fill_parent"
+		    android:layout_height="48dp"
+		    android:orientation="horizontal"
+		    android:layout_gravity="bottom" >
+	   	    
+	   	    <Button
+	   	    	android:id="@+id/activity_multiple_choice_response_edit_cancel"
+			    android:layout_width="fill_parent"
+			    android:layout_height="fill_parent"
+			    android:layout_weight="1.0"
+			    android:text="@string/action_cancel"
+			    android:onClick="onActionClicked"/>
+	   	    
+			<FrameLayout 
+			    android:layout_width="5dp"
+			    android:layout_height="48dp"
+			    android:background="@color/action_bar_background" >
+		
+			   	<View
+				    android:layout_width="2dp"
+				    android:layout_height="fill_parent"
+				    android:layout_marginTop="4dp"
+				    android:layout_marginBottom="4dp"
+				    android:layout_gravity="center_vertical|center"
+				    android:background="@color/drawer_menu_divider" />
+			</FrameLayout>
+		   	
+	   	    <Button
+	   	    	android:id="@+id/activity_multiple_choice_response_edit_save"
+			    android:layout_width="fill_parent"
+			    android:layout_height="fill_parent"
+			    android:layout_weight="1.0"
+			    android:text="@string/action_save"
+			    android:onClick="onActionClicked" />
+	   	</LinearLayout>
+	</FrameLayout>
+</android.support.v4.widget.DrawerLayout>

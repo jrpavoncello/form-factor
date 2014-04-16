@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<string name="app_name">Form Factor</string>
+	<string name="action_close">Close</string>
+	<string name="action_open">Open</string>
+	<string name="action_save">Save</string>
+	<string name="action_cancel">Cancel</string>
+	<string name="activity_complete_title">Complete Form</string>
+	<string name="activity_create_title">Create Form</string>
+	<string name="activity_multiple_choice_response_edit_title">Edit Choice</string>
+	<string name="activity_multiple_choice_question_edit_title">Edit Question</string>
+	<string name="activity_main_title">Welcome</string>
+	<string name="drawer_menu_title">Quick Menu</string>
+	<string name="item_detail_title">Item Detail</string>
+	<string name="settings_title">Settings</string>
+	<string name="activity_main_swipe_complete">Complete</string>
+	<string name="activity_main_swipe_create">Create</string>
+	<string name="activity_main_welcome_to">Welcome to&#8230;</string>
+	<string name="activity_main_recent_activity">Recent Activity</string>
+	<string name="activity_create_description_header">Description</string>
+	<string name="menu_create_add_new">Add</string>
+	<string name="menu_create_add_new_free_response">Free Response</string>
+	<string name="menu_create_add_new_free_draw">Free Draw</string>
+	<string name="menu_create_add_new_multiple_choice">Multiple Choice</string>
+	<string name="menu_create_edit_response_edit">Edit Choice</string>
+	<string name="menu_create_edit_response_delete">Delete Choice</string>
+	<string name="menu_create_response_add">Add Choice</string>
+	<string name="menu_create_question_edit">Edit Question</string>
+	<string name="menu_create_question_delete">Delete Question</string>
+	<string name="menu_create_question_image">Set Image</string>
+	<string name="question_hint">Ask me anything&#8230;</string>
+	<string name="multiple_choice_settings_response_min_responses_text">Min Answers</string>
+	<string name="multiple_choice_settings_response_max_responses_text">Max Answers</string>
+	<string name="multiple_choice_settings_response_text">Response</string>
+	<string name="title_activity_multiple_choice_settings">MultipleChoiceSettings</string>
+	<string name="hello_world">Hello world!</string>
+	<string name="action_settings">Settings</string>
+	<string name="title_activity_multiple_choice_response_edit">MultipleChoiceAnswerEdit</string>
+	<string name="alert_dialog_problem">Problem</string>
+	<string name="constraint_must_be_a_smaller_number">&#032;must be a smaller number</string>
+	<string name="constraint_must_be_equal_to_or_lower_than">&#032;must be equal to or lower than&#032;</string>
+	<string name="Specify_a">Specify a&#032;</string>
+	<string name="default_multiple_choice_response">Example Response</string>
+	<string name="default_content_description">image</string>
+
+</resources>

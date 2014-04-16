@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.rhcloud.jop.formfactor.views.questions.QuestionViewGroup" >
+
+    <item android:id="@+id/menu_create_question_set_image"
+		android:title="@string/menu_create_question_image"
+		android:icon="@drawable/ic_action_web"
+        android:showAsAction="never" />
+
+    <item android:id="@+id/menu_create_question_delete"
+		android:title="@string/menu_create_question_delete"
+		android:icon="@drawable/ic_action_delete"
+        android:showAsAction="never" />
+
+</menu>

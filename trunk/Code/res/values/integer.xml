@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="default_min_responses">1</integer>
+    <integer name="default_max_responses">1</integer>
+    <integer name="constraint_question_max_length">1000</integer>
+    <integer name="constraint_answer_max_length">100</integer>
+    <integer name="constraint_max_responses">100</integer>
+</resources>

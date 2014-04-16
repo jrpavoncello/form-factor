@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.rhcloud.jop.formfactor"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="14"
+        android:targetSdkVersion="17" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="com.rhcloud.jop.formfactor.views.MainActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.rhcloud.jop.formfactor.views.OpenImportForm"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.rhcloud.jop.formfactor.views.CreateActivity"
+            android:label="@string/activity_create_title"
+            android:parentActivityName="com.rhcloud.jop.formfactor.views.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.rhcloud.jop.formfactor.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.rhcloud.jop.formfactor.views.questions.MultipleChoiceQuestionEditActivity"
+            android:label="@string/title_activity_multiple_choice_settings"
+            android:parentActivityName="com.rhcloud.jop.formfactor.views.CreateActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.rhcloud.jop.formfactor.views.CreateActivity" />
+        </activity>
+        <activity
+            android:name="com.rhcloud.jop.formfactor.views.questions.MultipleChoiceResponseEditActivity"
+            android:label="@string/title_activity_multiple_choice_response_edit"
+            android:parentActivityName="com.rhcloud.jop.formfactor.views.CreateActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.rhcloud.jop.formfactor.views.CreateActivity" />
+        </activity>
+    </application>
+
+</manifest>

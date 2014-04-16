@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.rhcloud.jop.formfactor.MultipleChoiceResponseEdit" >
+
+    <item android:id="@+id/menu_create_response_edit"
+		android:title="@string/menu_create_edit_response_edit"
+		android:icon="@drawable/ic_action_free_draw"
+        android:showAsAction="never" />
+
+    <item android:id="@+id/menu_create_edit_response_delete"
+		android:title="@string/menu_create_edit_response_delete"
+		android:icon="@drawable/ic_action_delete"
+        android:showAsAction="never" />
+
+</menu>

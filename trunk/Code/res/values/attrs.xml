@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="GIFPlayerView">
+        <attr name="src" format="reference" />
+    </declare-styleable>
+    
+    <declare-styleable name="view_group_question">
+        <attr name="text" format="string" />
+        <attr name="image_dimensions" format="dimension" />
+        <attr name="image" format="color|reference" />
+    </declare-styleable>
+</resources>

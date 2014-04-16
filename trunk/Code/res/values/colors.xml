@@ -1,0 +1,23 @@
+<resources>
+
+    <color name="action_bar_background">#0b61a4</color>
+    <color name="action_bar_background_focused">#3dabd9</color>
+    <color name="action_bar_background_unfocused">#3dabd9</color>
+    <color name="action_bar_background_secondary">#25567b</color>
+    <color name="action_bar_title">#e8ffff</color>
+    <color name="window_background">#f5f5f5</color>
+    <color name="activity_main_window_background">#f5f5f5</color>
+    <color name="drawer_background">#104570</color>
+    <color name="text_view_text_primary">#1b71b4</color>
+    <color name="text_view_text_secondary">#aaa</color>
+    <color name="text_view_text_background">#ccc</color>
+    <color name="text_view_text_plain">#111</color>
+    <color name="text_view_text_menu">#FFF</color>
+    <color name="drawer_menu_divider">#5586ab</color>
+    <color name="activity_main_recent_background">#66a3d2</color>
+    <color name="header_text">#3F92D2</color>
+    <color name="white_background_divider">#ccc</color>
+    <color name="multiple_choice_checkbox_edit">#e72626</color>
+    <color name="multiple_choice_checkbox_text">#111</color>
+
+</resources>
