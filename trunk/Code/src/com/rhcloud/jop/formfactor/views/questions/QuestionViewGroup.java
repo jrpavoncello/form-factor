@@ -246,12 +246,12 @@ public class QuestionViewGroup extends LinearLayout implements OnMenuItemClickLi
 	
 	protected void setMaxResponses(int maxResponses)
 	{
-		this.mQuestion.MaxResponses = maxResponses;
+		this.mQuestion.Max = maxResponses;
 	}
 
 	protected void setMinResponses(int minResponses)
 	{
-		this.mQuestion.MinResponses = minResponses;
+		this.mQuestion.Min = minResponses;
 	}
 
 	protected void setOnQuestionDeleteListener(OnQuestionDeleteListener listener)

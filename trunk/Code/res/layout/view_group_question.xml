@@ -18,7 +18,7 @@
 	    android:layout_height="wrap_content" >
 	    
 	   	<EditText 
-	   	    android:layout_height = "wrap_content"
+	   	    android:layout_height = "47dp"
 	   	    android:layout_width = "fill_parent"
 	   	    android:id="@+id/question_edit_text"
 			android:paddingLeft="10dp"

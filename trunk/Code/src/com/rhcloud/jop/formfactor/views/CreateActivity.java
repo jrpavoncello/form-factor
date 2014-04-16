@@ -15,7 +15,7 @@ import com.rhcloud.jop.formfactor.domain.services.FormService;
 import com.rhcloud.jop.formfactor.domain.services.UserService;
 import com.rhcloud.jop.formfactor.sqlite.FormFactorDb;
 import com.rhcloud.jop.formfactor.views.MainActivityFragment.DrawerListener;
-import com.rhcloud.jop.formfactor.views.questions.MultipleChoiceViewGroup;
+import com.rhcloud.jop.formfactor.views.questions.MultipleChoiceQuestion;
 import com.rhcloud.jop.formfactor.views.questions.QuestionViewGroup;
 
 import android.app.ActionBar;
@@ -68,8 +68,8 @@ public class CreateActivity extends FormFactorFragmentActivity implements OnQues
 	{
 		Question question = new Question();
 		question.Type = QuestionType.MultipleChoice;
-		question.MinResponses = this.getResources().getInteger(R.integer.default_min_responses);
-		question.MaxResponses = this.getResources().getInteger(R.integer.default_max_responses);
+		question.Min = this.getResources().getInteger(R.integer.default_min_responses);
+		question.Max = this.getResources().getInteger(R.integer.default_max_responses);
 		addMultipleChoice(question);
 	}
 	
@@ -77,7 +77,7 @@ public class CreateActivity extends FormFactorFragmentActivity implements OnQues
 	{
 		LinearLayout questionsView = (LinearLayout)this.findViewById(R.id.activity_create_questions);
 		
-		MultipleChoiceViewGroup multipleChoiceViewGroup = new MultipleChoiceViewGroup(this);
+		MultipleChoiceQuestion multipleChoiceViewGroup = new MultipleChoiceQuestion(this);
 		
 		multipleChoiceViewGroup.setOnQuestionDeleteListener(this);
 		

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/view_group_multiple_choice"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <EditText
+        android:id="@+id/view_group_free_response_edit_text"
+    	android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+       	android:inputType="textCapSentences|textAutoCorrect|textMultiLine"
+		android:textCursorDrawable="@null"
+		android:paddingLeft="10dp"
+		android:paddingRight="10dp"
+		android:background="@color/text_view_text_background" />
+				
+   	<View
+	    android:layout_width="fill_parent"
+	    android:layout_height="1dp"
+	    android:background="@color/drawer_menu_divider" />
+    
+</LinearLayout>

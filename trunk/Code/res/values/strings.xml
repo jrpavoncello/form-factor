@@ -14,6 +14,7 @@
 	<string name="drawer_menu_title">Quick Menu</string>
 	<string name="item_detail_title">Item Detail</string>
 	<string name="settings_title">Settings</string>
+	<string name="activity_question_edit_title">Edit Question</string>
 	<string name="activity_main_swipe_complete">Complete</string>
 	<string name="activity_main_swipe_create">Create</string>
 	<string name="activity_main_welcome_to">Welcome to&#8230;</string>
@@ -30,8 +31,11 @@
 	<string name="menu_create_question_delete">Delete Question</string>
 	<string name="menu_create_question_image">Set Image</string>
 	<string name="question_hint">Ask me anything&#8230;</string>
-	<string name="multiple_choice_settings_response_min_responses_text">Min Answers</string>
-	<string name="multiple_choice_settings_response_max_responses_text">Max Answers</string>
+	<string name="free_response_settings_response_max_text">Max Length</string>
+	<string name="free_response_settings_response_min_text">Min Length</string>
+	<string name="activity_free_response_question_height_text">Height</string>
+	<string name="multiple_choice_settings_response_min_text">Min Answers</string>
+	<string name="multiple_choice_settings_response_max_text">Max Answers</string>
 	<string name="multiple_choice_settings_response_text">Response</string>
 	<string name="title_activity_multiple_choice_settings">MultipleChoiceSettings</string>
 	<string name="hello_world">Hello world!</string>

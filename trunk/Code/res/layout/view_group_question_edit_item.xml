@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/view_group_question_edit_item_container"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" >
+
+	<View
+		android:layout_width="fill_parent"
+		android:layout_height="3dp"
+		android:background="@color/drawer_menu_divider"
+		android:id="@+id/view_group_question_edit_item_divider_01" />
+    
+	<FrameLayout
+		android:layout_width="124dp"
+		android:layout_height="48dp"
+		android:paddingBottom="5dp"
+		android:paddingTop="5dp"
+		android:id="@+id/view_group_question_edit_item_frame_layout"
+		android:background="@color/action_bar_background_secondary"
+		android:layout_below="@id/view_group_question_edit_item_divider_01" >
+	 
+		<TextView 
+			android:id="@+id/view_group_question_edit_item_text"
+			android:layout_width="124dp"
+			android:layout_height="48dp"
+			android:paddingLeft="10dp"
+			android:layout_gravity="left|center_vertical"
+			android:textAppearance="?android:attr/textAppearanceMedium"
+			android:textColor="@android:color/white" />
+	</FrameLayout>
+
+	<View
+		android:layout_width="3dp"
+		android:layout_height="52dp"
+		android:background="@color/drawer_menu_divider"
+		android:id="@+id/view_group_question_edit_item_divider_02"
+		android:layout_toRightOf="@id/view_group_question_edit_item_frame_layout" />
+
+	<EditText 
+		android:id="@+id/view_group_question_edit_item"
+		android:layout_width="fill_parent"
+		android:layout_height="48dp"
+		android:inputType="number"
+		android:paddingLeft="10dp"
+		android:textCursorDrawable="@null"
+		android:layout_toRightOf="@id/view_group_question_edit_item_divider_02" />
+
+	<View
+		android:layout_width="fill_parent"
+		android:layout_height="1dp"
+		android:background="@color/drawer_menu_divider"
+		android:id="@+id/view_group_question_edit_item_divider_03"
+		android:layout_below="@id/view_group_question_edit_item_frame_layout" />
+</RelativeLayout>

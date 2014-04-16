@@ -44,8 +44,8 @@ public class QuestionRepository implements IQuestionRepository
 			values.put(table.FormID.GetName(), question.FormID);
 			values.put(table.Type.GetName(), question.Type.GetIndex());
 			values.put(table.Image.GetName(), question.Image);
-			values.put(table.MaxResponses.GetName(), question.MaxResponses);
-			values.put(table.MinResponses.GetName(), question.MinResponses);
+			values.put(table.Max.GetName(), question.Max);
+			values.put(table.Min.GetName(), question.Min);
 	
 			question.ID = SQLiteHelper.logInsert(TAG_NAME, this.liteDB.insert(table.TABLE_NAME, null, values));
 			
@@ -80,8 +80,8 @@ public class QuestionRepository implements IQuestionRepository
 					question.FormID = cursor.getInt(table.FormID.Index);
 					question.Type = QuestionType.values()[(cursor.getInt(table.Type.Index))];
 					question.Image = cursor.getBlob(table.Image.Index);
-					question.MaxResponses = cursor.getInt(table.MaxResponses.Index);
-					question.MinResponses = cursor.getInt(table.MinResponses.Index);
+					question.Max = cursor.getInt(table.Max.Index);
+					question.Min = cursor.getInt(table.Min.Index);
 					
 					questions.add(question);
 				}
@@ -125,8 +125,8 @@ public class QuestionRepository implements IQuestionRepository
 					question.FormID = cursor.getInt(table.FormID.Index);
 					question.Type = QuestionType.values()[cursor.getInt(table.Type.Index)];
 					question.Image = cursor.getBlob(table.Image.Index);
-					question.MaxResponses = cursor.getInt(table.MaxResponses.Index);
-					question.MinResponses = cursor.getInt(table.MinResponses.Index);
+					question.Max = cursor.getInt(table.Max.Index);
+					question.Min = cursor.getInt(table.Min.Index);
 					
 					questions.add(question);
 				}
@@ -166,8 +166,8 @@ public class QuestionRepository implements IQuestionRepository
 				question.FormID = cursor.getInt(table.FormID.Index);
 				question.Type = QuestionType.values()[cursor.getInt(table.Type.Index)];
 				question.Image = cursor.getBlob(table.Image.Index);
-				question.MaxResponses = cursor.getInt(table.MaxResponses.Index);
-				question.MinResponses = cursor.getInt(table.MinResponses.Index);
+				question.Max = cursor.getInt(table.Max.Index);
+				question.Min = cursor.getInt(table.Min.Index);
 			}
 			
 			this.unitOfWork.CommitTransaction();
@@ -195,8 +195,8 @@ public class QuestionRepository implements IQuestionRepository
 			values.put(table.FormID.GetName(), question.FormID);
 			values.put(table.Type.GetName(), question.Type.GetIndex());
 			values.put(table.Image.GetName(), question.Image);
-			values.put(table.MaxResponses.GetName(), question.MaxResponses);
-			values.put(table.MinResponses.GetName(), question.MinResponses);
+			values.put(table.Max.GetName(), question.Max);
+			values.put(table.Min.GetName(), question.Min);
 	
 			String whereClause = table._ID + " = ?";
 	
@@ -211,7 +211,7 @@ public class QuestionRepository implements IQuestionRepository
 	}
 
 	@Override
-	public void UpdateSettings(long questionID, int minResponses, int maxResponses)
+	public void UpdateSettings(long questionID, int min, int max)
 	{
 		try
 		{
@@ -220,8 +220,8 @@ public class QuestionRepository implements IQuestionRepository
 			ContentValues values = new ContentValues();
 			
 			values.put(table._ID, questionID);
-			values.put(table.MaxResponses.GetName(), maxResponses);
-			values.put(table.MinResponses.GetName(), minResponses);
+			values.put(table.Max.GetName(), max);
+			values.put(table.Min.GetName(), min);
 	
 			String whereClause = table._ID + " = ?";
 	

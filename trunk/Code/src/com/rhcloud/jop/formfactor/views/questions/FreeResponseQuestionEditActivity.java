@@ -34,28 +34,28 @@ import android.widget.TextView;
 import android.text.Editable;
 import android.text.TextWatcher;
 
-public class MultipleChoiceQuestionEditActivity extends FormFactorFragmentActivity implements ActionBar.TabListener, DrawerListener, OnTouchListener, OnFocusChangeListener
+public class FreeResponseQuestionEditActivity extends FormFactorFragmentActivity implements ActionBar.TabListener, DrawerListener, OnTouchListener, OnFocusChangeListener
 {
 	private long mQuestionID = 0;
 	private Question mQuestion;
-	static EditText mMinResponses;
-	static EditText mMaxResponses;
-	static int mConstraintMaxResponses;
+	static EditText mMinLength;
+	static EditText mMaxLength;
+	static int mConstraintMaxLength;
 	static int mConstraintMinResponses;
-	static int mValidMinResponses;
-	static int mValidMaxResponses;
+	static int mValidMinLength;
+	static int mValidMaxLength;
 	
 	private HashSet<Integer> mHasReceivedFocus = new HashSet<Integer>();
 	
-	public MultipleChoiceQuestionEditActivity()
+	public FreeResponseQuestionEditActivity()
 	{
-		super.setData(this, R.id.activity_multiple_choice_question_edit);
+		super.setData(this, R.id.activity_free_response_question_edit);
 	}
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
-		setContentView(R.layout.activity_multiple_choice_question_edit);
+		setContentView(R.layout.activity_free_response_question_edit);
 		super.onCreate(savedInstanceState);
         
         this.setTitle(this.getResources().getString(R.string.drawer_menu_title));
@@ -82,27 +82,27 @@ public class MultipleChoiceQuestionEditActivity extends FormFactorFragmentActivi
         	}
         }
 		
-		mMaxResponses = (EditText)this.findViewById(R.id.activity_multiple_choice_question_edit_answer_max);
-		mMaxResponses.setOnFocusChangeListener(this);
+		mMaxLength = (EditText)this.findViewById(R.id.activity_free_response_question_edit_answer_max);
+		mMaxLength.setOnFocusChangeListener(this);
 		
-		mConstraintMaxResponses = this.getResources().getInteger(R.integer.constraint_question_max);
+		mConstraintMaxLength = this.getResources().getInteger(R.integer.constraint_question_max);
 		
-		if(this.mQuestion != null && mMaxResponses.getText() != null && mMaxResponses.getText().toString().equals(""))
+		if(this.mQuestion != null && mMaxLength.getText() != null && mMaxLength.getText().toString().equals(""))
 		{
-			mValidMaxResponses = this.mQuestion.Max;
-			mMaxResponses.setText("" + this.mQuestion.Max);
+			mValidMaxLength = this.mQuestion.Max;
+			mMaxLength.setText("" + this.mQuestion.Max);
 		}
 		
-        mMinResponses = (EditText)this.findViewById(R.id.activity_multiple_choice_question_edit_answer_min);
-        mMinResponses.setOnFocusChangeListener(this);
+        mMinLength = (EditText)this.findViewById(R.id.activity_multiple_choice_question_edit_answer_min);
+        mMinLength.setOnFocusChangeListener(this);
 		
-		if(this.mQuestion != null && mMinResponses.getText() != null && mMinResponses.getText().toString().equals(""))
+		if(this.mQuestion != null && mMinLength.getText() != null && mMinLength.getText().toString().equals(""))
 		{
-			mValidMinResponses = this.mQuestion.Min;
-			mMinResponses.setText("" + this.mQuestion.Min);
+			mValidMinLength = this.mQuestion.Min;
+			mMinLength.setText("" + this.mQuestion.Min);
 		}
 		
-        mMinResponses.addTextChangedListener(new TextWatcher()
+        mMinLength.addTextChangedListener(new TextWatcher()
         {
 		    public void afterTextChanged(Editable s){ }
 		    
@@ -110,26 +110,26 @@ public class MultipleChoiceQuestionEditActivity extends FormFactorFragmentActivi
 		    
 		    public void onTextChanged(CharSequence s, int start, int before, int count)
     		{
-		    	if(mMinResponses != null)
+		    	if(mMinLength != null)
 		    	{
-			        String newText = mMinResponses.getText().toString();
+			        String newText = mMinLength.getText().toString();
 	
 			        if(!newText.equals("") && newText.length() < 9)
 	        		{
 				        int newNum = Integer.parseInt(newText);
 				        
-				        if(newNum > mValidMaxResponses)
+				        if(newNum > mValidMaxLength)
 				        {
-				        	mMinResponses.setText("" + mValidMaxResponses);
+				        	mMinLength.setText("" + mValidMaxLength);
 				        }
 				        
-			        	mValidMinResponses = newNum;
+			        	mValidMinLength = newNum;
 	        		}
 		    	}
 		    }
         });
 
-        mMaxResponses.addTextChangedListener(new TextWatcher()
+        mMaxLength.addTextChangedListener(new TextWatcher()
         {
 		    public void afterTextChanged(Editable s){ }
 		    
@@ -137,26 +137,26 @@ public class MultipleChoiceQuestionEditActivity extends FormFactorFragmentActivi
 		    
 		    public void onTextChanged(CharSequence s, int start, int before, int count)
     		{
-		    	if(mMaxResponses != null)
+		    	if(mMaxLength != null)
 		    	{
-			        String newText = mMaxResponses.getText().toString();
+			        String newText = mMaxLength.getText().toString();
 	
 			        if(!newText.equals("") && newText.length() < 9)
 	        		{
 				        int newNum = Integer.parseInt(newText);
 				        
-				        if(newNum > mConstraintMaxResponses)
+				        if(newNum > mConstraintMaxLength)
 				        {
-				        	mMaxResponses.setText("" + mConstraintMaxResponses);
+				        	mMaxLength.setText("" + mConstraintMaxLength);
 				        }
 				        
-			        	mValidMaxResponses = newNum;
+			        	mValidMaxLength = newNum;
 	        		}
 		    	}
 		    }
         });
 
-		FrameLayout frameLayout = (FrameLayout)this.findViewById(R.id.activity_multiple_choice_question_edit_container);
+		FrameLayout frameLayout = (FrameLayout)this.findViewById(R.id.activity_free_response_question_edit_container);
 		
 		ActivityHelper.setupForKeyboardHide(this, frameLayout);
 	}
@@ -187,8 +187,8 @@ public class MultipleChoiceQuestionEditActivity extends FormFactorFragmentActivi
     		
     		if(this.validateInput(false))
     		{
-	    		this.mQuestion.Max = Integer.parseInt(mMaxResponses.getText().toString());
-	    		this.mQuestion.Min = Integer.parseInt(mMinResponses.getText().toString());
+	    		this.mQuestion.Max = Integer.parseInt(mMaxLength.getText().toString());
+	    		this.mQuestion.Min = Integer.parseInt(mMinLength.getText().toString());
     		}
     		
         	dataContext.GetQuestionRepository().UpdateSettings(this.mQuestion.ID, this.mQuestion.Min, this.mQuestion.Max);
@@ -286,14 +286,15 @@ public class MultipleChoiceQuestionEditActivity extends FormFactorFragmentActivi
 	{
 		Result result = new Result();
 		
-		String maxResponses = mMaxResponses.getText().toString();
-		String minResponses = mMinResponses.getText().toString();
+		String maxResponses = mMaxLength.getText().toString();
+		String minResponses = mMinLength.getText().toString();
 		
-		String minText = ((TextView)this.findViewById(R.id.activity_multiple_choice_question_edit_answer_min_text)).getText().toString();
-		String maxText = ((TextView)this.findViewById(R.id.activity_multiple_choice_question_edit_answer_max_text)).getText().toString();
+		String minText = ((TextView)this.findViewById(R.id.activity_free_response_question_edit_min)).getText().toString();
+		String maxText = ((TextView)this.findViewById(R.id.activity_free_response_question_edit_max)).getText().toString();
+		String lengthText = ((TextView)this.findViewById(R.id.activity_free_response_question_edit_height)).getText().toString();
 		
-		boolean shouldValidateMin = this.mHasReceivedFocus.contains(mMinResponses.getId());
-		boolean shouldValidateMax = this.mHasReceivedFocus.contains(mMaxResponses.getId());
+		boolean shouldValidateMin = this.mHasReceivedFocus.contains(mMinLength.getId());
+		boolean shouldValidateMax = this.mHasReceivedFocus.contains(mMaxLength.getId());
 		
 		String constraint_must_be_a_smaller_number = this.getResources().getString(R.string.constraint_must_be_a_smaller_number);
 		String constraint_must_be_equal_to_or_lower_than = this.getResources().getString(R.string.constraint_must_be_equal_to_or_lower_than);
@@ -341,25 +342,25 @@ public class MultipleChoiceQuestionEditActivity extends FormFactorFragmentActivi
 		{
 			if(shouldValidateMax)
 			{
-				MultipleChoiceQuestionEditActivity.mValidMaxResponses = Integer.parseInt(maxResponses);
-				if(MultipleChoiceQuestionEditActivity.mValidMaxResponses > mConstraintMaxResponses)
+				FreeResponseQuestionEditActivity.mValidMaxLength = Integer.parseInt(maxResponses);
+				if(FreeResponseQuestionEditActivity.mValidMaxLength > mConstraintMaxLength)
 				{
 					result.Messages.add(maxText + constraint_must_be_equal_to_or_lower_than + minText);
 					result.Success = false;
 					
-					MultipleChoiceQuestionEditActivity.mValidMaxResponses = 0;
+					FreeResponseQuestionEditActivity.mValidMaxLength = 0;
 				}
 			}
 			
 			if(shouldValidateMin)
 			{
-				MultipleChoiceQuestionEditActivity.mValidMinResponses = Integer.parseInt(minResponses);
-				if(MultipleChoiceQuestionEditActivity.mValidMinResponses > mValidMaxResponses)
+				FreeResponseQuestionEditActivity.mValidMinLength = Integer.parseInt(minResponses);
+				if(FreeResponseQuestionEditActivity.mValidMinLength > mValidMaxLength)
 				{
 					result.Messages.add(minText + constraint_must_be_equal_to_or_lower_than + maxText);
 					result.Success = false;
 					
-					MultipleChoiceQuestionEditActivity.mValidMinResponses = 0;
+					FreeResponseQuestionEditActivity.mValidMinLength = 0;
 				}
 			}
 		}

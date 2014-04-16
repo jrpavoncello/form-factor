@@ -26,7 +26,7 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
 
-public class MultipleChoiceViewGroup extends QuestionViewGroup implements OnCheckedChangeListener, OnMenuItemClickListener, View.OnClickListener, View.OnLongClickListener
+public class MultipleChoiceQuestion extends QuestionViewGroup implements OnCheckedChangeListener, OnMenuItemClickListener, View.OnClickListener, View.OnLongClickListener
 {
 	private LinearLayout mChoicesSection;
 	
@@ -36,7 +36,7 @@ public class MultipleChoiceViewGroup extends QuestionViewGroup implements OnChec
 	private boolean mIsEditChoiceMode = false;
 	private CheckBox mSelectedCheckBox;
 
-	public MultipleChoiceViewGroup(Context context)
+	public MultipleChoiceQuestion(Context context)
 	{
 		super(context);
 
@@ -47,7 +47,7 @@ public class MultipleChoiceViewGroup extends QuestionViewGroup implements OnChec
 		super.setOnClickListener(this);
 	}
 
-	public MultipleChoiceViewGroup(Context context, AttributeSet attrs)
+	public MultipleChoiceQuestion(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
 
@@ -58,7 +58,7 @@ public class MultipleChoiceViewGroup extends QuestionViewGroup implements OnChec
 		super.setOnClickListener(this);
 	}
 
-	public MultipleChoiceViewGroup(Context context, AttributeSet attrs, int defStyle)
+	public MultipleChoiceQuestion(Context context, AttributeSet attrs, int defStyle)
 	{
 		super(context, attrs, defStyle);
 
@@ -128,12 +128,12 @@ public class MultipleChoiceViewGroup extends QuestionViewGroup implements OnChec
 	
 	public int getMaxResponses()
 	{
-		return this.mQuestion.MaxResponses;
+		return this.mQuestion.Max;
 	}
 	
 	public int getMinResponses()
 	{
-		return this.mQuestion.MinResponses;
+		return this.mQuestion.Min;
 	}
 	
 	public Question getQuestion()
@@ -160,7 +160,7 @@ public class MultipleChoiceViewGroup extends QuestionViewGroup implements OnChec
 			}
 		}
 		
-		if(checkedBoxes >= this.mQuestion.MinResponses && checkedBoxes <= this.mQuestion.MaxResponses)
+		if(checkedBoxes >= this.mQuestion.Min && checkedBoxes <= this.mQuestion.Max)
 		{
 			return true;
 		}
@@ -204,7 +204,7 @@ public class MultipleChoiceViewGroup extends QuestionViewGroup implements OnChec
 					}
 				}
 				
-				if(checkedBoxes > this.mQuestion.MaxResponses)
+				if(checkedBoxes > this.mQuestion.Max)
 				{
 					checkBox.setChecked(false);
 				}
@@ -323,12 +323,12 @@ public class MultipleChoiceViewGroup extends QuestionViewGroup implements OnChec
 
 	public void setMaxResponses(int maxResponses)
 	{
-		this.mQuestion.MaxResponses = maxResponses;
+		this.mQuestion.Max = maxResponses;
 	}
 
 	public void setMinResponses(int minResponses)
 	{
-		this.mQuestion.MinResponses = minResponses;
+		this.mQuestion.Min = minResponses;
 	}
 	
 	public void setOnQuestionDeleteListener(OnQuestionDeleteListener listener)

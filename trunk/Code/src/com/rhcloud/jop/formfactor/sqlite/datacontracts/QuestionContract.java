@@ -11,8 +11,8 @@ public final class QuestionContract extends BaseTable
 	public static final BaseColumn Type = new BaseColumn("iType", BaseColumn.IntegerType);
 	public static final BaseColumn Question = new BaseColumn("sQuestion", BaseColumn.TextType);
 	public static final BaseColumn Image = new BaseColumn("blImage", BaseColumn.BlobType);
-	public static final BaseColumn MinResponses = new BaseColumn("iMinResponses", BaseColumn.IntegerType);
-	public static final BaseColumn MaxResponses = new BaseColumn("iMaxResponses", BaseColumn.IntegerType);
+	public static final BaseColumn Min = new BaseColumn("iMin", BaseColumn.IntegerType);
+	public static final BaseColumn Max = new BaseColumn("iMax", BaseColumn.IntegerType);
 	
 	@Override
 	protected String GetTableName ()
@@ -28,7 +28,7 @@ public final class QuestionContract extends BaseTable
 		super.AddColumnCreate(Type);
 		super.AddColumnCreate(Question);
 		super.AddColumnCreate(Image);
-		super.AddColumnCreate(MinResponses);
-		super.AddColumnCreate(MaxResponses);
+		super.AddColumnCreate(Min);
+		super.AddColumnCreate(Max);
 	}
 }

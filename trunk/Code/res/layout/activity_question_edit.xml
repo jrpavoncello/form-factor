@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <ScrollView 
+        android:id="@+id/activity_question_edit_item_container"
+        android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:layout_gravity="center|top"
+	    android:layout_marginBottom="48dp" />
+   	
+   	<LinearLayout
+	    android:layout_width="fill_parent"
+	    android:layout_height="48dp"
+	    android:orientation="horizontal"
+	    android:layout_gravity="bottom" >
+   	    
+   	    <Button
+   	    	android:id="@+id/activity_question_edit_cancel"
+		    android:layout_width="fill_parent"
+		    android:layout_height="fill_parent"
+		    android:layout_weight="1.0"
+		    android:text="@string/action_cancel"
+		    android:onClick="onActionClicked"/>
+   	    
+		<FrameLayout 
+		    android:layout_width="6dp"
+		    android:layout_height="48dp"
+		    android:background="@color/action_bar_background" >
+	
+		   	<View
+			    android:layout_width="3dp"
+			    android:layout_height="fill_parent"
+			    android:layout_marginTop="4dp"
+			    android:layout_marginBottom="4dp"
+			    android:layout_gravity="center_vertical|center"
+			    android:background="@color/drawer_menu_divider" />
+		</FrameLayout>
+	   	
+   	    <Button
+   	    	android:id="@+id/activity_question_edit_save"
+		    android:layout_width="fill_parent"
+		    android:layout_height="fill_parent"
+		    android:layout_weight="1.0"
+		    android:text="@string/action_save"
+		    android:onClick="onActionClicked" />
+   	</LinearLayout>
+</FrameLayout>

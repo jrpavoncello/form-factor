@@ -18,9 +18,11 @@ import android.app.ActionBar.Tab;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -30,11 +32,14 @@ import android.view.View.OnTouchListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
+import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 
-public class MultipleChoiceQuestionEditActivity extends FormFactorFragmentActivity implements ActionBar.TabListener, DrawerListener, OnTouchListener, OnFocusChangeListener
+public class QuestionViewGroupEditActivity extends FragmentActivity implements ActionBar.TabListener, DrawerListener, OnTouchListener, OnFocusChangeListener
 {
 	private long mQuestionID = 0;
 	private Question mQuestion;
@@ -47,135 +52,28 @@ public class MultipleChoiceQuestionEditActivity extends FormFactorFragmentActivi
 	
 	private HashSet<Integer> mHasReceivedFocus = new HashSet<Integer>();
 	
-	public MultipleChoiceQuestionEditActivity()
+	public QuestionViewGroupEditActivity()
 	{
-		super.setData(this, R.id.activity_multiple_choice_question_edit);
+		super();
 	}
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
-	{
-		setContentView(R.layout.activity_multiple_choice_question_edit);
+	{		
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_question_edit);
         
-        this.setTitle(this.getResources().getString(R.string.drawer_menu_title));
-        
-        if(savedInstanceState == null)
-        {
-            Intent intent = this.getIntent();
-            if(intent != null)
-        	{
-                savedInstanceState = intent.getExtras();
-        	}
-        }
-        
-        if(savedInstanceState != null)
-        {
-        	if(savedInstanceState.containsKey(BundleKeys.QuestionID))
-        	{
-            	this.mQuestionID = savedInstanceState.getLong(BundleKeys.QuestionID, 0);
-        		
-        		UnitOfWork unitOfWork = new UnitOfWork(FormFactorDb.getInstance(this));
-        		FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
-        		
-            	this.mQuestion = dataContext.GetQuestionRepository().GetByID(this.mQuestionID); 
-        	}
-        }
-		
-		mMaxResponses = (EditText)this.findViewById(R.id.activity_multiple_choice_question_edit_answer_max);
-		mMaxResponses.setOnFocusChangeListener(this);
-		
-		mConstraintMaxResponses = this.getResources().getInteger(R.integer.constraint_question_max);
-		
-		if(this.mQuestion != null && mMaxResponses.getText() != null && mMaxResponses.getText().toString().equals(""))
-		{
-			mValidMaxResponses = this.mQuestion.Max;
-			mMaxResponses.setText("" + this.mQuestion.Max);
-		}
-		
-        mMinResponses = (EditText)this.findViewById(R.id.activity_multiple_choice_question_edit_answer_min);
-        mMinResponses.setOnFocusChangeListener(this);
-		
-		if(this.mQuestion != null && mMinResponses.getText() != null && mMinResponses.getText().toString().equals(""))
-		{
-			mValidMinResponses = this.mQuestion.Min;
-			mMinResponses.setText("" + this.mQuestion.Min);
-		}
-		
-        mMinResponses.addTextChangedListener(new TextWatcher()
-        {
-		    public void afterTextChanged(Editable s){ }
-		    
-		    public void beforeTextChanged(CharSequence s, int start, int count, int after){ }
-		    
-		    public void onTextChanged(CharSequence s, int start, int before, int count)
-    		{
-		    	if(mMinResponses != null)
-		    	{
-			        String newText = mMinResponses.getText().toString();
-	
-			        if(!newText.equals("") && newText.length() < 9)
-	        		{
-				        int newNum = Integer.parseInt(newText);
-				        
-				        if(newNum > mValidMaxResponses)
-				        {
-				        	mMinResponses.setText("" + mValidMaxResponses);
-				        }
-				        
-			        	mValidMinResponses = newNum;
-	        		}
-		    	}
-		    }
-        });
-
-        mMaxResponses.addTextChangedListener(new TextWatcher()
-        {
-		    public void afterTextChanged(Editable s){ }
-		    
-		    public void beforeTextChanged(CharSequence s, int start, int count, int after){ }
-		    
-		    public void onTextChanged(CharSequence s, int start, int before, int count)
-    		{
-		    	if(mMaxResponses != null)
-		    	{
-			        String newText = mMaxResponses.getText().toString();
-	
-			        if(!newText.equals("") && newText.length() < 9)
-	        		{
-				        int newNum = Integer.parseInt(newText);
-				        
-				        if(newNum > mConstraintMaxResponses)
-				        {
-				        	mMaxResponses.setText("" + mConstraintMaxResponses);
-				        }
-				        
-			        	mValidMaxResponses = newNum;
-	        		}
-		    	}
-		    }
-        });
+        this.setTitle(this.getResources().getString(R.string.activity_question_edit_title));
 
 		FrameLayout frameLayout = (FrameLayout)this.findViewById(R.id.activity_multiple_choice_question_edit_container);
 		
 		ActivityHelper.setupForKeyboardHide(this, frameLayout);
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu)
-	{
-		return true;
 	}
 	
 	@Override
 	public void onSaveInstanceState(Bundle bundle)
 	{
 		super.onSaveInstanceState(bundle);
-		
-		if(bundle != null)
-		{
-			bundle.putLong(BundleKeys.ResponseChoiceID, this.mQuestionID);
-		}
 	}
 	
 	private void saveCurrentState()
@@ -341,25 +239,25 @@ public class MultipleChoiceQuestionEditActivity extends FormFactorFragmentActivi
 		{
 			if(shouldValidateMax)
 			{
-				MultipleChoiceQuestionEditActivity.mValidMaxResponses = Integer.parseInt(maxResponses);
-				if(MultipleChoiceQuestionEditActivity.mValidMaxResponses > mConstraintMaxResponses)
+				QuestionViewGroupEditActivity.mValidMaxResponses = Integer.parseInt(maxResponses);
+				if(QuestionViewGroupEditActivity.mValidMaxResponses > mConstraintMaxResponses)
 				{
 					result.Messages.add(maxText + constraint_must_be_equal_to_or_lower_than + minText);
 					result.Success = false;
 					
-					MultipleChoiceQuestionEditActivity.mValidMaxResponses = 0;
+					QuestionViewGroupEditActivity.mValidMaxResponses = 0;
 				}
 			}
 			
 			if(shouldValidateMin)
 			{
-				MultipleChoiceQuestionEditActivity.mValidMinResponses = Integer.parseInt(minResponses);
-				if(MultipleChoiceQuestionEditActivity.mValidMinResponses > mValidMaxResponses)
+				QuestionViewGroupEditActivity.mValidMinResponses = Integer.parseInt(minResponses);
+				if(QuestionViewGroupEditActivity.mValidMinResponses > mValidMaxResponses)
 				{
 					result.Messages.add(minText + constraint_must_be_equal_to_or_lower_than + maxText);
 					result.Success = false;
 					
-					MultipleChoiceQuestionEditActivity.mValidMinResponses = 0;
+					QuestionViewGroupEditActivity.mValidMinResponses = 0;
 				}
 			}
 		}

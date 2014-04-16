@@ -22,5 +22,5 @@ public interface IQuestionRepository
 
 	public void Update(Question question);
 
-	public void UpdateSettings(long questionID, int minResponses, int maxResponses);
+	public void UpdateSettings(long questionID, int min, int max);
 }
