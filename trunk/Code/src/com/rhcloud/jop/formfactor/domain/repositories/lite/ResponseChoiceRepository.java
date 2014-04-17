@@ -20,7 +20,6 @@ public class ResponseChoiceRepository implements IResponseChoiceRepository
 {
 	private SQLiteDatabase liteDB;
 	private UnitOfWork unitOfWork;
-	private static ResponseChoicesContract table = FormFactorTables.getInstance().ResponseChoicesContract;
 	private final String TAG_NAME = "com.rhcloud.jop.formfactor.domain.dal.repositories.ResponseChoiceRepository";
 	
 	public ResponseChoiceRepository(UnitOfWork unitOfWork)
@@ -39,10 +38,10 @@ public class ResponseChoiceRepository implements IResponseChoiceRepository
 			
 			ContentValues values = new ContentValues();
 			
-			values.put(table.QuestionID.GetName(), choice.QuestionID);
-			values.put(table.Choice.GetName(), choice.Choice);
+			values.put(ResponseChoicesContract.QuestionID.GetName(), choice.QuestionID);
+			values.put(ResponseChoicesContract.Choice.GetName(), choice.Choice);
 	
-			choice.ID = SQLiteHelper.logInsert(TAG_NAME, this.liteDB.insert(table.TABLE_NAME, null, values));
+			choice.ID = SQLiteHelper.logInsert(TAG_NAME, this.liteDB.insert(ResponseChoicesContract.TABLE_NAME, null, values));
 			
 			this.unitOfWork.CommitTransaction();
 		}
@@ -61,9 +60,9 @@ public class ResponseChoiceRepository implements IResponseChoiceRepository
 		{
 			this.unitOfWork.BeginTransaction();
 			
-			String whereClause = " WHERE " + table.QuestionID.GetName() + " = " + questionID;
+			String whereClause = " WHERE " + ResponseChoicesContract.QuestionID.GetName() + " = " + questionID;
 			
-			String query = "SELECT * FROM " + table.TABLE_NAME + whereClause;
+			String query = "SELECT * FROM " + ResponseChoicesContract.TABLE_NAME + whereClause;
 			
 			Cursor cursor = this.liteDB.rawQuery(query, null);
 			
@@ -74,8 +73,8 @@ public class ResponseChoiceRepository implements IResponseChoiceRepository
 					ResponseChoice choice = new ResponseChoice();
 					
 					choice.ID = cursor.getInt(0);
-					choice.QuestionID = cursor.getInt(table.QuestionID.Index);
-					choice.Choice = cursor.getString(table.Choice.Index);
+					choice.QuestionID = cursor.getInt(ResponseChoicesContract.QuestionID.Index);
+					choice.Choice = cursor.getString(ResponseChoicesContract.Choice.Index);
 					
 					choices.add(choice);
 				}
@@ -101,17 +100,17 @@ public class ResponseChoiceRepository implements IResponseChoiceRepository
 		{
 			this.unitOfWork.BeginTransaction();
 			
-			String whereClause = " WHERE " + table._ID + " = " + ID;
+			String whereClause = " WHERE " + ResponseChoicesContract._ID + " = " + ID;
 			
-			String query = "SELECT * FROM " + table.TABLE_NAME + whereClause;
+			String query = "SELECT * FROM " + ResponseChoicesContract.TABLE_NAME + whereClause;
 			
 			Cursor cursor = this.liteDB.rawQuery(query, null);
 			
 			if(cursor.moveToFirst())
 			{
 				choice.ID = cursor.getInt(0);
-				choice.QuestionID = cursor.getInt(table.QuestionID.Index);
-				choice.Choice = cursor.getString(table.Choice.Index);
+				choice.QuestionID = cursor.getInt(ResponseChoicesContract.QuestionID.Index);
+				choice.Choice = cursor.getString(ResponseChoicesContract.Choice.Index);
 			}
 			
 			this.unitOfWork.CommitTransaction();
@@ -133,12 +132,12 @@ public class ResponseChoiceRepository implements IResponseChoiceRepository
 			
 			ContentValues values = new ContentValues();
 			
-			values.put(table._ID, choice.ID);
-			values.put(table.QuestionID.GetName(), choice.QuestionID);
-			values.put(table.Choice.GetName(), choice.Choice);
+			values.put(ResponseChoicesContract._ID, choice.ID);
+			values.put(ResponseChoicesContract.QuestionID.GetName(), choice.QuestionID);
+			values.put(ResponseChoicesContract.Choice.GetName(), choice.Choice);
 			
-			String whereClause = table._ID + " = ?";
-			SQLiteHelper.logUpdate(TAG_NAME, this.liteDB.update(table.TABLE_NAME, values, whereClause, new String[] { "" + choice.ID }));
+			String whereClause = ResponseChoicesContract._ID + " = ?";
+			SQLiteHelper.logUpdate(TAG_NAME, this.liteDB.update(ResponseChoicesContract.TABLE_NAME, values, whereClause, new String[] { "" + choice.ID }));
 			
 			this.unitOfWork.CommitTransaction();
 		}
@@ -157,11 +156,11 @@ public class ResponseChoiceRepository implements IResponseChoiceRepository
 			
 			ContentValues values = new ContentValues();
 			
-			values.put(table._ID, choiceID);
-			values.put(table.Choice.GetName(), choice);
+			values.put(ResponseChoicesContract._ID, choiceID);
+			values.put(ResponseChoicesContract.Choice.GetName(), choice);
 			
-			String whereClause = table._ID + " = ?";
-			SQLiteHelper.logUpdate(TAG_NAME, this.liteDB.update(table.TABLE_NAME, values, whereClause, new String[] { "" + choiceID }));
+			String whereClause = ResponseChoicesContract._ID + " = ?";
+			SQLiteHelper.logUpdate(TAG_NAME, this.liteDB.update(ResponseChoicesContract.TABLE_NAME, values, whereClause, new String[] { "" + choiceID }));
 			
 			this.unitOfWork.CommitTransaction();
 		}
@@ -178,9 +177,9 @@ public class ResponseChoiceRepository implements IResponseChoiceRepository
 		{
 			this.unitOfWork.BeginTransaction();
 			
-			String whereClause = table.QuestionID.GetName() + " = ?";
+			String whereClause = ResponseChoicesContract.QuestionID.GetName() + " = ?";
 	
-			SQLiteHelper.logDelete(TAG_NAME, this.liteDB.delete(table.TABLE_NAME, whereClause, new String[] { "" + questionID }));
+			SQLiteHelper.logDelete(TAG_NAME, this.liteDB.delete(ResponseChoicesContract.TABLE_NAME, whereClause, new String[] { "" + questionID }));
 			
 			this.unitOfWork.CommitTransaction();
 		}
@@ -197,7 +196,7 @@ public class ResponseChoiceRepository implements IResponseChoiceRepository
 		{
 			this.unitOfWork.BeginTransaction();
 			
-			String whereClause = table._ID + " NOT IN (";
+			String whereClause = ResponseChoicesContract._ID + " NOT IN (";
 			
 			String[] args = new String[IDs.length + 1];
 			
@@ -217,9 +216,9 @@ public class ResponseChoiceRepository implements IResponseChoiceRepository
 			
 			args[IDs.length] = "" + questionID;
 			
-			whereClause += " AND " + table.QuestionID + " = ?";
+			whereClause += " AND " + ResponseChoicesContract.QuestionID + " = ?";
 	
-			SQLiteHelper.logDelete(TAG_NAME, this.liteDB.delete(table.TABLE_NAME, whereClause, args));
+			SQLiteHelper.logDelete(TAG_NAME, this.liteDB.delete(ResponseChoicesContract.TABLE_NAME, whereClause, args));
 			
 			this.unitOfWork.CommitTransaction();
 		}

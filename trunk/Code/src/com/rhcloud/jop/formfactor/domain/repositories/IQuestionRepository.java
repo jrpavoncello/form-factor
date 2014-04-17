@@ -18,6 +18,10 @@ public interface IQuestionRepository
 	
 	public List<Question> GetByFormID(long formID);
 	
+	public List<Long> GetByIDsNotIn(Long[] IDs, long formID);
+	
+	public List<Long> GetIDsByFormID(long formID);
+	
 	public Question GetByID(long ID);
 
 	public void Update(Question question);

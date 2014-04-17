@@ -26,7 +26,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-public class QuestionViewGroup extends LinearLayout implements OnMenuItemClickListener, View.OnClickListener
+public abstract class QuestionViewGroup extends LinearLayout implements OnMenuItemClickListener, View.OnClickListener
 {
 	protected Question mQuestion = new Question();
 	private float mImageDimensions = 0;
@@ -43,7 +43,7 @@ public class QuestionViewGroup extends LinearLayout implements OnMenuItemClickLi
 	private AttributeSet attrs;
 	private int defStyle;
 
-	public QuestionViewGroup(Context context) 
+	protected QuestionViewGroup(Context context) 
 	{
 		super(context);
 		
@@ -58,7 +58,7 @@ public class QuestionViewGroup extends LinearLayout implements OnMenuItemClickLi
 		setData();
 	}
 
-	public QuestionViewGroup(Context context, AttributeSet attrs)
+	protected QuestionViewGroup(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
 		
@@ -74,7 +74,7 @@ public class QuestionViewGroup extends LinearLayout implements OnMenuItemClickLi
 		setData();
 	}
 
-	public QuestionViewGroup(Context context, AttributeSet attrs, int defStyle)
+	protected QuestionViewGroup(Context context, AttributeSet attrs, int defStyle)
 	{
 		super(context, attrs, defStyle);
 		
@@ -91,7 +91,7 @@ public class QuestionViewGroup extends LinearLayout implements OnMenuItemClickLi
 		setData();
 	}
 	
-	public void deleteQuestion(){ }
+	protected abstract void onQuestionDeleting();
 	
 	public Drawable getImage()
 	{
@@ -176,7 +176,7 @@ public class QuestionViewGroup extends LinearLayout implements OnMenuItemClickLi
 			
 		case R.id.menu_create_question_delete:
 
-			this.deleteQuestion();
+			this.onQuestionDeleting();
 			
 			this.onQuestionDelete();
 			
@@ -186,7 +186,7 @@ public class QuestionViewGroup extends LinearLayout implements OnMenuItemClickLi
 		return false;
 	}
 
-	protected void onQuestionDelete()
+	private void onQuestionDelete()
 	{
 		for(OnQuestionDeleteListener listener : this.mQuestionDeleteListeners)
 		{
@@ -231,7 +231,7 @@ public class QuestionViewGroup extends LinearLayout implements OnMenuItemClickLi
 			this.mQuestionImage.setImageBitmap(bmp);
 		}
 	}
-
+	
 	protected void setImage(Drawable image) 
 	{
 		mImage = image;
@@ -246,12 +246,12 @@ public class QuestionViewGroup extends LinearLayout implements OnMenuItemClickLi
 	
 	protected void setMaxResponses(int maxResponses)
 	{
-		this.mQuestion.Max = maxResponses;
+		this.mQuestion.MaxResponses = maxResponses;
 	}
 
 	protected void setMinResponses(int minResponses)
 	{
-		this.mQuestion.Min = minResponses;
+		this.mQuestion.MinResponses = minResponses;
 	}
 
 	protected void setOnQuestionDeleteListener(OnQuestionDeleteListener listener)

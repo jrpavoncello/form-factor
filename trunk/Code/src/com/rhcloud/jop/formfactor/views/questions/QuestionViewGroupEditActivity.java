@@ -85,11 +85,11 @@ public class QuestionViewGroupEditActivity extends FragmentActivity implements A
     		
     		if(this.validateInput(false))
     		{
-	    		this.mQuestion.Max = Integer.parseInt(mMaxResponses.getText().toString());
-	    		this.mQuestion.Min = Integer.parseInt(mMinResponses.getText().toString());
+	    		this.mQuestion.MaxResponses = Integer.parseInt(mMaxResponses.getText().toString());
+	    		this.mQuestion.MinResponses = Integer.parseInt(mMinResponses.getText().toString());
     		}
     		
-        	dataContext.GetQuestionRepository().UpdateSettings(this.mQuestion.ID, this.mQuestion.Min, this.mQuestion.Max);
+        	dataContext.GetQuestionRepository().UpdateSettings(this.mQuestion.ID, this.mQuestion.MinResponses, this.mQuestion.MaxResponses);
 		}
 	}
 

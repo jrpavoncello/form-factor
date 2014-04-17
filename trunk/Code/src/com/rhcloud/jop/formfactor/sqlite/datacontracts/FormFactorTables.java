@@ -23,19 +23,23 @@ public final class FormFactorTables
 				FormsQuestionsXRefContract, 
 				LogoContract, 
 				QuestionContract, 
+				FreeResponseQuestionExtendContract, 
+				MultipleChoiceQuestionExtendContract, 
 				QuestionTypeContract, 
 				ResponseChoicesContract, 
 				UserChoiceResponsesContract, 
 				UserDrawResponsesContract, 
 				UserOpenResponsesContract, 
 				UserContract, 
-				UserActivityTypeContract  };
+				UserActivityTypeContract };
 	}
 	
     public final FormsContract FormsContract = new FormsContract();
     public final FormsQuestionsXRefContract FormsQuestionsXRefContract = new FormsQuestionsXRefContract();
     public final LogoContract LogoContract = new LogoContract();
     public final QuestionContract QuestionContract = new QuestionContract();
+    public final FreeResponseQuestionContract FreeResponseQuestionExtendContract = new FreeResponseQuestionContract();
+    public final MultipleChoiceQuestionContract MultipleChoiceQuestionExtendContract = new MultipleChoiceQuestionContract();
     public final QuestionTypeContract QuestionTypeContract = new QuestionTypeContract();
     public final ResponseChoicesContract ResponseChoicesContract = new ResponseChoicesContract();
     public final UserChoiceResponsesContract UserChoiceResponsesContract = new UserChoiceResponsesContract();

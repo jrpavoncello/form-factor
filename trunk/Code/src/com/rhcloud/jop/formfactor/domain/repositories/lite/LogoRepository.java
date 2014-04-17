@@ -12,12 +12,10 @@ import com.rhcloud.jop.formfactor.domain.repositories.ILogoRepository;
 import com.rhcloud.jop.formfactor.sqlite.FormFactorDb;
 import com.rhcloud.jop.formfactor.sqlite.datacontracts.*;
 
-@SuppressWarnings("static-access")
 public class LogoRepository implements ILogoRepository
 {
 	private SQLiteDatabase liteDB;
 	private IUnitOfWork unitOfWork;
-	private static LogoContract table = FormFactorTables.getInstance().LogoContract;
 	private final String TAG_NAME = "com.rhcloud.jop.formfactor.domain.dal.repositories.LogoRepository";
 	
 	public LogoRepository(UnitOfWork unitOfWork)
@@ -36,10 +34,10 @@ public class LogoRepository implements ILogoRepository
 			
 			ContentValues values = new ContentValues();
 			
-			values.put(table.Description.GetName(), logo.Description);
-			values.put(table.Image.GetName(), logo.Image);
+			values.put(LogoContract.Description.GetName(), logo.Description);
+			values.put(LogoContract.Image.GetName(), logo.Image);
 	
-			logo.ID = SQLiteHelper.logInsert(TAG_NAME, this.liteDB.insert(table.TABLE_NAME, null, values));
+			logo.ID = SQLiteHelper.logInsert(TAG_NAME, this.liteDB.insert(LogoContract.TABLE_NAME, null, values));
 			
 			this.unitOfWork.CommitTransaction();
 		}
@@ -58,18 +56,17 @@ public class LogoRepository implements ILogoRepository
 		{
 			this.unitOfWork.BeginTransaction();
 			
-
-			String whereClause = " WHERE " + table._ID + " = " + ID;
+			String whereClause = " WHERE " + LogoContract._ID + " = " + ID;
 			
-			String query = "SELECT * FROM " + table.TABLE_NAME + whereClause;
+			String query = "SELECT * FROM " + LogoContract.TABLE_NAME + whereClause;
 			
 			Cursor cursor = this.liteDB.rawQuery(query, null);
 			
 			if(cursor.moveToFirst())
 			{
 				logo.ID = cursor.getInt(0);
-				logo.Description = cursor.getString(table.Description.Index);
-				logo.Image = cursor.getBlob(table.Image.Index);
+				logo.Description = cursor.getString(LogoContract.Description.Index);
+				logo.Image = cursor.getBlob(LogoContract.Image.Index);
 			}
 			
 			this.unitOfWork.CommitTransaction();
@@ -91,12 +88,12 @@ public class LogoRepository implements ILogoRepository
 			
 			ContentValues values = new ContentValues();
 			
-			values.put(table._ID, logo.ID);
-			values.put(table.Description.GetName(), logo.Description);
-			values.put(table.Image.GetName(), logo.Image);
+			values.put(LogoContract._ID, logo.ID);
+			values.put(LogoContract.Description.GetName(), logo.Description);
+			values.put(LogoContract.Image.GetName(), logo.Image);
 			
-			String whereClause = table._ID + " = ?";
-			SQLiteHelper.logUpdate(TAG_NAME, this.liteDB.update(table.TABLE_NAME, values, whereClause, new String[] { "" + logo.ID }));
+			String whereClause = LogoContract._ID + " = ?";
+			SQLiteHelper.logUpdate(TAG_NAME, this.liteDB.update(LogoContract.TABLE_NAME, values, whereClause, new String[] { "" + logo.ID }));
 			
 			this.unitOfWork.CommitTransaction();
 		}

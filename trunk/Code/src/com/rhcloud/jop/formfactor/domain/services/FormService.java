@@ -6,6 +6,8 @@ import java.util.List;
 import com.rhcloud.jop.formfactor.common.Result;
 import com.rhcloud.jop.formfactor.domain.Form;
 import com.rhcloud.jop.formfactor.domain.IFormFactorDataContext;
+import com.rhcloud.jop.formfactor.domain.MultipleChoiceQuestion;
+import com.rhcloud.jop.formfactor.domain.FreeResponseQuestion;
 import com.rhcloud.jop.formfactor.domain.Question;
 import com.rhcloud.jop.formfactor.domain.ResponseChoice;
 import com.rhcloud.jop.formfactor.domain.repositories.IFormRepository;
@@ -27,7 +29,6 @@ public class FormService
 		Result result = new Result();
 
 		IFormRepository formRepo = DataContext.GetFormRepository();
-		IQuestionRepository questionRepo = DataContext.GetQuestionRepository();
 		ILogoRepository logoRepo = DataContext.GetLogoRepository();
 		
 		if(form != null)
@@ -72,16 +73,30 @@ public class FormService
 			
 			if(size > 0)
 			{
-				long[] questionIDs = new long[size];
+				ArrayList<Long> questionIDsMultipleChoice = new ArrayList<Long>();
+				ArrayList<Long> questionIDsFreeResponse = new ArrayList<Long>();
 	
 				for(int i = 0; i < size; i++)
 				{
 					Question question = form.Questions.get(i);
 					question.FormID = form.ID;
-					questionIDs[i] = question.ID;
+					
+					if(question instanceof MultipleChoiceQuestion)
+					{
+						questionIDsMultipleChoice.add(question.ID);
+					}
+					else
+					{
+						if(question instanceof FreeResponseQuestion)
+						{
+							questionIDsFreeResponse.add(question.ID);
+						}
+					}
 				}
 				
-				questionRepo.DeleteByIDsNotIn(questionIDs, form.ID);
+				IQuestionRepository questionRepo = DataContext.GetQuestionRepository(MultipleChoiceQuestion.class, );
+				Long[] ids;
+				questionRepo.DeleteByIDsNotIn(questionIDsMultipleChoice.toArray(ids), form.ID);
 				
 				for(Question question : form.Questions)
 				{
@@ -110,7 +125,7 @@ public class FormService
 		
 		try
 		{
-			IQuestionRepository questionRepo = DataContext.GetQuestionRepository();
+			IQuestionRepository questionRepo = DataContext.GetQuestionRepository(MultipleChoiceQuestion.class);
 			IResponseChoiceRepository responseRepo = DataContext.GetResponseChoiceRepository();
 
 			if(question.ID == 0)

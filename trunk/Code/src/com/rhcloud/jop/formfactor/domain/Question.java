@@ -10,8 +10,6 @@ public class Question
 	public int Number = 0;
 	public QuestionType Type = QuestionType.None;
 	public String Question = "";
-	public int Min = 0;
-	public int Max = 0;
 	public byte[] Image = null;
 	
 	public List<ResponseChoice> ResponseChoices = new ArrayList<ResponseChoice>();

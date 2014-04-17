@@ -1,6 +1,5 @@
 package com.rhcloud.jop.formfactor.views.questions;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.rhcloud.jop.formfactor.R;
@@ -15,35 +14,30 @@ import com.rhcloud.jop.formfactor.views.OnQuestionDeleteListener;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.PopupMenu.OnMenuItemClickListener;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 
-public class FreeResponseQuestion extends QuestionViewGroup implements OnCheckedChangeListener, OnMenuItemClickListener, View.OnClickListener, View.OnLongClickListener
+public class FreeResponseQuestion extends QuestionViewGroup implements OnMenuItemClickListener, View.OnClickListener
 {
-	private LinearLayout mChoicesSection;
-	
-	private List<CheckBox> mCheckBoxes = new ArrayList<CheckBox>();
+	private LinearLayout mResponseSection;
+	private EditText mResponse;
 
 	private boolean mIsCreateMode = true;
-	private boolean mIsEditChoiceMode = false;
-	private CheckBox mSelectedCheckBox;
 
 	public FreeResponseQuestion(Context context)
 	{
 		super(context);
 
 		LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		inflater.inflate(R.layout.view_group_multiple_choice, (LinearLayout)super.findViewById(R.id.question_response_section));
-		
-		this.mChoicesSection = (LinearLayout)this.findViewById(R.id.question_response_section);
+		inflater.inflate(R.layout.view_group_free_response, (LinearLayout)super.findViewById(R.id.question_response_section));
+
+		this.mResponseSection = (LinearLayout)this.findViewById(R.id.question_response_section);
+		this.mResponse = (EditText)this.findViewById(R.id.view_group_free_response_edit_text);
 		super.setOnClickListener(this);
 	}
 
@@ -52,9 +46,10 @@ public class FreeResponseQuestion extends QuestionViewGroup implements OnChecked
 		super(context, attrs);
 
 		LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		inflater.inflate(R.layout.view_group_multiple_choice, (LinearLayout)super.findViewById(R.id.question_response_section));
+		inflater.inflate(R.layout.view_group_free_response, (LinearLayout)super.findViewById(R.id.question_response_section));
 		
-		this.mChoicesSection = (LinearLayout)this.findViewById(R.id.question_response_section);
+		this.mResponseSection = (LinearLayout)this.findViewById(R.id.question_response_section);
+		this.mResponse = (EditText)this.findViewById(R.id.view_group_free_response_edit_text);
 		super.setOnClickListener(this);
 	}
 
@@ -63,77 +58,21 @@ public class FreeResponseQuestion extends QuestionViewGroup implements OnChecked
 		super(context, attrs, defStyle);
 
 		LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		inflater.inflate(R.layout.view_group_multiple_choice, (LinearLayout)super.findViewById(R.id.question_response_section));
+		inflater.inflate(R.layout.view_group_free_response, (LinearLayout)super.findViewById(R.id.question_response_section));
 		
-		this.mChoicesSection = (LinearLayout)this.findViewById(R.id.question_response_section);
+		this.mResponseSection = (LinearLayout)this.findViewById(R.id.question_response_section);
+		this.mResponse = (EditText)this.findViewById(R.id.view_group_free_response_edit_text);
 		super.setOnClickListener(this);
-	}
-
-	private void addResponseChoice(ResponseChoice response)
-	{
-		LayoutInflater inflater = (LayoutInflater)this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-				
-		CheckBox checkBox = (CheckBox)inflater.inflate(R.layout.view_multiple_choice_checkbox, null);
-
-		UnitOfWork unitOfWork = new UnitOfWork(FormFactorDb.getInstance(this.getContext()));
-		FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
-
-		if(this.mQuestion != null)
-		{
-			response.QuestionID = this.mQuestion.ID;
-		}
-		
-		if(response.ID == 0)
-		{
-			response.Choice = this.getResources().getString(R.string.default_multiple_choice_response);
-			
-			dataContext.GetResponseChoiceRepository().Add(response);
-			
-			this.mQuestion.ResponseChoices.add(response);
-		}
-		else
-		{
-			if(!this.mQuestion.ResponseChoices.contains(response))
-			{
-				this.mQuestion.ResponseChoices.add(response);
-			}
-		}
-		
-		checkBox.setText(response.Choice);
-		checkBox.setChecked(false);
-		
-		checkBox.setOnCheckedChangeListener(this);
-		checkBox.setOnLongClickListener(this);
-		
-		this.mCheckBoxes.add(checkBox);
-		
-		this.mChoicesSection.addView(checkBox);
-		
-		this.invalidate();
-	}
-	
-	private void deleteResponseChoice()
-	{
-		for(int i = 0; i < this.mCheckBoxes.size(); i++)
-		{
-			if(this.mSelectedCheckBox == mCheckBoxes.get(i))
-			{
-				this.mQuestion.ResponseChoices.remove(i);
-				this.mCheckBoxes.remove(i);
-			}
-		}
-
-		this.mChoicesSection.removeView(this.mSelectedCheckBox);
 	}
 	
 	public int getMaxResponses()
 	{
-		return this.mQuestion.Max;
+		return ((com.rhcloud.jop.formfactor.domain.MultipleChoiceQuestion)this.mQuestion).MaxResponses;
 	}
 	
 	public int getMinResponses()
 	{
-		return this.mQuestion.Min;
+		return ((com.rhcloud.jop.formfactor.domain.MultipleChoiceQuestion)this.mQuestion).MinResponses;
 	}
 	
 	public Question getQuestion()
@@ -150,66 +89,7 @@ public class FreeResponseQuestion extends QuestionViewGroup implements OnChecked
 	
 	public boolean isValidForSubmission()
 	{
-		int checkedBoxes = 0;
-		
-		for(int i = 0; i < this.mCheckBoxes.size(); i++)
-		{
-			if(mCheckBoxes.get(i).isChecked())
-			{
-				checkedBoxes++;
-			}
-		}
-		
-		if(checkedBoxes >= this.mQuestion.Min && checkedBoxes <= this.mQuestion.Max)
-		{
-			return true;
-		}
-			
 		return false;
-	}
-	
-	@Override
-	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
-	{
-		CheckBox checkBox = (CheckBox)buttonView;
-		
-		if(this.mIsEditChoiceMode)
-		{
-			if(checkBox.isChecked())
-			{
-				checkBox.setChecked(false);
-				
-				this.mSelectedCheckBox = checkBox;
-				
-				PopupMenu popup = new PopupMenu(this.getContext(), checkBox);
-				
-				popup.getMenuInflater().inflate(R.menu.multiple_choice_response_edit, popup.getMenu());
-				
-				popup.setOnMenuItemClickListener(this);
-				
-				popup.show();
-			}
-		}
-		else
-		{
-			if(checkBox.isChecked())
-			{
-				int checkedBoxes = 0;
-				
-				for(int i = 0; i < this.mCheckBoxes.size(); i++)
-				{
-					if(this.mCheckBoxes.get(i).isChecked())
-					{
-						checkedBoxes++;
-					}
-				}
-				
-				if(checkedBoxes > this.mQuestion.Max)
-				{
-					checkBox.setChecked(false);
-				}
-			}
-		}
 	}
 	
 	@Override
@@ -228,28 +108,6 @@ public class FreeResponseQuestion extends QuestionViewGroup implements OnChecked
 			break;
 		}
 	}
-	
-	@Override
-	public boolean onLongClick(View v)
-	{
-		if(this.mIsCreateMode)
-		{
-			if(v instanceof CheckBox)
-			{
-				this.mSelectedCheckBox = (CheckBox)v;
-				
-				PopupMenu popup = new PopupMenu(this.getContext(), v);
-				
-				popup.getMenuInflater().inflate(R.menu.multiple_choice_response_edit, popup.getMenu());
-				
-				popup.setOnMenuItemClickListener(this);
-				
-				popup.show();
-			}
-		}
-		
-		return false;
-	}
 
 	@Override
 	public boolean onMenuItemClick(MenuItem menuItem)
@@ -260,46 +118,16 @@ public class FreeResponseQuestion extends QuestionViewGroup implements OnChecked
 		
 		switch(id)
 		{
-		case R.id.menu_create_response_edit:
-			
-			for(int i = 0; i < this.mCheckBoxes.size(); i++)
-			{
-				if(this.mSelectedCheckBox == mCheckBoxes.get(i))
-				{
-					Intent intent = new Intent(this.getContext(), MultipleChoiceResponseEditActivity.class);
-					
-					ResponseChoice choice = this.mQuestion.ResponseChoices.get(i);
-					
-					intent.putExtra(BundleKeys.ResponseChoiceID, choice.ID);
-					
-					this.getContext().startActivity(intent);
-					
-					break;
-				}
-			}
 		
-			return true;
-			
-		case R.id.menu_create_edit_response_delete:
-
-			this.deleteResponseChoice();
-			
-			return true;
-			
-		case R.id.menu_create_question_add_response:
-			ResponseChoice choice = new ResponseChoice();
-			this.addResponseChoice(choice);
-			
-			return true;
-			
 		case R.id.menu_create_question_edit:
+			
 			UnitOfWork unitOfWork = new UnitOfWork(FormFactorDb.getInstance(this.getContext()));
 			FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
 			FormService formService = new FormService(dataContext);
 			
 			formService.AddUpdateQuestion(this.mQuestion);
 			
-			Intent intent = new Intent(this.getContext(), MultipleChoiceQuestionEditActivity.class);
+			Intent intent = new Intent(this.getContext(), FreeResponseQuestionEditActivity.class);
 			intent.putExtra(BundleKeys.QuestionID, this.mQuestion.ID);
 			
 			this.getContext().startActivity(intent);
@@ -314,25 +142,26 @@ public class FreeResponseQuestion extends QuestionViewGroup implements OnChecked
 	public void setData(Question question)
 	{
 		super.setData(question);
-		
-		for(ResponseChoice choice : question.ResponseChoices)
-		{
-			this.addResponseChoice(choice);
-		}
 	}
 
 	public void setMaxResponses(int maxResponses)
 	{
-		this.mQuestion.Max = maxResponses;
+		((com.rhcloud.jop.formfactor.domain.MultipleChoiceQuestion)this.mQuestion).MaxResponses = maxResponses;
 	}
 
 	public void setMinResponses(int minResponses)
 	{
-		this.mQuestion.Min = minResponses;
+		((com.rhcloud.jop.formfactor.domain.MultipleChoiceQuestion)this.mQuestion).MinResponses = minResponses;
 	}
 	
 	public void setOnQuestionDeleteListener(OnQuestionDeleteListener listener)
 	{
 		super.setOnQuestionDeleteListener(listener);
+	}
+
+	@Override
+	protected void onQuestionDeleting()
+	{
+		
 	}
 }

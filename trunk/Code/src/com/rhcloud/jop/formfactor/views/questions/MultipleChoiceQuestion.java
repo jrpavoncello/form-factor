@@ -128,12 +128,12 @@ public class MultipleChoiceQuestion extends QuestionViewGroup implements OnCheck
 	
 	public int getMaxResponses()
 	{
-		return this.mQuestion.Max;
+		return this.mQuestion.MaxResponses;
 	}
 	
 	public int getMinResponses()
 	{
-		return this.mQuestion.Min;
+		return this.mQuestion.MinResponses;
 	}
 	
 	public Question getQuestion()
@@ -160,7 +160,7 @@ public class MultipleChoiceQuestion extends QuestionViewGroup implements OnCheck
 			}
 		}
 		
-		if(checkedBoxes >= this.mQuestion.Min && checkedBoxes <= this.mQuestion.Max)
+		if(checkedBoxes >= this.mQuestion.MinResponses && checkedBoxes <= this.mQuestion.MaxResponses)
 		{
 			return true;
 		}
@@ -204,7 +204,7 @@ public class MultipleChoiceQuestion extends QuestionViewGroup implements OnCheck
 					}
 				}
 				
-				if(checkedBoxes > this.mQuestion.Max)
+				if(checkedBoxes > this.mQuestion.MaxResponses)
 				{
 					checkBox.setChecked(false);
 				}
@@ -323,16 +323,22 @@ public class MultipleChoiceQuestion extends QuestionViewGroup implements OnCheck
 
 	public void setMaxResponses(int maxResponses)
 	{
-		this.mQuestion.Max = maxResponses;
+		this.mQuestion.MaxResponses = maxResponses;
 	}
 
 	public void setMinResponses(int minResponses)
 	{
-		this.mQuestion.Min = minResponses;
+		this.mQuestion.MinResponses = minResponses;
 	}
 	
 	public void setOnQuestionDeleteListener(OnQuestionDeleteListener listener)
 	{
 		super.setOnQuestionDeleteListener(listener);
+	}
+
+	@Override
+	protected void onQuestionDeleting() {
+		// TODO Auto-generated method stub
+		
 	}
 }

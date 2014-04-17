@@ -78,7 +78,7 @@ public class MultipleChoiceQuestionEditActivity extends FormFactorFragmentActivi
         		UnitOfWork unitOfWork = new UnitOfWork(FormFactorDb.getInstance(this));
         		FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
         		
-            	this.mQuestion = dataContext.GetQuestionRepository().GetByID(this.mQuestionID); 
+            	this.mQuestion = dataContext.GetQuestionRepository().GetByQuestionID(this.mQuestionID); 
         	}
         }
 		
@@ -89,8 +89,8 @@ public class MultipleChoiceQuestionEditActivity extends FormFactorFragmentActivi
 		
 		if(this.mQuestion != null && mMaxResponses.getText() != null && mMaxResponses.getText().toString().equals(""))
 		{
-			mValidMaxResponses = this.mQuestion.Max;
-			mMaxResponses.setText("" + this.mQuestion.Max);
+			mValidMaxResponses = this.mQuestion.MaxResponses;
+			mMaxResponses.setText("" + this.mQuestion.MaxResponses);
 		}
 		
         mMinResponses = (EditText)this.findViewById(R.id.activity_multiple_choice_question_edit_answer_min);
@@ -98,8 +98,8 @@ public class MultipleChoiceQuestionEditActivity extends FormFactorFragmentActivi
 		
 		if(this.mQuestion != null && mMinResponses.getText() != null && mMinResponses.getText().toString().equals(""))
 		{
-			mValidMinResponses = this.mQuestion.Min;
-			mMinResponses.setText("" + this.mQuestion.Min);
+			mValidMinResponses = this.mQuestion.MinResponses;
+			mMinResponses.setText("" + this.mQuestion.MinResponses);
 		}
 		
         mMinResponses.addTextChangedListener(new TextWatcher()
@@ -187,11 +187,11 @@ public class MultipleChoiceQuestionEditActivity extends FormFactorFragmentActivi
     		
     		if(this.validateInput(false))
     		{
-	    		this.mQuestion.Max = Integer.parseInt(mMaxResponses.getText().toString());
-	    		this.mQuestion.Min = Integer.parseInt(mMinResponses.getText().toString());
+	    		this.mQuestion.MaxResponses = Integer.parseInt(mMaxResponses.getText().toString());
+	    		this.mQuestion.MinResponses = Integer.parseInt(mMinResponses.getText().toString());
     		}
     		
-        	dataContext.GetQuestionRepository().UpdateSettings(this.mQuestion.ID, this.mQuestion.Min, this.mQuestion.Max);
+        	dataContext.GetQuestionRepository().UpdateSettings(this.mQuestion.ID, this.mQuestion.MinResponses, this.mQuestion.MaxResponses);
 		}
 	}
 

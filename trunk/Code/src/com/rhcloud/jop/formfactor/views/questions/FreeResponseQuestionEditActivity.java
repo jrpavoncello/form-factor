@@ -40,10 +40,13 @@ public class FreeResponseQuestionEditActivity extends FormFactorFragmentActivity
 	private Question mQuestion;
 	static EditText mMinLength;
 	static EditText mMaxLength;
+	static EditText mResponseLines;
 	static int mConstraintMaxLength;
 	static int mConstraintMinResponses;
+	static int mConstraintResponseLines;
 	static int mValidMinLength;
 	static int mValidMaxLength;
+	static int mValidResponseLines;
 	
 	private HashSet<Integer> mHasReceivedFocus = new HashSet<Integer>();
 	
@@ -78,7 +81,7 @@ public class FreeResponseQuestionEditActivity extends FormFactorFragmentActivity
         		UnitOfWork unitOfWork = new UnitOfWork(FormFactorDb.getInstance(this));
         		FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
         		
-            	this.mQuestion = dataContext.GetQuestionRepository().GetByID(this.mQuestionID); 
+            	this.mQuestion = dataContext.GetQuestionRepository().GetByQuestionID(this.mQuestionID); 
         	}
         }
 		
@@ -86,11 +89,12 @@ public class FreeResponseQuestionEditActivity extends FormFactorFragmentActivity
 		mMaxLength.setOnFocusChangeListener(this);
 		
 		mConstraintMaxLength = this.getResources().getInteger(R.integer.constraint_question_max);
+		mConstraintResponseLines = this.getResources().getInteger(R.integer.constraint_question_response_max_lines);
 		
 		if(this.mQuestion != null && mMaxLength.getText() != null && mMaxLength.getText().toString().equals(""))
 		{
-			mValidMaxLength = this.mQuestion.Max;
-			mMaxLength.setText("" + this.mQuestion.Max);
+			mValidMaxLength = this.mQuestion.MaxResponses;
+			mMaxLength.setText("" + this.mQuestion.MaxResponses);
 		}
 		
         mMinLength = (EditText)this.findViewById(R.id.activity_multiple_choice_question_edit_answer_min);
@@ -98,8 +102,17 @@ public class FreeResponseQuestionEditActivity extends FormFactorFragmentActivity
 		
 		if(this.mQuestion != null && mMinLength.getText() != null && mMinLength.getText().toString().equals(""))
 		{
-			mValidMinLength = this.mQuestion.Min;
-			mMinLength.setText("" + this.mQuestion.Min);
+			mValidMinLength = this.mQuestion.MinResponses;
+			mMinLength.setText("" + this.mQuestion.MinResponses);
+		}
+		
+        mResponseLines = (EditText)this.findViewById(R.id.activity_free_response_question_edit_height);
+        mResponseLines.setOnFocusChangeListener(this);
+		
+		if(this.mQuestion != null && mResponseLines.getText() != null && mResponseLines.getText().toString().equals(""))
+		{
+			mValidResponseLines = this.mQuestion.MinResponses;
+			mResponseLines.setText("" + this.mQuestion.MinResponses);
 		}
 		
         mMinLength.addTextChangedListener(new TextWatcher()
@@ -155,6 +168,33 @@ public class FreeResponseQuestionEditActivity extends FormFactorFragmentActivity
 		    	}
 		    }
         });
+		
+        mResponseLines.addTextChangedListener(new TextWatcher()
+        {
+		    public void afterTextChanged(Editable s){ }
+		    
+		    public void beforeTextChanged(CharSequence s, int start, int count, int after){ }
+		    
+		    public void onTextChanged(CharSequence s, int start, int before, int count)
+    		{
+		    	if(mResponseLines != null)
+		    	{
+			        String newText = mResponseLines.getText().toString();
+	
+			        if(!newText.equals("") && newText.length() < 9)
+	        		{
+				        int newNum = Integer.parseInt(newText);
+				        
+				        if(newNum > mConstraintResponseLines)
+				        {
+				        	mResponseLines.setText("" + mConstraintResponseLines);
+				        }
+				        
+			        	mValidResponseLines = newNum;
+	        		}
+		    	}
+		    }
+        });
 
 		FrameLayout frameLayout = (FrameLayout)this.findViewById(R.id.activity_free_response_question_edit_container);
 		
@@ -187,11 +227,11 @@ public class FreeResponseQuestionEditActivity extends FormFactorFragmentActivity
     		
     		if(this.validateInput(false))
     		{
-	    		this.mQuestion.Max = Integer.parseInt(mMaxLength.getText().toString());
-	    		this.mQuestion.Min = Integer.parseInt(mMinLength.getText().toString());
+    			((com.rhcloud.jop.formfactor.domain.MultipleChoiceQuestion)this.mQuestion).MaxResponses = Integer.parseInt(mMaxLength.getText().toString());
+    			((com.rhcloud.jop.formfactor.domain.MultipleChoiceQuestion)this.mQuestion).MinResponses = Integer.parseInt(mMinLength.getText().toString());
     		}
     		
-        	dataContext.GetQuestionRepository().UpdateSettings(this.mQuestion.ID, this.mQuestion.Min, this.mQuestion.Max);
+        	dataContext.GetQuestionRepository().UpdateSettings(this.mQuestion.ID, ((com.rhcloud.jop.formfactor.domain.MultipleChoiceQuestion)this.mQuestion).MinResponses, ((com.rhcloud.jop.formfactor.domain.MultipleChoiceQuestion)this.mQuestion).MaxResponses);
 		}
 	}
 
@@ -288,6 +328,7 @@ public class FreeResponseQuestionEditActivity extends FormFactorFragmentActivity
 		
 		String maxResponses = mMaxLength.getText().toString();
 		String minResponses = mMinLength.getText().toString();
+		String responseLines = mResponseLines.getText().toString();
 		
 		String minText = ((TextView)this.findViewById(R.id.activity_free_response_question_edit_min)).getText().toString();
 		String maxText = ((TextView)this.findViewById(R.id.activity_free_response_question_edit_max)).getText().toString();

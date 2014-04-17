@@ -14,12 +14,10 @@ import com.rhcloud.jop.formfactor.domain.repositories.IFormRepository;
 import com.rhcloud.jop.formfactor.sqlite.FormFactorDb;
 import com.rhcloud.jop.formfactor.sqlite.datacontracts.*;
 
-@SuppressWarnings("static-access")
 public class FormRepository implements IFormRepository
 {
 	private SQLiteDatabase liteDB;
 	private UnitOfWork unitOfWork;
-	private static FormsContract table = FormFactorTables.getInstance().FormsContract;
 	private final String TAG_NAME = "com.rhcloud.jop.formfactor.domain.dal.repositories.FormRepository";
 	
 	public FormRepository(UnitOfWork unitOfWork)
@@ -38,12 +36,12 @@ public class FormRepository implements IFormRepository
 			
 			ContentValues values = new ContentValues();
 			
-			values.put(table.Title.GetName(), form.Title);
-			values.put(table.Description.GetName(), form.Description);
-			values.put(table.UserID.GetName(), form.UserID);
-			values.put(table.Logo.GetName(), form.Logo.ID);
+			values.put(FormsContract.Title.GetName(), form.Title);
+			values.put(FormsContract.Description.GetName(), form.Description);
+			values.put(FormsContract.UserID.GetName(), form.UserID);
+			values.put(FormsContract.Logo.GetName(), form.Logo.ID);
 	
-			form.ID = SQLiteHelper.logInsert(TAG_NAME, this.liteDB.insert(table.TABLE_NAME, null, values));
+			form.ID = SQLiteHelper.logInsert(TAG_NAME, this.liteDB.insert(FormsContract.TABLE_NAME, null, values));
 			
 			this.unitOfWork.CommitTransaction();
 		}
@@ -62,7 +60,7 @@ public class FormRepository implements IFormRepository
 		{
 			this.unitOfWork.BeginTransaction();
 			
-			Cursor cursor = this.liteDB.rawQuery("SELECT * FROM " + table.TABLE_NAME, null);
+			Cursor cursor = this.liteDB.rawQuery("SELECT * FROM " + FormsContract.TABLE_NAME, null);
 			
 			if(cursor.moveToFirst())
 			{
@@ -71,10 +69,10 @@ public class FormRepository implements IFormRepository
 					Form form = new Form();
 					
 					form.ID = cursor.getInt(0);
-					form.UserID = cursor.getInt(table.UserID.Index);
-					form.Title = cursor.getString(table.Title.Index);
-					form.Description = cursor.getString(table.Description.Index);
-					form.Logo.ID = cursor.getInt(table.Logo.Index);
+					form.UserID = cursor.getInt(FormsContract.UserID.Index);
+					form.Title = cursor.getString(FormsContract.Title.Index);
+					form.Description = cursor.getString(FormsContract.Description.Index);
+					form.Logo.ID = cursor.getInt(FormsContract.Logo.Index);
 					
 					questions.add(form);
 				}
@@ -100,9 +98,9 @@ public class FormRepository implements IFormRepository
 		{
 			this.unitOfWork.BeginTransaction();
 			
-			String whereClause = " WHERE " + table.UserID.GetName() + " = " + userID;
+			String whereClause = " WHERE " + FormsContract.UserID.GetName() + " = " + userID;
 			
-			String query = "SELECT * FROM " + table.TABLE_NAME + whereClause;
+			String query = "SELECT * FROM " + FormsContract.TABLE_NAME + whereClause;
 			
 			Cursor cursor = this.liteDB.rawQuery(query, null);
 			
@@ -113,10 +111,10 @@ public class FormRepository implements IFormRepository
 					Form form = new Form();
 					
 					form.ID = cursor.getInt(0);
-					form.UserID = cursor.getInt(table.UserID.Index);
-					form.Title = cursor.getString(table.Title.Index);
-					form.Description = cursor.getString(table.Description.Index);
-					form.Logo.ID = cursor.getInt(table.Logo.Index);
+					form.UserID = cursor.getInt(FormsContract.UserID.Index);
+					form.Title = cursor.getString(FormsContract.Title.Index);
+					form.Description = cursor.getString(FormsContract.Description.Index);
+					form.Logo.ID = cursor.getInt(FormsContract.Logo.Index);
 					
 					forms.add(form);
 				}
@@ -142,19 +140,19 @@ public class FormRepository implements IFormRepository
 		{
 			this.unitOfWork.BeginTransaction();
 			
-			String whereClause = " WHERE " + table._ID + " = " + ID;
+			String whereClause = " WHERE " + FormsContract._ID + " = " + ID;
 			
-			String query = "SELECT * FROM " + table.TABLE_NAME + whereClause;
+			String query = "SELECT * FROM " + FormsContract.TABLE_NAME + whereClause;
 			
 			Cursor cursor = this.liteDB.rawQuery(query, null);
 			
 			if(cursor.moveToFirst())
 			{
 				form.ID = cursor.getInt(0);
-				form.UserID = cursor.getInt(table.UserID.Index);
-				form.Title = cursor.getString(table.Title.Index);
-				form.Description = cursor.getString(table.Description.Index);
-				form.Logo.ID = cursor.getInt(table.Logo.Index);
+				form.UserID = cursor.getInt(FormsContract.UserID.Index);
+				form.Title = cursor.getString(FormsContract.Title.Index);
+				form.Description = cursor.getString(FormsContract.Description.Index);
+				form.Logo.ID = cursor.getInt(FormsContract.Logo.Index);
 			}
 			
 			this.unitOfWork.CommitTransaction();
@@ -176,15 +174,15 @@ public class FormRepository implements IFormRepository
 			
 			ContentValues values = new ContentValues();
 			
-			values.put(table._ID, form.ID);
-			values.put(table.UserID.GetName(), form.UserID);
-			values.put(table.Title.GetName(), form.Title);
-			values.put(table.Description.GetName(), form.Description);
-			values.put(table.Logo.GetName(), form.Logo.ID);
+			values.put(FormsContract._ID, form.ID);
+			values.put(FormsContract.UserID.GetName(), form.UserID);
+			values.put(FormsContract.Title.GetName(), form.Title);
+			values.put(FormsContract.Description.GetName(), form.Description);
+			values.put(FormsContract.Logo.GetName(), form.Logo.ID);
 	
-			String whereClause = table._ID + " = ?";
+			String whereClause = FormsContract._ID + " = ?";
 	
-			SQLiteHelper.logUpdate(TAG_NAME, this.liteDB.update(table.TABLE_NAME, values, whereClause, new String[] { "" + form.ID }));
+			SQLiteHelper.logUpdate(TAG_NAME, this.liteDB.update(FormsContract.TABLE_NAME, values, whereClause, new String[] { "" + form.ID }));
 			
 			this.unitOfWork.CommitTransaction();
 		}

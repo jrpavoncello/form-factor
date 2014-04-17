@@ -5,11 +5,7 @@ import java.util.List;
 
 import com.rhcloud.jop.formfactor.R;
 import com.rhcloud.jop.formfactor.common.ActivityHelper;
-import com.rhcloud.jop.formfactor.domain.Form;
-import com.rhcloud.jop.formfactor.domain.Question;
-import com.rhcloud.jop.formfactor.domain.QuestionType;
-import com.rhcloud.jop.formfactor.domain.UnitOfWork;
-import com.rhcloud.jop.formfactor.domain.User;
+import com.rhcloud.jop.formfactor.domain.*;
 import com.rhcloud.jop.formfactor.domain.dal.lite.FormFactorDataContext;
 import com.rhcloud.jop.formfactor.domain.services.FormService;
 import com.rhcloud.jop.formfactor.domain.services.UserService;
@@ -22,11 +18,9 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -66,10 +60,10 @@ public class CreateActivity extends FormFactorFragmentActivity implements OnQues
 	
 	public void addMultipleChoice()
 	{
-		Question question = new Question();
+		com.rhcloud.jop.formfactor.domain.MultipleChoiceQuestion question = new com.rhcloud.jop.formfactor.domain.MultipleChoiceQuestion();
 		question.Type = QuestionType.MultipleChoice;
-		question.Min = this.getResources().getInteger(R.integer.default_min_responses);
-		question.Max = this.getResources().getInteger(R.integer.default_max_responses);
+		question.MinResponses = this.getResources().getInteger(R.integer.default_min_responses);
+		question.MaxResponses = this.getResources().getInteger(R.integer.default_max_responses);
 		addMultipleChoice(question);
 	}
 	
