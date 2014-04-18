@@ -6,9 +6,13 @@ public interface IMultipleChoiceQuestionRepository
 {
 	public void Add(MultipleChoiceQuestion question);
 
+	public MultipleChoiceQuestion GetByQuestionID(MultipleChoiceQuestion question);
+
 	public void DeleteByQuestionID(long ID);
+	
+	public void DeleteByQuestionIDsNotIn(Long[] IDs, long formID);
 	
 	public void Update(MultipleChoiceQuestion question);
 
-	public MultipleChoiceQuestion GetByQuestionID(MultipleChoiceQuestion question);
+	public void DeleteByFormID(long formID);
 }

@@ -35,6 +35,8 @@ public class MultipleChoiceQuestion extends QuestionViewGroup implements OnCheck
 	private boolean mIsCreateMode = true;
 	private boolean mIsEditChoiceMode = false;
 	private CheckBox mSelectedCheckBox;
+	
+	private com.rhcloud.jop.formfactor.domain.MultipleChoiceQuestion mQuestion;
 
 	public MultipleChoiceQuestion(Context context)
 	{
@@ -315,7 +317,9 @@ public class MultipleChoiceQuestion extends QuestionViewGroup implements OnCheck
 	{
 		super.setData(question);
 		
-		for(ResponseChoice choice : question.ResponseChoices)
+		this.mQuestion = (com.rhcloud.jop.formfactor.domain.MultipleChoiceQuestion)question;
+		
+		for(ResponseChoice choice : this.mQuestion.ResponseChoices)
 		{
 			this.addResponseChoice(choice);
 		}

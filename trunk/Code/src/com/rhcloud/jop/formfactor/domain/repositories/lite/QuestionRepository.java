@@ -290,34 +290,9 @@ public class QuestionRepository implements IQuestionRepository
 			this.unitOfWork.AbortTransaction();
 		}
 	}
-
-	@Override
-	public void UpdateSettings(long questionID, int min, int max)
-	{
-		try
-		{
-			this.unitOfWork.BeginTransaction();
-			
-			ContentValues values = new ContentValues();
-			
-			values.put(QuestionContract._ID, questionID);
-			values.put(QuestionContract.Max.GetName(), max);
-			values.put(QuestionContract.Min.GetName(), min);
-	
-			String whereClause = QuestionContract._ID + " = ?";
-	
-			SQLiteHelper.logUpdate(TAG_NAME, this.liteDB.update(QuestionContract.TABLE_NAME, values, whereClause, new String[] { "" + questionID }));
-			
-			this.unitOfWork.CommitTransaction();
-		}
-		catch(Exception ex)
-		{
-			this.unitOfWork.AbortTransaction();
-		}
-	}
 	
 	@Override
-	public void DeleteByIDsNotIn(long[] IDs, long formID)
+	public void DeleteByIDsNotIn(Long[] IDs, long formID)
 	{
 		try
 		{

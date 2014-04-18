@@ -108,4 +108,52 @@ public class MultipleChoiceQuestionRepository implements IMultipleChoiceQuestion
 			this.unitOfWork.AbortTransaction();
 		}
 	}
+
+	@Override
+	public void DeleteByQuestionIDsNotIn(Long[] IDs, long formID)
+	{
+		try
+		{
+			this.unitOfWork.BeginTransaction();
+			
+			//Model this after
+			//DELETE FROM tMultipleChoiceQuestion WHERE tMultipleChoiceQuestion.iQuestionID NOT IN (?,?,?,...) AND tMultipleChoiceQuestion.iQuestionID IN (SELECT iQuestionID FROM tQuestion WHERE iFormID = ?)
+			
+			String whereClause = MultipleChoiceQuestionContract.TABLE_NAME + "." + MultipleChoiceQuestionContract.QuestionID.GetName() + " NOT IN (";
+			
+			String[] args = new String[IDs.length + 1];
+			
+			for(int i = 0; i < IDs.length; i++)
+			{
+				if(i != IDs.length - 1)
+				{
+					whereClause += "?, ";
+				}
+				else
+				{
+					whereClause += "?)";
+				}
+				
+				args[i] = "" + IDs[i];
+			}
+			
+			args[IDs.length] = "" + formID;
+			
+			whereClause += " AND " + MultipleChoiceQuestionContract.QuestionID.GetName() + " IN ( SELECT " + QuestionContract._ID + " FROM " + QuestionContract.TABLE_NAME + " WHERE " + QuestionContract.FormID.GetName() + " = ?";
+	
+			SQLiteHelper.logDelete(TAG_NAME, this.liteDB.delete(MultipleChoiceQuestionContract.TABLE_NAME, whereClause, args));
+			
+			this.unitOfWork.CommitTransaction();
+		}
+		catch(Exception ex)
+		{
+			this.unitOfWork.AbortTransaction();
+		}
+	}
+
+	@Override
+	public void DeleteByFormID(long formID)
+	{
+		
+	}
 }

@@ -26,6 +26,8 @@ public class FreeResponseQuestion extends QuestionViewGroup implements OnMenuIte
 {
 	private LinearLayout mResponseSection;
 	private EditText mResponse;
+	
+	private com.rhcloud.jop.formfactor.domain.FreeResponseQuestion mQuestion;
 
 	private boolean mIsCreateMode = true;
 
@@ -65,14 +67,14 @@ public class FreeResponseQuestion extends QuestionViewGroup implements OnMenuIte
 		super.setOnClickListener(this);
 	}
 	
-	public int getMaxResponses()
+	public int getMaxLength()
 	{
-		return ((com.rhcloud.jop.formfactor.domain.MultipleChoiceQuestion)this.mQuestion).MaxResponses;
+		return this.mQuestion.MaxLength;
 	}
 	
-	public int getMinResponses()
+	public int getMinLength()
 	{
-		return ((com.rhcloud.jop.formfactor.domain.MultipleChoiceQuestion)this.mQuestion).MinResponses;
+		return this.mQuestion.MinLength;
 	}
 	
 	public Question getQuestion()
@@ -80,11 +82,6 @@ public class FreeResponseQuestion extends QuestionViewGroup implements OnMenuIte
 		this.mQuestion.Question = this.getQuestionText();
 		
 		return this.mQuestion;
-	}
-	
-	public List<ResponseChoice> getResponseChoies()
-	{
-		return this.mQuestion.ResponseChoices;
 	}
 	
 	public boolean isValidForSubmission()
@@ -142,16 +139,18 @@ public class FreeResponseQuestion extends QuestionViewGroup implements OnMenuIte
 	public void setData(Question question)
 	{
 		super.setData(question);
+		
+		this.mQuestion = (com.rhcloud.jop.formfactor.domain.FreeResponseQuestion)question;
 	}
 
-	public void setMaxResponses(int maxResponses)
+	public void setMaxLength(int maxLength)
 	{
-		((com.rhcloud.jop.formfactor.domain.MultipleChoiceQuestion)this.mQuestion).MaxResponses = maxResponses;
+		this.mQuestion.MaxLength = maxLength;
 	}
 
-	public void setMinResponses(int minResponses)
+	public void setMinLength(int minLength)
 	{
-		((com.rhcloud.jop.formfactor.domain.MultipleChoiceQuestion)this.mQuestion).MinResponses = minResponses;
+		this.mQuestion.MinLength = minLength;
 	}
 	
 	public void setOnQuestionDeleteListener(OnQuestionDeleteListener listener)

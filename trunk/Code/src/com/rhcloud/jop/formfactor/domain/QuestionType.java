@@ -5,7 +5,7 @@ public enum QuestionType
 	None(0),
 	BestChoice(1), 
 	MultipleChoice (2),
-	OpenEnded (3),
+	FreeResponse (3),
 	FreeDraw (4);
 	
 	private long index = 0;

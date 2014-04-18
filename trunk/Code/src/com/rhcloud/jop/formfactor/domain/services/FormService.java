@@ -9,9 +9,12 @@ import com.rhcloud.jop.formfactor.domain.IFormFactorDataContext;
 import com.rhcloud.jop.formfactor.domain.MultipleChoiceQuestion;
 import com.rhcloud.jop.formfactor.domain.FreeResponseQuestion;
 import com.rhcloud.jop.formfactor.domain.Question;
+import com.rhcloud.jop.formfactor.domain.QuestionType;
 import com.rhcloud.jop.formfactor.domain.ResponseChoice;
 import com.rhcloud.jop.formfactor.domain.repositories.IFormRepository;
+import com.rhcloud.jop.formfactor.domain.repositories.IFreeResponseQuestionRepository;
 import com.rhcloud.jop.formfactor.domain.repositories.ILogoRepository;
+import com.rhcloud.jop.formfactor.domain.repositories.IMultipleChoiceQuestionRepository;
 import com.rhcloud.jop.formfactor.domain.repositories.IQuestionRepository;
 import com.rhcloud.jop.formfactor.domain.repositories.IResponseChoiceRepository;
 
@@ -30,6 +33,7 @@ public class FormService
 
 		IFormRepository formRepo = DataContext.GetFormRepository();
 		ILogoRepository logoRepo = DataContext.GetLogoRepository();
+		IQuestionRepository questionRepo = DataContext.GetQuestionRepository();
 		
 		if(form != null)
 		{
@@ -73,39 +77,17 @@ public class FormService
 			
 			if(size > 0)
 			{
-				ArrayList<Long> questionIDsMultipleChoice = new ArrayList<Long>();
-				ArrayList<Long> questionIDsFreeResponse = new ArrayList<Long>();
-	
-				for(int i = 0; i < size; i++)
-				{
-					Question question = form.Questions.get(i);
-					question.FormID = form.ID;
-					
-					if(question instanceof MultipleChoiceQuestion)
-					{
-						questionIDsMultipleChoice.add(question.ID);
-					}
-					else
-					{
-						if(question instanceof FreeResponseQuestion)
-						{
-							questionIDsFreeResponse.add(question.ID);
-						}
-					}
-				}
-				
-				IQuestionRepository questionRepo = DataContext.GetQuestionRepository(MultipleChoiceQuestion.class, );
-				Long[] ids;
-				questionRepo.DeleteByIDsNotIn(questionIDsMultipleChoice.toArray(ids), form.ID);
-				
-				for(Question question : form.Questions)
-				{
-					result.Merge(AddUpdateQuestion(question));
-				}
+				result.Merge(AddUpdateQuestions(form.Questions, form.ID));
 			}
 			else
 			{
 				questionRepo.DeleteByFormID(form.ID);
+				
+				IMultipleChoiceQuestionRepository multipleChoiceQuestionRepo = DataContext.GetMultipleChoiceQuestionRepository();
+				IFreeResponseQuestionRepository freeResponseQuestionRepo = DataContext.GetFreeResponseQuestionRepository();
+				
+				multipleChoiceQuestionRepo.DeleteByFormID(form.ID);
+				freeResponseQuestionRepo.DeleteByFormID(form.ID);
 			}
 			
 			return result;
@@ -119,15 +101,30 @@ public class FormService
 		return result;
 	}
 	
+	public Result AddUpdateQuestions(List<Question> questions, long formID)
+	{
+		Result result = new Result();
+		
+		for(Question question : questions)
+		{
+			question.FormID = formID;
+			result.Merge(AddUpdateQuestion(question));
+		}
+		
+		return result;
+	}
+	
 	public Result AddUpdateQuestion(Question question)
 	{
 		Result result = new Result();
 		
 		try
 		{
-			IQuestionRepository questionRepo = DataContext.GetQuestionRepository(MultipleChoiceQuestion.class);
+			IQuestionRepository questionRepo = DataContext.GetQuestionRepository();
 			IResponseChoiceRepository responseRepo = DataContext.GetResponseChoiceRepository();
-
+			IMultipleChoiceQuestionRepository multipleChoiceQuestionRepo = DataContext.GetMultipleChoiceQuestionRepository();
+			IFreeResponseQuestionRepository freeResponseQuestionRepo = DataContext.GetFreeResponseQuestionRepository();
+			
 			if(question.ID == 0)
 			{
 				questionRepo.Add(question);
@@ -136,40 +133,76 @@ public class FormService
 			{
 				questionRepo.Update(question);
 			}
-				
-			int size = question.ResponseChoices.size();
-			
-			if(size > 0)
-			{
-				long[] choiceIDs = new long[size];
-	
-				for(int i = 0; i < size; i++)
-				{
-					ResponseChoice choice = question.ResponseChoices.get(i);
-					choice.QuestionID = question.ID;
-					choiceIDs[i] = choice.ID;
-				}
-				
-				responseRepo.DeleteByIDsNotIn(choiceIDs, question.ID);
-				
-				for(ResponseChoice choice : question.ResponseChoices)
-				{
-					if(choice.ID != 0)
-					{
-						choice.QuestionID = question.ID;
 
-						responseRepo.Update(choice);
-					}
-					else
+			ArrayList<Long> questionIDsMultipleChoice = new ArrayList<Long>();
+			ArrayList<Long> questionIDsFreeResponse = new ArrayList<Long>();
+			
+			if(question instanceof MultipleChoiceQuestion)
+			{
+				questionIDsMultipleChoice.add(question.ID);
+				
+				MultipleChoiceQuestion q = (MultipleChoiceQuestion)question;
+				multipleChoiceQuestionRepo.Add(q);
+				
+				int size = q.ResponseChoices.size();
+				
+				if(size > 0)
+				{
+					long[] choiceIDs = new long[size];
+		
+					for(int i = 0; i < size; i++)
 					{
-						responseRepo.Add(choice);
+						ResponseChoice choice = q.ResponseChoices.get(i);
+						choice.QuestionID = question.ID;
+						choiceIDs[i] = choice.ID;
 					}
+					
+					responseRepo.DeleteByIDsNotIn(choiceIDs, question.ID);
+					
+					for(ResponseChoice choice : q.ResponseChoices)
+					{
+						if(choice.ID != 0)
+						{
+							choice.QuestionID = question.ID;
+
+							responseRepo.Update(choice);
+						}
+						else
+						{
+							responseRepo.Add(choice);
+						}
+					}
+				}
+				else
+				{
+					responseRepo.DeleteByQuestionID(question.ID);
 				}
 			}
 			else
 			{
-				responseRepo.DeleteByQuestionID(question.ID);
+				if(question instanceof FreeResponseQuestion)
+				{
+					questionIDsFreeResponse.add(question.ID);
+
+					FreeResponseQuestion q = (FreeResponseQuestion)question;
+					freeResponseQuestionRepo.Add(q);
+				}
 			}
+			
+			Long[] ids = new Long[questionIDsMultipleChoice.size()];
+			
+			ids = questionIDsMultipleChoice.toArray(ids);
+			
+			questionRepo.DeleteByIDsNotIn(ids, question.FormID);
+			multipleChoiceQuestionRepo.DeleteByQuestionIDsNotIn(ids, question.FormID);
+			
+			ids = new Long[questionIDsFreeResponse.size()];
+			
+			ids = questionIDsFreeResponse.toArray(ids);
+			
+			questionRepo.DeleteByIDsNotIn(ids, question.FormID);
+			freeResponseQuestionRepo.DeleteByQuestionIDsNotIn(ids, question.FormID);
+			
 		}
 		catch(Exception ex)
 		{
@@ -178,6 +211,35 @@ public class FormService
 		}
 		
 		return result;
+	}
+	
+	public Question GetQuestionByID(long questionID)
+	{
+		Question question = null;
+		
+		IQuestionRepository questionRepo = DataContext.GetQuestionRepository();
+		
+		question = questionRepo.GetByID(questionID);
+
+		this.FillQuestion(question);
+			
+		return question;
+	}
+	
+	public List<Question> GetQuestionsByFormID(long formID)
+	{
+		List<Question> questions = new ArrayList<Question>();
+		
+		IQuestionRepository questionRepo = DataContext.GetQuestionRepository();
+		
+		questions = questionRepo.GetByFormID(formID);
+		
+		for(Question question : questions)
+		{
+			this.FillQuestion(question);
+		}
+		
+		return questions;
 	}
 	
 	public Form GetFormByID(long formID)
@@ -205,22 +267,69 @@ public class FormService
 		return forms;
 	}
 	
+	private void FillQuestion(Question question)
+	{
+		IMultipleChoiceQuestionRepository multipleChoiceQuestionRepo = DataContext.GetMultipleChoiceQuestionRepository();
+		IFreeResponseQuestionRepository freeResponseQuestionRepo = DataContext.GetFreeResponseQuestionRepository();
+		IResponseChoiceRepository responseRepo = DataContext.GetResponseChoiceRepository();
+		
+		if(question instanceof MultipleChoiceQuestion)
+		{
+			MultipleChoiceQuestion q = (MultipleChoiceQuestion)question;
+			multipleChoiceQuestionRepo.GetByQuestionID(q);
+		}
+		else
+		{
+			if(question instanceof FreeResponseQuestion)
+			{
+				FreeResponseQuestion q = (FreeResponseQuestion)question;
+				freeResponseQuestionRepo.GetByQuestionID(q);
+			}
+			else
+			{
+				if(question.Type == QuestionType.MultipleChoice)
+				{
+					MultipleChoiceQuestion q = new MultipleChoiceQuestion();
+					
+					q.ID = question.ID;
+					q.FormID = question.FormID;
+					q.Image = question.Image;
+					q.Number = question.Number;
+					q.Question = question.Question;
+					q.Type = question.Type;
+					q.ResponseChoices = responseRepo.GetByQuestionID(question.ID);
+					
+					question = q;
+				}
+				else
+				{
+					if(question.Type == QuestionType.FreeResponse)
+					{
+						FreeResponseQuestion q = new FreeResponseQuestion();
+						
+						q.ID = question.ID;
+						q.FormID = question.FormID;
+						q.Image = question.Image;
+						q.Number = question.Number;
+						q.Question = question.Question;
+						q.Type = question.Type;
+						
+						question = q;
+					}
+				}
+			}
+		}
+	}
+	
 	private void FillForms(List<Form> forms)
 	{
 		ILogoRepository logoRepo = DataContext.GetLogoRepository();
-		IQuestionRepository questionRepo = DataContext.GetQuestionRepository();
-		IResponseChoiceRepository responseRepo = DataContext.GetResponseChoiceRepository();
 		
 		for(Form form : forms)
 		{
 			form.Logo = logoRepo.GetByID(form.Logo.ID);
 			
-			form.Questions.addAll(questionRepo.GetByFormID(form.ID));
-			
-			for(Question question : form.Questions)
-			{
-				question.ResponseChoices = responseRepo.GetByQuestionID(question.ID);
-			}
+			form.Questions.addAll(this.GetQuestionsByFormID(form.ID));
 		}
 	}
 }

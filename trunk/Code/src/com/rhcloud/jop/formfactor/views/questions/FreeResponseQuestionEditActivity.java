@@ -8,6 +8,7 @@ import com.rhcloud.jop.formfactor.common.Result;
 import com.rhcloud.jop.formfactor.domain.Question;
 import com.rhcloud.jop.formfactor.domain.UnitOfWork;
 import com.rhcloud.jop.formfactor.domain.dal.lite.FormFactorDataContext;
+import com.rhcloud.jop.formfactor.domain.services.FormService;
 import com.rhcloud.jop.formfactor.sqlite.FormFactorDb;
 import com.rhcloud.jop.formfactor.views.BundleKeys;
 import com.rhcloud.jop.formfactor.views.FormFactorFragmentActivity;
@@ -37,7 +38,7 @@ import android.text.TextWatcher;
 public class FreeResponseQuestionEditActivity extends FormFactorFragmentActivity implements ActionBar.TabListener, DrawerListener, OnTouchListener, OnFocusChangeListener
 {
 	private long mQuestionID = 0;
-	private Question mQuestion;
+	private com.rhcloud.jop.formfactor.domain.FreeResponseQuestion mQuestion;
 	static EditText mMinLength;
 	static EditText mMaxLength;
 	static EditText mResponseLines;
@@ -80,8 +81,9 @@ public class FreeResponseQuestionEditActivity extends FormFactorFragmentActivity
         		
         		UnitOfWork unitOfWork = new UnitOfWork(FormFactorDb.getInstance(this));
         		FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
+        		FormService formService = new FormService(dataContext);
         		
-            	this.mQuestion = dataContext.GetQuestionRepository().GetByQuestionID(this.mQuestionID); 
+            	this.mQuestion = (com.rhcloud.jop.formfactor.domain.FreeResponseQuestion)formService.GetQuestionByID(this.mQuestionID); 
         	}
         }
 		
@@ -93,8 +95,8 @@ public class FreeResponseQuestionEditActivity extends FormFactorFragmentActivity
 		
 		if(this.mQuestion != null && mMaxLength.getText() != null && mMaxLength.getText().toString().equals(""))
 		{
-			mValidMaxLength = this.mQuestion.MaxResponses;
-			mMaxLength.setText("" + this.mQuestion.MaxResponses);
+			mValidMaxLength = this.mQuestion.MaxLength;
+			mMaxLength.setText("" + this.mQuestion.MaxLength);
 		}
 		
         mMinLength = (EditText)this.findViewById(R.id.activity_multiple_choice_question_edit_answer_min);
@@ -102,8 +104,8 @@ public class FreeResponseQuestionEditActivity extends FormFactorFragmentActivity
 		
 		if(this.mQuestion != null && mMinLength.getText() != null && mMinLength.getText().toString().equals(""))
 		{
-			mValidMinLength = this.mQuestion.MinResponses;
-			mMinLength.setText("" + this.mQuestion.MinResponses);
+			mValidMinLength = this.mQuestion.MinLength;
+			mMinLength.setText("" + this.mQuestion.MinLength);
 		}
 		
         mResponseLines = (EditText)this.findViewById(R.id.activity_free_response_question_edit_height);
@@ -111,8 +113,8 @@ public class FreeResponseQuestionEditActivity extends FormFactorFragmentActivity
 		
 		if(this.mQuestion != null && mResponseLines.getText() != null && mResponseLines.getText().toString().equals(""))
 		{
-			mValidResponseLines = this.mQuestion.MinResponses;
-			mResponseLines.setText("" + this.mQuestion.MinResponses);
+			mValidResponseLines = this.mQuestion.Lines;
+			mResponseLines.setText("" + this.mQuestion.Lines);
 		}
 		
         mMinLength.addTextChangedListener(new TextWatcher()
@@ -227,11 +229,11 @@ public class FreeResponseQuestionEditActivity extends FormFactorFragmentActivity
     		
     		if(this.validateInput(false))
     		{
-    			((com.rhcloud.jop.formfactor.domain.MultipleChoiceQuestion)this.mQuestion).MaxResponses = Integer.parseInt(mMaxLength.getText().toString());
-    			((com.rhcloud.jop.formfactor.domain.MultipleChoiceQuestion)this.mQuestion).MinResponses = Integer.parseInt(mMinLength.getText().toString());
+    			this.mQuestion.MaxLength = Integer.parseInt(mMaxLength.getText().toString());
+    			this.mQuestion.MinLength = Integer.parseInt(mMinLength.getText().toString());
     		}
     		
-        	dataContext.GetQuestionRepository().UpdateSettings(this.mQuestion.ID, ((com.rhcloud.jop.formfactor.domain.MultipleChoiceQuestion)this.mQuestion).MinResponses, ((com.rhcloud.jop.formfactor.domain.MultipleChoiceQuestion)this.mQuestion).MaxResponses);
+        	dataContext.GetFreeResponseQuestionRepository().Update(this.mQuestion);
 		}
 	}
 

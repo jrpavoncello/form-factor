@@ -9,7 +9,7 @@ public final class FreeResponseQuestionContract extends BaseTable
 	public static final BaseColumn QuestionID = new BaseColumn("iQuestionID", BaseColumn.IntegerType);
 	public static final BaseColumn MinLength = new BaseColumn("iMinLength", BaseColumn.IntegerType);
 	public static final BaseColumn MaxLength = new BaseColumn("iMaxLength", BaseColumn.IntegerType);
-	public static final BaseColumn MaxLines = new BaseColumn("iMaxLines", BaseColumn.IntegerType);
+	public static final BaseColumn Lines = new BaseColumn("iLines", BaseColumn.IntegerType);
 	
 	@Override
 	protected String GetTableName ()
@@ -23,6 +23,6 @@ public final class FreeResponseQuestionContract extends BaseTable
 		super.AddColumnCreate(QuestionID);
 		super.AddColumnCreate(MinLength);
 		super.AddColumnCreate(MaxLength);
-		super.AddColumnCreate(MaxLines);
+		super.AddColumnCreate(Lines);
 	}
 }

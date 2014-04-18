@@ -10,7 +10,7 @@ public interface IQuestionRepository
 	
 	public void DeleteByID(long formID);
 
-	public void DeleteByIDsNotIn(long[] IDs, long formID);
+	public void DeleteByIDsNotIn(Long[] IDs, long formID);
 	
 	public void DeleteByFormID(long formID);
 	
@@ -25,6 +25,4 @@ public interface IQuestionRepository
 	public Question GetByID(long ID);
 
 	public void Update(Question question);
-
-	public void UpdateSettings(long questionID, int min, int max);
 }

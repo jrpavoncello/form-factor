@@ -8,6 +8,7 @@ import com.rhcloud.jop.formfactor.common.Result;
 import com.rhcloud.jop.formfactor.domain.Question;
 import com.rhcloud.jop.formfactor.domain.UnitOfWork;
 import com.rhcloud.jop.formfactor.domain.dal.lite.FormFactorDataContext;
+import com.rhcloud.jop.formfactor.domain.services.FormService;
 import com.rhcloud.jop.formfactor.sqlite.FormFactorDb;
 import com.rhcloud.jop.formfactor.views.BundleKeys;
 import com.rhcloud.jop.formfactor.views.FormFactorFragmentActivity;
@@ -37,7 +38,7 @@ import android.text.TextWatcher;
 public class MultipleChoiceQuestionEditActivity extends FormFactorFragmentActivity implements ActionBar.TabListener, DrawerListener, OnTouchListener, OnFocusChangeListener
 {
 	private long mQuestionID = 0;
-	private Question mQuestion;
+	private com.rhcloud.jop.formfactor.domain.MultipleChoiceQuestion mQuestion;
 	static EditText mMinResponses;
 	static EditText mMaxResponses;
 	static int mConstraintMaxResponses;
@@ -77,8 +78,9 @@ public class MultipleChoiceQuestionEditActivity extends FormFactorFragmentActivi
         		
         		UnitOfWork unitOfWork = new UnitOfWork(FormFactorDb.getInstance(this));
         		FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
+        		FormService formService = new FormService(dataContext);
         		
-            	this.mQuestion = dataContext.GetQuestionRepository().GetByQuestionID(this.mQuestionID); 
+            	this.mQuestion = (com.rhcloud.jop.formfactor.domain.MultipleChoiceQuestion)formService.GetQuestionByID(this.mQuestionID); 
         	}
         }
 		
@@ -190,8 +192,8 @@ public class MultipleChoiceQuestionEditActivity extends FormFactorFragmentActivi
 	    		this.mQuestion.MaxResponses = Integer.parseInt(mMaxResponses.getText().toString());
 	    		this.mQuestion.MinResponses = Integer.parseInt(mMinResponses.getText().toString());
     		}
-    		
-        	dataContext.GetQuestionRepository().UpdateSettings(this.mQuestion.ID, this.mQuestion.MinResponses, this.mQuestion.MaxResponses);
+
+        	dataContext.GetMultipleChoiceQuestionRepository().Update(this.mQuestion);
 		}
 	}
 

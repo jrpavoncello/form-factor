@@ -11,6 +11,4 @@ public class Question
 	public QuestionType Type = QuestionType.None;
 	public String Question = "";
 	public byte[] Image = null;
-	
-	public List<ResponseChoice> ResponseChoices = new ArrayList<ResponseChoice>();
 }

@@ -116,11 +116,6 @@ public abstract class QuestionViewGroup extends LinearLayout implements OnMenuIt
 		return this.mQuestion.Question;
 	}
 	
-	public List<ResponseChoice> getResponseChoies()
-	{
-		return this.mQuestion.ResponseChoices;
-	}
-	
 	@Override
 	public void onClick(View v)
 	{
@@ -242,16 +237,6 @@ public abstract class QuestionViewGroup extends LinearLayout implements OnMenuIt
 	{
 		mImageDimensions = dimensions;
 		this.invalidate();
-	}
-	
-	protected void setMaxResponses(int maxResponses)
-	{
-		this.mQuestion.MaxResponses = maxResponses;
-	}
-
-	protected void setMinResponses(int minResponses)
-	{
-		this.mQuestion.MinResponses = minResponses;
 	}
 
 	protected void setOnQuestionDeleteListener(OnQuestionDeleteListener listener)
