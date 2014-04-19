@@ -53,18 +53,46 @@ public class CreateActivity extends FormFactorFragmentActivity implements OnQues
 	
 	public void addFreeResponse()
 	{
-		ListView questionsView = (ListView)this.findViewById(R.id.activity_create_questions);
+		com.rhcloud.jop.formfactor.domain.FreeResponseQuestion question = new com.rhcloud.jop.formfactor.domain.FreeResponseQuestion();
+		question.FormID = this.mForm.ID;
+		question.Type = QuestionType.FreeResponse;
+		question.MinLength = this.getResources().getInteger(R.integer.default_min_length);
+		question.MaxLength = this.getResources().getInteger(R.integer.default_max_length);
+		question.Lines = this.getResources().getInteger(R.integer.default_lines);
 		
-		ListView multipleChoiceList = new ListView(this);
+		this.addFreeResponse(question);
+	}
+	
+	public void addFreeResponse(Question question)
+	{
+		LinearLayout questionsView = (LinearLayout)this.findViewById(R.id.activity_create_questions);
+		
+		com.rhcloud.jop.formfactor.views.questions.FreeResponseQuestion freeResponseViewGroup = new com.rhcloud.jop.formfactor.views.questions.FreeResponseQuestion(this);
+		
+		freeResponseViewGroup.setOnQuestionDeleteListener(this);
+		
+		freeResponseViewGroup.setData(question);
+		
+		this.mQuestions.add(freeResponseViewGroup);
+		
+		questionsView.addView(freeResponseViewGroup);
+		
+		UnitOfWork unitOfWork = new UnitOfWork(FormFactorDb.getInstance(this));
+		FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
+		FormService formService = new FormService(dataContext);
+		
+		formService.AddUpdateQuestion(question);
 	}
 	
 	public void addMultipleChoice()
 	{
 		com.rhcloud.jop.formfactor.domain.MultipleChoiceQuestion question = new com.rhcloud.jop.formfactor.domain.MultipleChoiceQuestion();
+		question.FormID = this.mForm.ID;
 		question.Type = QuestionType.MultipleChoice;
 		question.MinResponses = this.getResources().getInteger(R.integer.default_min_responses);
 		question.MaxResponses = this.getResources().getInteger(R.integer.default_max_responses);
-		addMultipleChoice(question);
+		
+		this.addMultipleChoice(question);
 	}
 	
 	public void addMultipleChoice(Question question)
@@ -80,21 +108,12 @@ public class CreateActivity extends FormFactorFragmentActivity implements OnQues
 		this.mQuestions.add(multipleChoiceViewGroup);
 		
 		questionsView.addView(multipleChoiceViewGroup);
-	}
-	
-	public void deleteMultipleChoice(Question question)
-	{
-		LinearLayout questionsView = (LinearLayout)this.findViewById(R.id.activity_create_questions);
 		
-		int size = this.mQuestions.size();
+		UnitOfWork unitOfWork = new UnitOfWork(FormFactorDb.getInstance(this));
+		FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
+		FormService formService = new FormService(dataContext);
 		
-		for(int i = 0; i < size; i++)
-		{
-			if(question.ID == this.mQuestions.get(i).getQuestion().ID)
-			{
-				questionsView.removeViewAt(i);
-			}
-		}
+		formService.AddUpdateQuestion(question);
 	}
 
 	@Override
@@ -163,6 +182,7 @@ public class CreateActivity extends FormFactorFragmentActivity implements OnQues
 				return true;
 				
 			case R.id.activity_create_add_new_free_response:
+				addFreeResponse();
 				return true;
 				
 			default:
@@ -408,6 +428,13 @@ public class CreateActivity extends FormFactorFragmentActivity implements OnQues
 					{
 						this.addMultipleChoice(question);
 					}
+					else
+					{
+						if(question.Type == QuestionType.FreeResponse)
+						{
+							this.addFreeResponse(question);
+						}
+					}
 				}
 			}
 			else
@@ -425,9 +452,16 @@ public class CreateActivity extends FormFactorFragmentActivity implements OnQues
 	{		
 		Question question = questionView.getQuestion();
 		
-		if(question.Type == QuestionType.MultipleChoice)
+		LinearLayout questionsView = (LinearLayout)this.findViewById(R.id.activity_create_questions);
+		
+		int size = this.mQuestions.size();
+		
+		for(int i = 0; i < size; i++)
 		{
-			this.deleteMultipleChoice(question);
+			if(question.ID == this.mQuestions.get(i).getQuestion().ID)
+			{
+				questionsView.removeViewAt(i);
+			}
 		}
 		
 		UnitOfWork unitOfWork = new UnitOfWork(FormFactorDb.getInstance(this));

@@ -20,7 +20,6 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:orientation="vertical"
-	    	android:id="@+id/view_group_question_edit_items_container"
 			android:layout_gravity="top" >
 		
 		   	<View
@@ -64,142 +63,142 @@
 			        android:inputType="number"
 			        android:paddingLeft="10dp"
 					android:textCursorDrawable="@null" />
-		
-			   	<View
-				    android:layout_width="fill_parent"
-				    android:layout_height="1dp"
-				    android:background="@color/drawer_menu_divider" />
-				    
-			    <LinearLayout 
-				    android:layout_width="fill_parent"
-				    android:layout_height="48dp"
-				    android:orientation="horizontal"
-				    android:layout_gravity="left|center_vertical" >
-			    
-				   	<FrameLayout
-					    android:layout_width="124dp"
-					    android:layout_height="fill_parent"
-					    android:paddingBottom="5dp"
-					    android:paddingTop="5dp"
-				        android:background="@color/action_bar_background_secondary" >
-					    
-					    <TextView 
-					        android:id="@+id/activity_free_response_question_edit_max"
-					        android:layout_width="124dp"
-		   					android:paddingLeft="10dp"
-					        android:layout_height="wrap_content"
-					    	android:layout_gravity="left|center_vertical"
-				   			android:textAppearance="?android:attr/textAppearanceMedium"
-					        android:text="@string/free_response_settings_response_max_text"
-					        android:textColor="@android:color/white" />
-				   	</FrameLayout>
-			
-				   	<View
-					    android:layout_width="3dp"
-					    android:layout_height="fill_parent"
-					    android:background="@color/drawer_menu_divider" />
-				    
-				    <EditText 
-				        android:id="@+id/activity_free_response_question_edit_answer_max"
-				        android:layout_width="fill_parent"
-				        android:layout_height="fill_parent"
-				        android:inputType="number"
-				        android:paddingLeft="10dp"
-						android:textCursorDrawable="@null" />
-			    </LinearLayout>
-			
-			   	<View
-				    android:layout_width="fill_parent"
-				    android:layout_height="1dp"
-				    android:background="@color/drawer_menu_divider" />
-				    
-			    <LinearLayout 
-				    android:layout_width="fill_parent"
-				    android:layout_height="48dp"
-				    android:orientation="horizontal"
-				    android:layout_gravity="left|center_vertical" >
-			    
-				   	<FrameLayout
-					    android:layout_width="124dp"
-					    android:layout_height="fill_parent"
-					    android:paddingBottom="5dp"
-					    android:paddingTop="5dp"
-				        android:background="@color/action_bar_background_secondary" >
-					    
-					    <TextView 
-					        android:id="@+id/activity_free_response_question_edit_height_text"
-					        android:layout_width="124dp"
-		   					android:paddingLeft="10dp"
-					        android:layout_height="wrap_content"
-					    	android:layout_gravity="left|center_vertical"
-				   			android:textAppearance="?android:attr/textAppearanceMedium"
-					        android:text="@string/activity_free_response_question_height_text"
-					        android:textColor="@android:color/white" />
-				   	</FrameLayout>
-			
-				   	<View
-					    android:layout_width="3dp"
-					    android:layout_height="fill_parent"
-					    android:background="@color/drawer_menu_divider" />
-				    
-				    <EditText 
-				        android:id="@+id/activity_free_response_question_edit_height"
-				        android:layout_width="fill_parent"
-				        android:layout_height="fill_parent"
-				        android:inputType="number"
-				        android:paddingLeft="10dp"
-						android:textCursorDrawable="@null" />
-			    </LinearLayout>
-			
-			   	<View
-				    android:layout_width="fill_parent"
-				    android:layout_height="1dp"
-				    android:background="@color/drawer_menu_divider" />
-		   	
-			   	<!-- Space filler view so that user can click out of the keyboard correctly -->
-			    <View
-				    android:layout_width="fill_parent"
-				    android:layout_height="fill_parent"
-				    android:background="@color/window_background"/>
-			    
 		   	</LinearLayout>
-		   	
-		   	<LinearLayout
+		
+		   	<View
+			    android:layout_width="fill_parent"
+			    android:layout_height="1dp"
+			    android:background="@color/drawer_menu_divider" />
+			    
+		    <LinearLayout 
 			    android:layout_width="fill_parent"
 			    android:layout_height="48dp"
 			    android:orientation="horizontal"
-			    android:layout_gravity="bottom" >
-		   	    
-		   	    <Button
-		   	    	android:id="@+id/view_group_question_edit_cancel"
-				    android:layout_width="fill_parent"
+			    android:layout_gravity="left|center_vertical" >
+		    
+			   	<FrameLayout
+				    android:layout_width="124dp"
 				    android:layout_height="fill_parent"
-				    android:layout_weight="1.0"
-				    android:text="@string/action_cancel"
-				    android:onClick="onActionClicked"/>
-		   	    
-				<FrameLayout 
-				    android:layout_width="5dp"
-				    android:layout_height="48dp"
-				    android:background="@color/action_bar_background" >
-			
-				   	<View
-					    android:layout_width="2dp"
-					    android:layout_height="fill_parent"
-					    android:layout_marginTop="4dp"
-					    android:layout_marginBottom="4dp"
-					    android:layout_gravity="center_vertical|center"
-					    android:background="@color/drawer_menu_divider" />
-				</FrameLayout>
-			   	
-		   	    <Button
-		   	    	android:id="@+id/view_group_question_edit_save"
-				    android:layout_width="fill_parent"
+				    android:paddingBottom="5dp"
+				    android:paddingTop="5dp"
+			        android:background="@color/action_bar_background_secondary" >
+				    
+				    <TextView 
+				        android:id="@+id/activity_free_response_question_edit_answer_max_text"
+				        android:layout_width="124dp"
+	   					android:paddingLeft="10dp"
+				        android:layout_height="wrap_content"
+				    	android:layout_gravity="left|center_vertical"
+			   			android:textAppearance="?android:attr/textAppearanceMedium"
+				        android:text="@string/free_response_settings_response_max_text"
+				        android:textColor="@android:color/white" />
+			   	</FrameLayout>
+		
+			   	<View
+				    android:layout_width="3dp"
 				    android:layout_height="fill_parent"
-				    android:layout_weight="1.0"
-				    android:text="@string/action_save"
-				    android:onClick="onActionClicked" />
-		   	</LinearLayout>
+				    android:background="@color/drawer_menu_divider" />
+			    
+			    <EditText 
+			        android:id="@+id/activity_free_response_question_edit_answer_max"
+			        android:layout_width="fill_parent"
+			        android:layout_height="fill_parent"
+			        android:inputType="number"
+			        android:paddingLeft="10dp"
+					android:textCursorDrawable="@null" />
+		    </LinearLayout>
+		
+		   	<View
+			    android:layout_width="fill_parent"
+			    android:layout_height="1dp"
+			    android:background="@color/drawer_menu_divider" />
+			    
+		    <LinearLayout 
+			    android:layout_width="fill_parent"
+			    android:layout_height="48dp"
+			    android:orientation="horizontal"
+			    android:layout_gravity="left|center_vertical" >
+		    
+			   	<FrameLayout
+				    android:layout_width="124dp"
+				    android:layout_height="fill_parent"
+				    android:paddingBottom="5dp"
+				    android:paddingTop="5dp"
+			        android:background="@color/action_bar_background_secondary" >
+				    
+				    <TextView 
+				        android:id="@+id/activity_free_response_question_edit_answer_height_text"
+				        android:layout_width="124dp"
+	   					android:paddingLeft="10dp"
+				        android:layout_height="wrap_content"
+				    	android:layout_gravity="left|center_vertical"
+			   			android:textAppearance="?android:attr/textAppearanceMedium"
+				        android:text="@string/free_response_settings_response_lines_text"
+				        android:textColor="@android:color/white" />
+			   	</FrameLayout>
+		
+			   	<View
+				    android:layout_width="3dp"
+				    android:layout_height="fill_parent"
+				    android:background="@color/drawer_menu_divider" />
+			    
+			    <EditText 
+			        android:id="@+id/activity_free_response_question_edit_lines"
+			        android:layout_width="fill_parent"
+			        android:layout_height="fill_parent"
+			        android:inputType="number"
+			        android:paddingLeft="10dp"
+					android:textCursorDrawable="@null" />
+		    </LinearLayout>
+		
+		   	<View
+			    android:layout_width="fill_parent"
+			    android:layout_height="1dp"
+			    android:background="@color/drawer_menu_divider" />
+	   	
+		   	<!-- Space filler view so that user can click out of the keyboard correctly -->
+		    <View
+			    android:layout_width="fill_parent"
+			    android:layout_height="fill_parent"
+			    android:background="@color/window_background"/>
+		    
+	   	</LinearLayout>
+	   	
+	   	<LinearLayout
+		    android:layout_width="fill_parent"
+		    android:layout_height="48dp"
+		    android:orientation="horizontal"
+		    android:layout_gravity="bottom" >
+	   	    
+	   	    <Button
+	   	    	android:id="@+id/activity_free_response_question_edit_cancel"
+			    android:layout_width="fill_parent"
+			    android:layout_height="fill_parent"
+			    android:layout_weight="1.0"
+			    android:text="@string/action_cancel"
+			    android:onClick="onActionClicked"/>
+	   	    
+			<FrameLayout 
+			    android:layout_width="5dp"
+			    android:layout_height="48dp"
+			    android:background="@color/action_bar_background" >
+		
+			   	<View
+				    android:layout_width="2dp"
+				    android:layout_height="fill_parent"
+				    android:layout_marginTop="4dp"
+				    android:layout_marginBottom="4dp"
+				    android:layout_gravity="center_vertical|center"
+				    android:background="@color/drawer_menu_divider" />
+			</FrameLayout>
+		   	
+	   	    <Button
+	   	    	android:id="@+id/activity_free_response_question_edit_save"
+			    android:layout_width="fill_parent"
+			    android:layout_height="fill_parent"
+			    android:layout_weight="1.0"
+			    android:text="@string/action_save"
+			    android:onClick="onActionClicked" />
 	   	</LinearLayout>
 	</FrameLayout>
     

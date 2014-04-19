@@ -4,9 +4,15 @@ import com.rhcloud.jop.formfactor.sqlite.datacontracts.types.BaseColumn;
 
 public class UserActivityTypeContract extends BaseTable
 {
-	public static final String TABLE_NAME = "tUserActivityType";
+	public final String TABLE_NAME = "tUserActivityType";
 
-	public static final BaseColumn Action = new BaseColumn("sAction", BaseColumn.TextType);
+	public BaseColumn Action;
+	
+	@Override
+	protected void InitTables()
+	{
+		Action = new BaseColumn("sAction", BaseColumn.TextType);
+	}
 	
 	public UserActivityTypeContract()
 	{

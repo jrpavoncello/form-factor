@@ -4,11 +4,19 @@ import com.rhcloud.jop.formfactor.sqlite.datacontracts.types.BaseColumn;
 
 public final class UserChoiceResponsesContract extends BaseTable
 {
-	public static final String TABLE_NAME = "tUserChoiceResponses";
+	public final String TABLE_NAME = "tUserChoiceResponses";
 
-	public static final BaseColumn UserID = new BaseColumn("iUserID", BaseColumn.IntegerType);
-	public static final BaseColumn QuestionID = new BaseColumn("iQuestionID", BaseColumn.IntegerType);
-	public static final BaseColumn ChoiceID = new BaseColumn("iChoiceID", BaseColumn.IntegerType);
+	public BaseColumn UserID = new BaseColumn("iUserID", BaseColumn.IntegerType);
+	public BaseColumn QuestionID = new BaseColumn("iQuestionID", BaseColumn.IntegerType);
+	public BaseColumn ChoiceID = new BaseColumn("iChoiceID", BaseColumn.IntegerType);
+
+	@Override
+	protected void InitTables()
+	{
+		UserID = new BaseColumn("iUserID", BaseColumn.IntegerType);
+		QuestionID = new BaseColumn("iQuestionID", BaseColumn.IntegerType);
+		ChoiceID = new BaseColumn("iChoiceID", BaseColumn.IntegerType);
+	}
 	
 	@Override
 	protected String GetTableName ()

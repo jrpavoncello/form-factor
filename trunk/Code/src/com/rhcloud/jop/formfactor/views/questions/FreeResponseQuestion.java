@@ -98,7 +98,7 @@ public class FreeResponseQuestion extends QuestionViewGroup implements OnMenuIte
 		{
 		case R.id.question_overflow_button:
 			
-			this.mPopupMenu.getMenuInflater().inflate(R.menu.multiple_choice_question_edit, this.mPopupMenu.getMenu());
+			this.mPopupMenu.getMenuInflater().inflate(R.menu.free_response_question_edit, this.mPopupMenu.getMenu());
 			
 			super.setOnMenuItemClickListener(this);
 			
@@ -116,7 +116,7 @@ public class FreeResponseQuestion extends QuestionViewGroup implements OnMenuIte
 		switch(id)
 		{
 		
-		case R.id.menu_create_question_edit:
+		case R.id.menu_create_free_response_question_edit:
 			
 			UnitOfWork unitOfWork = new UnitOfWork(FormFactorDb.getInstance(this.getContext()));
 			FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
@@ -141,6 +141,11 @@ public class FreeResponseQuestion extends QuestionViewGroup implements OnMenuIte
 		super.setData(question);
 		
 		this.mQuestion = (com.rhcloud.jop.formfactor.domain.FreeResponseQuestion)question;
+		
+		if(this.mQuestion.Lines > 0)
+		{
+			this.mResponse.setLines(this.mQuestion.Lines);
+		}
 	}
 
 	public void setMaxLength(int maxLength)

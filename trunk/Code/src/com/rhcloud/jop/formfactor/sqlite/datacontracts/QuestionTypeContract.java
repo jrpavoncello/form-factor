@@ -4,9 +4,15 @@ import com.rhcloud.jop.formfactor.sqlite.datacontracts.types.BaseColumn;
 
 public final class QuestionTypeContract extends BaseTable
 {
-	public static final String TABLE_NAME = "tQuestionType";
+	public static String TABLE_NAME = "tQuestionType";
 
-	public static final BaseColumn Name = new BaseColumn("sName", BaseColumn.TextType);
+	public static BaseColumn Name;
+	
+	@Override
+	protected void InitTables()
+	{
+		Name = new BaseColumn("sName", BaseColumn.TextType);
+	}
 	
 	public QuestionTypeContract()
 	{

@@ -16,6 +16,7 @@ public class MultipleChoiceQuestionRepository implements IMultipleChoiceQuestion
 	private SQLiteDatabase liteDB;
 	private UnitOfWork unitOfWork;
 	private final String TAG_NAME = "com.rhcloud.jop.formfactor.domain.dal.repositories.MultipleChoiceQuestionRepository";
+	private FormFactorTables tables = FormFactorTables.getInstance();
 	
 	public MultipleChoiceQuestionRepository(UnitOfWork unitOfWork)
 	{
@@ -29,11 +30,11 @@ public class MultipleChoiceQuestionRepository implements IMultipleChoiceQuestion
 	{
 		ContentValues values = new ContentValues();
 		
-		values.put(MultipleChoiceQuestionContract.QuestionID.GetName(), question.ID);
-		values.put(MultipleChoiceQuestionContract.MinResponses.GetName(), question.MinResponses);
-		values.put(MultipleChoiceQuestionContract.MaxResponses.GetName(), question.MaxResponses);
+		values.put(tables.MultipleChoiceQuestionContract.QuestionID.GetName(), question.ID);
+		values.put(tables.MultipleChoiceQuestionContract.MinResponses.GetName(), question.MinResponses);
+		values.put(tables.MultipleChoiceQuestionContract.MaxResponses.GetName(), question.MaxResponses);
 
-		question.ID = SQLiteHelper.logInsert(TAG_NAME, this.liteDB.insert(MultipleChoiceQuestionContract.TABLE_NAME, null, values));
+		question.MultipleChoiceQuestionID = SQLiteHelper.logInsert(TAG_NAME, this.liteDB.insert(tables.MultipleChoiceQuestionContract.TABLE_NAME, null, values));
 	}
 
 	@Override
@@ -43,16 +44,17 @@ public class MultipleChoiceQuestionRepository implements IMultipleChoiceQuestion
 		{
 			this.unitOfWork.BeginTransaction();
 			
-			String whereClause = " WHERE " + MultipleChoiceQuestionContract.QuestionID.GetName() + " = " + question.ID;
+			String whereClause = " WHERE " + tables.MultipleChoiceQuestionContract.QuestionID.GetName() + " = " + question.ID;
 			
-			String query = "SELECT * FROM " + MultipleChoiceQuestionContract.TABLE_NAME + whereClause;
+			String query = "SELECT * FROM " + tables.MultipleChoiceQuestionContract.TABLE_NAME + whereClause;
 			
 			Cursor cursor = this.liteDB.rawQuery(query, null);
 			
 			if(cursor.moveToFirst())
 			{
-				question.MinResponses = cursor.getInt(MultipleChoiceQuestionContract.MinResponses.Index);
-				question.MaxResponses = cursor.getInt(MultipleChoiceQuestionContract.MaxResponses.Index);
+				question.MultipleChoiceQuestionID = cursor.getInt(0);
+				question.MinResponses = cursor.getInt(tables.MultipleChoiceQuestionContract.MinResponses.Index);
+				question.MaxResponses = cursor.getInt(tables.MultipleChoiceQuestionContract.MaxResponses.Index);
 			}
 			
 			this.unitOfWork.CommitTransaction();
@@ -72,9 +74,9 @@ public class MultipleChoiceQuestionRepository implements IMultipleChoiceQuestion
 		{
 			this.unitOfWork.BeginTransaction();
 			
-			String whereClause = MultipleChoiceQuestionContract.QuestionID.GetName() + " = ?";
+			String whereClause = tables.MultipleChoiceQuestionContract.QuestionID.GetName() + " = ?";
 	
-			SQLiteHelper.logDelete(TAG_NAME, this.liteDB.delete(MultipleChoiceQuestionContract.TABLE_NAME, whereClause, new String[] { "" + questionID }));
+			SQLiteHelper.logDelete(TAG_NAME, this.liteDB.delete(tables.MultipleChoiceQuestionContract.TABLE_NAME, whereClause, new String[] { "" + questionID }));
 			
 			this.unitOfWork.CommitTransaction();
 		}
@@ -93,13 +95,12 @@ public class MultipleChoiceQuestionRepository implements IMultipleChoiceQuestion
 			
 			ContentValues values = new ContentValues();
 			
-			values.put(MultipleChoiceQuestionContract.QuestionID.GetName(), question.ID);
-			values.put(MultipleChoiceQuestionContract.MinResponses.GetName(), question.MinResponses);
-			values.put(MultipleChoiceQuestionContract.MaxResponses.GetName(), question.MaxResponses);
+			values.put(tables.MultipleChoiceQuestionContract.MinResponses.GetName(), question.MinResponses);
+			values.put(tables.MultipleChoiceQuestionContract.MaxResponses.GetName(), question.MaxResponses);
 	
-			String whereClause = MultipleChoiceQuestionContract.QuestionID.GetName() + " = ?";
+			String whereClause = tables.MultipleChoiceQuestionContract.QuestionID.GetName() + " = ?";
 	
-			SQLiteHelper.logUpdate(TAG_NAME, this.liteDB.update(MultipleChoiceQuestionContract.TABLE_NAME, values, whereClause, new String[] { "" + question.ID }));
+			SQLiteHelper.logUpdate(TAG_NAME, this.liteDB.update(tables.MultipleChoiceQuestionContract.TABLE_NAME, values, whereClause, new String[] { "" + question.ID }));
 			
 			this.unitOfWork.CommitTransaction();
 		}
@@ -119,7 +120,7 @@ public class MultipleChoiceQuestionRepository implements IMultipleChoiceQuestion
 			//Model this after
 			//DELETE FROM tMultipleChoiceQuestion WHERE tMultipleChoiceQuestion.iQuestionID NOT IN (?,?,?,...) AND tMultipleChoiceQuestion.iQuestionID IN (SELECT iQuestionID FROM tQuestion WHERE iFormID = ?)
 			
-			String whereClause = MultipleChoiceQuestionContract.TABLE_NAME + "." + MultipleChoiceQuestionContract.QuestionID.GetName() + " NOT IN (";
+			String whereClause = tables.MultipleChoiceQuestionContract.TABLE_NAME + "." + tables.MultipleChoiceQuestionContract.QuestionID.GetName() + " NOT IN (";
 			
 			String[] args = new String[IDs.length + 1];
 			
@@ -139,9 +140,9 @@ public class MultipleChoiceQuestionRepository implements IMultipleChoiceQuestion
 			
 			args[IDs.length] = "" + formID;
 			
-			whereClause += " AND " + MultipleChoiceQuestionContract.QuestionID.GetName() + " IN ( SELECT " + QuestionContract._ID + " FROM " + QuestionContract.TABLE_NAME + " WHERE " + QuestionContract.FormID.GetName() + " = ?";
+			whereClause += " AND " + tables.MultipleChoiceQuestionContract.TABLE_NAME + "." + tables.MultipleChoiceQuestionContract.QuestionID.GetName() + " IN ( SELECT " + tables.QuestionContract._ID + " FROM " + tables.QuestionContract.TABLE_NAME + " WHERE " + tables.QuestionContract.FormID.GetName() + " = ? )";
 	
-			SQLiteHelper.logDelete(TAG_NAME, this.liteDB.delete(MultipleChoiceQuestionContract.TABLE_NAME, whereClause, args));
+			SQLiteHelper.logDelete(TAG_NAME, this.liteDB.delete(tables.MultipleChoiceQuestionContract.TABLE_NAME, whereClause, args));
 			
 			this.unitOfWork.CommitTransaction();
 		}
@@ -154,6 +155,21 @@ public class MultipleChoiceQuestionRepository implements IMultipleChoiceQuestion
 	@Override
 	public void DeleteByFormID(long formID)
 	{
-		
+		try
+		{
+			this.unitOfWork.BeginTransaction();
+			
+			String whereClause = tables.MultipleChoiceQuestionContract.QuestionID.GetName() + " IN (";
+			
+			whereClause += " SELECT " + tables.QuestionContract._ID + " FROM " + tables.QuestionContract.TABLE_NAME + " WHERE " + tables.QuestionContract.FormID.GetName() + " = ?";
+	
+			SQLiteHelper.logDelete(TAG_NAME, this.liteDB.delete(tables.MultipleChoiceQuestionContract.TABLE_NAME, whereClause, new String[] { "" + formID }));
+			
+			this.unitOfWork.CommitTransaction();
+		}
+		catch(Exception ex)
+		{
+			this.unitOfWork.AbortTransaction();
+		}
 	}
 }

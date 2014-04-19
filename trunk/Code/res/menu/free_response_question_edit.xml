@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.rhcloud.jop.formfactor.FreeResponseQuestionEdit" >
+
+    <item android:id="@+id/menu_create_free_response_question_edit"
+		android:title="@string/menu_create_question_edit"
+		android:icon="@drawable/ic_action_free_draw"
+        android:showAsAction="never" />
+
+</menu>

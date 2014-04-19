@@ -56,7 +56,7 @@ public class MultipleChoiceQuestionEditActivity extends FormFactorFragmentActivi
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
-		setContentView(R.layout.activity_multiple_choice_question_edit);
+ 		setContentView(R.layout.activity_multiple_choice_question_edit);
 		super.onCreate(savedInstanceState);
         
         this.setTitle(this.getResources().getString(R.string.drawer_menu_title));
@@ -219,13 +219,13 @@ public class MultipleChoiceQuestionEditActivity extends FormFactorFragmentActivi
 		
 		switch(id)
 		{
-		case R.id.view_group_question_edit_cancel:
+		case R.id.activity_multiple_choice_question_edit_cancel:
 			this.mQuestion = null;
 			this.mQuestionID = 0;
 			
 			this.finish();
 			break;
-		case R.id.view_group_question_edit_save:
+		case R.id.activity_multiple_choice_question_edit_save:
 			if(this.validateInput(true))
 			{
 				this.saveCurrentState();

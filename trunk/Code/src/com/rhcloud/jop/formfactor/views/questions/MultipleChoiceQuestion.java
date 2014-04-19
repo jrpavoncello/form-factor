@@ -288,13 +288,13 @@ public class MultipleChoiceQuestion extends QuestionViewGroup implements OnCheck
 			
 			return true;
 			
-		case R.id.menu_create_question_add_response:
+		case R.id.menu_create_multiple_choice_question_add_response:
 			ResponseChoice choice = new ResponseChoice();
 			this.addResponseChoice(choice);
 			
 			return true;
 			
-		case R.id.menu_create_question_edit:
+		case R.id.menu_create_multiple_choice_question_edit:
 			UnitOfWork unitOfWork = new UnitOfWork(FormFactorDb.getInstance(this.getContext()));
 			FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
 			FormService formService = new FormService(dataContext);

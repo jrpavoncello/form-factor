@@ -23,8 +23,8 @@ public final class FormFactorTables
 				FormsQuestionsXRefContract, 
 				LogoContract, 
 				QuestionContract, 
-				FreeResponseQuestionExtendContract, 
-				MultipleChoiceQuestionExtendContract, 
+				FreeResponseQuestionContract, 
+				MultipleChoiceQuestionContract, 
 				QuestionTypeContract, 
 				ResponseChoicesContract, 
 				UserChoiceResponsesContract, 
@@ -38,8 +38,8 @@ public final class FormFactorTables
     public final FormsQuestionsXRefContract FormsQuestionsXRefContract = new FormsQuestionsXRefContract();
     public final LogoContract LogoContract = new LogoContract();
     public final QuestionContract QuestionContract = new QuestionContract();
-    public final FreeResponseQuestionContract FreeResponseQuestionExtendContract = new FreeResponseQuestionContract();
-    public final MultipleChoiceQuestionContract MultipleChoiceQuestionExtendContract = new MultipleChoiceQuestionContract();
+    public final FreeResponseQuestionContract FreeResponseQuestionContract = new FreeResponseQuestionContract();
+    public final MultipleChoiceQuestionContract MultipleChoiceQuestionContract = new MultipleChoiceQuestionContract();
     public final QuestionTypeContract QuestionTypeContract = new QuestionTypeContract();
     public final ResponseChoicesContract ResponseChoicesContract = new ResponseChoicesContract();
     public final UserChoiceResponsesContract UserChoiceResponsesContract = new UserChoiceResponsesContract();

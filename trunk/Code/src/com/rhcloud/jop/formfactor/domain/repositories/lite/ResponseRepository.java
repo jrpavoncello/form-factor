@@ -12,6 +12,7 @@ public class ResponseRepository implements IResponseRepository
 	private SQLiteDatabase liteDB;
 	private UnitOfWork unitOfWork;
 	private final String TAG_NAME = "com.rhcloud.jop.formfactor.domain.dal.repositories.ResponseRepository";
+	private FormFactorTables tables = FormFactorTables.getInstance();
 	
 	public ResponseRepository(UnitOfWork unitOfWork)
 	{

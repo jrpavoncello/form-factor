@@ -4,7 +4,13 @@
     android:id="@+id/view_group_multiple_choice"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:paddingTop="5dp" >
+				
+   	<View
+	    android:layout_width="fill_parent"
+	    android:layout_height="2dp"
+	    android:background="@color/drawer_menu_divider" />
     
     <EditText
         android:id="@+id/view_group_free_response_edit_text"
@@ -18,7 +24,7 @@
 				
    	<View
 	    android:layout_width="fill_parent"
-	    android:layout_height="1dp"
+	    android:layout_height="2dp"
 	    android:background="@color/drawer_menu_divider" />
     
 </LinearLayout>

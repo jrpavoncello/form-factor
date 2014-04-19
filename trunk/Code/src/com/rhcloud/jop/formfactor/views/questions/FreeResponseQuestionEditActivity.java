@@ -90,7 +90,7 @@ public class FreeResponseQuestionEditActivity extends FormFactorFragmentActivity
 		mMaxLength = (EditText)this.findViewById(R.id.activity_free_response_question_edit_answer_max);
 		mMaxLength.setOnFocusChangeListener(this);
 		
-		mConstraintMaxLength = this.getResources().getInteger(R.integer.constraint_question_max);
+		mConstraintMaxLength = this.getResources().getInteger(R.integer.constraint_answer_max_length);
 		mConstraintResponseLines = this.getResources().getInteger(R.integer.constraint_question_response_max_lines);
 		
 		if(this.mQuestion != null && mMaxLength.getText() != null && mMaxLength.getText().toString().equals(""))
@@ -99,7 +99,7 @@ public class FreeResponseQuestionEditActivity extends FormFactorFragmentActivity
 			mMaxLength.setText("" + this.mQuestion.MaxLength);
 		}
 		
-        mMinLength = (EditText)this.findViewById(R.id.activity_multiple_choice_question_edit_answer_min);
+        mMinLength = (EditText)this.findViewById(R.id.activity_free_response_question_edit_min);
         mMinLength.setOnFocusChangeListener(this);
 		
 		if(this.mQuestion != null && mMinLength.getText() != null && mMinLength.getText().toString().equals(""))
@@ -108,7 +108,7 @@ public class FreeResponseQuestionEditActivity extends FormFactorFragmentActivity
 			mMinLength.setText("" + this.mQuestion.MinLength);
 		}
 		
-        mResponseLines = (EditText)this.findViewById(R.id.activity_free_response_question_edit_height);
+        mResponseLines = (EditText)this.findViewById(R.id.activity_free_response_question_edit_lines);
         mResponseLines.setOnFocusChangeListener(this);
 		
 		if(this.mQuestion != null && mResponseLines.getText() != null && mResponseLines.getText().toString().equals(""))
@@ -231,6 +231,7 @@ public class FreeResponseQuestionEditActivity extends FormFactorFragmentActivity
     		{
     			this.mQuestion.MaxLength = Integer.parseInt(mMaxLength.getText().toString());
     			this.mQuestion.MinLength = Integer.parseInt(mMinLength.getText().toString());
+    			this.mQuestion.Lines = Integer.parseInt(mResponseLines.getText().toString());
     		}
     		
         	dataContext.GetFreeResponseQuestionRepository().Update(this.mQuestion);
@@ -259,13 +260,13 @@ public class FreeResponseQuestionEditActivity extends FormFactorFragmentActivity
 		
 		switch(id)
 		{
-		case R.id.view_group_question_edit_cancel:
+		case R.id.activity_free_response_question_edit_cancel:
 			this.mQuestion = null;
 			this.mQuestionID = 0;
 			
 			this.finish();
 			break;
-		case R.id.view_group_question_edit_save:
+		case R.id.activity_free_response_question_edit_save:
 			if(this.validateInput(true))
 			{
 				this.saveCurrentState();
@@ -333,8 +334,8 @@ public class FreeResponseQuestionEditActivity extends FormFactorFragmentActivity
 		String responseLines = mResponseLines.getText().toString();
 		
 		String minText = ((TextView)this.findViewById(R.id.activity_free_response_question_edit_min)).getText().toString();
-		String maxText = ((TextView)this.findViewById(R.id.activity_free_response_question_edit_max)).getText().toString();
-		String lengthText = ((TextView)this.findViewById(R.id.activity_free_response_question_edit_height)).getText().toString();
+		String maxText = ((TextView)this.findViewById(R.id.activity_free_response_question_edit_min)).getText().toString();
+		String lengthText = ((TextView)this.findViewById(R.id.activity_free_response_question_edit_lines)).getText().toString();
 		
 		boolean shouldValidateMin = this.mHasReceivedFocus.contains(mMinLength.getId());
 		boolean shouldValidateMax = this.mHasReceivedFocus.contains(mMaxLength.getId());

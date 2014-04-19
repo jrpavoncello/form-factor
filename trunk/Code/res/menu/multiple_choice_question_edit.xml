@@ -2,12 +2,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.rhcloud.jop.formfactor.MultipleChoiceQuestionEdit" >
 
-    <item android:id="@+id/menu_create_question_add_response"
+    <item android:id="@+id/menu_create_multiple_choice_question_add_response"
 		android:title="@string/menu_create_response_add"
 		android:icon="@drawable/ic_action_new"
         android:showAsAction="never" />
 
-    <item android:id="@+id/menu_create_question_edit"
+    <item android:id="@+id/menu_create_multiple_choice_question_edit"
 		android:title="@string/menu_create_question_edit"
 		android:icon="@drawable/ic_action_free_draw"
         android:showAsAction="never" />

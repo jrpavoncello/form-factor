@@ -33,9 +33,10 @@ public final class FormFactorDbHelper extends SQLiteOpenHelper
 	@Override
 	public void onCreate(SQLiteDatabase db)
 	{
-		BaseTable[] tables = FormFactorTables.getInstance().GetAllTables();
+		FormFactorTables tables = FormFactorTables.getInstance();
+		BaseTable[] baseTables = tables.GetAllTables();
 		
-		for(BaseTable table : tables)
+		for(BaseTable table : baseTables)
 		{
 			String cmdCreate = table.GetCmdCreateTable();
 			db.execSQL(cmdCreate);
@@ -55,10 +56,10 @@ public final class FormFactorDbHelper extends SQLiteOpenHelper
 		{
 			ContentValues values = new ContentValues();
 
-			values.put(UserActivityTypeContract._ID, activityType.GetIndex());
-			values.put(UserActivityTypeContract.Action.GetName(), activityType.name());
+			values.put(tables.UserActivityTypeContract._ID, activityType.GetIndex());
+			values.put(tables.UserActivityTypeContract.Action.GetName(), activityType.name());
 			
-			db.insert(UserActivityTypeContract.TABLE_NAME, null, values);
+			db.insert(tables.UserActivityTypeContract.TABLE_NAME, null, values);
 		}
 	}
 

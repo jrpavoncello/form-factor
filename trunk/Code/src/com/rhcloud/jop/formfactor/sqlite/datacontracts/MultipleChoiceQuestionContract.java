@@ -4,11 +4,19 @@ import com.rhcloud.jop.formfactor.sqlite.datacontracts.types.BaseColumn;
 
 public final class MultipleChoiceQuestionContract extends BaseTable
 {
-	public static final String TABLE_NAME = "tMultipleChoiceQuestion";
+	public final String TABLE_NAME = "tMultipleChoiceQuestion";
 	
-	public static final BaseColumn QuestionID = new BaseColumn("iQuestionID", BaseColumn.IntegerType);
-	public static final BaseColumn MinResponses = new BaseColumn("iMinResponses", BaseColumn.IntegerType);
-	public static final BaseColumn MaxResponses = new BaseColumn("iMaxResponses", BaseColumn.IntegerType);
+	public BaseColumn QuestionID;
+	public BaseColumn MinResponses;
+	public BaseColumn MaxResponses;
+	
+	@Override
+	protected void InitTables()
+	{
+		QuestionID = new BaseColumn("iQuestionID", BaseColumn.IntegerType);
+		MinResponses = new BaseColumn("iMinResponses", BaseColumn.IntegerType);
+		MaxResponses = new BaseColumn("iMaxResponses", BaseColumn.IntegerType);
+	}
 	
 	@Override
 	protected String GetTableName ()

@@ -4,12 +4,21 @@ import com.rhcloud.jop.formfactor.sqlite.datacontracts.types.BaseColumn;
 
 public final class UserDrawResponsesContract extends BaseTable
 {
-	public static final String TABLE_NAME = "tUserDrawResponses";
+	public final String TABLE_NAME = "tUserDrawResponses";
 
-	public static final BaseColumn UserID = new BaseColumn("iUserID", BaseColumn.IntegerType);
-	public static final BaseColumn QuestionID = new BaseColumn("iQuestionID", BaseColumn.IntegerType);
-	public static final BaseColumn Description = new BaseColumn("sDescription", BaseColumn.TextType);
-	public static final BaseColumn Image = new BaseColumn("blImage", BaseColumn.BlobType);
+	public BaseColumn UserID = new BaseColumn("iUserID", BaseColumn.IntegerType);
+	public BaseColumn QuestionID = new BaseColumn("iQuestionID", BaseColumn.IntegerType);
+	public BaseColumn Description = new BaseColumn("sDescription", BaseColumn.TextType);
+	public BaseColumn Image = new BaseColumn("blImage", BaseColumn.BlobType);
+
+	@Override
+	protected void InitTables()
+	{
+		UserID = new BaseColumn("iUserID", BaseColumn.IntegerType);
+		QuestionID = new BaseColumn("iQuestionID", BaseColumn.IntegerType);
+		Description = new BaseColumn("sDescription", BaseColumn.TextType);
+		Image = new BaseColumn("blImage", BaseColumn.BlobType);
+	}
 	
 	@Override
 	protected String GetTableName ()

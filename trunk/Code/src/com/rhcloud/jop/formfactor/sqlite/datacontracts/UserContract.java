@@ -5,10 +5,17 @@ import com.rhcloud.jop.formfactor.sqlite.datacontracts.types.BaseColumn;
 
 public final class UserContract extends BaseTable
 {
-	public static final String TABLE_NAME = "tUser";
+	public final String TABLE_NAME = "tUser";
 
-	public static final BaseColumn Username = new BaseColumn("sUsername", BaseColumn.TextType);
-	public static final BaseColumn Email = new BaseColumn("sEmail", BaseColumn.TextType);
+	public BaseColumn Username = new BaseColumn("sUsername", BaseColumn.TextType);
+	public BaseColumn Email = new BaseColumn("sEmail", BaseColumn.TextType);
+
+	@Override
+	protected void InitTables()
+	{
+		Username = new BaseColumn("sUsername", BaseColumn.TextType);
+		Email = new BaseColumn("sEmail", BaseColumn.TextType);
+	}
 	
 	@Override
 	protected String GetTableName()

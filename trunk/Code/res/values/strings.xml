@@ -10,6 +10,8 @@
 	<string name="activity_create_title">Create Form</string>
 	<string name="activity_multiple_choice_response_edit_title">Edit Choice</string>
 	<string name="activity_multiple_choice_question_edit_title">Edit Question</string>
+	<string name="activity_multiple_choice_settings_title">Multiple Choice Settings</string>
+	<string name="activity_free_response_edit_title">Free Response Settings</string>
 	<string name="activity_main_title">Welcome</string>
 	<string name="drawer_menu_title">Quick Menu</string>
 	<string name="item_detail_title">Item Detail</string>
@@ -33,11 +35,10 @@
 	<string name="question_hint">Ask me anything&#8230;</string>
 	<string name="free_response_settings_response_max_text">Max Length</string>
 	<string name="free_response_settings_response_min_text">Min Length</string>
-	<string name="activity_free_response_question_height_text">Height</string>
+	<string name="free_response_settings_response_lines_text">Lines</string>
 	<string name="multiple_choice_settings_response_min_text">Min Answers</string>
 	<string name="multiple_choice_settings_response_max_text">Max Answers</string>
 	<string name="multiple_choice_settings_response_text">Response</string>
-	<string name="title_activity_multiple_choice_settings">MultipleChoiceSettings</string>
 	<string name="hello_world">Hello world!</string>
 	<string name="action_settings">Settings</string>
 	<string name="title_activity_multiple_choice_response_edit">MultipleChoiceAnswerEdit</string>

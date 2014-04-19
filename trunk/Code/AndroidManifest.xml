@@ -36,7 +36,7 @@
         </activity>
         <activity
             android:name="com.rhcloud.jop.formfactor.views.questions.MultipleChoiceQuestionEditActivity"
-            android:label="@string/title_activity_multiple_choice_settings"
+            android:label="@string/activity_multiple_choice_settings_title"
             android:parentActivityName="com.rhcloud.jop.formfactor.views.CreateActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -45,6 +45,14 @@
         <activity
             android:name="com.rhcloud.jop.formfactor.views.questions.MultipleChoiceResponseEditActivity"
             android:label="@string/title_activity_multiple_choice_response_edit"
+            android:parentActivityName="com.rhcloud.jop.formfactor.views.CreateActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.rhcloud.jop.formfactor.views.CreateActivity" />
+        </activity>
+        <activity
+            android:name="com.rhcloud.jop.formfactor.views.questions.FreeResponseQuestionEditActivity"
+            android:label="@string/activity_free_response_edit_title"
             android:parentActivityName="com.rhcloud.jop.formfactor.views.CreateActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

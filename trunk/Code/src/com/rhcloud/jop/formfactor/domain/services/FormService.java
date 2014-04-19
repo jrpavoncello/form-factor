@@ -105,11 +105,22 @@ public class FormService
 	{
 		Result result = new Result();
 		
-		for(Question question : questions)
+		int size = questions.size();
+		
+		Long[] IDs = new Long[size];
+		
+		for(int i = 0; i < size; i++)
 		{
+			Question question = questions.get(i);
 			question.FormID = formID;
 			result.Merge(AddUpdateQuestion(question));
+			
+			IDs[i] = question.ID;
 		}
+		
+		IQuestionRepository questionRepo = DataContext.GetQuestionRepository();
+		
+		questionRepo.DeleteByIDsNotIn(IDs, formID);
 		
 		return result;
 	}
@@ -142,7 +153,15 @@ public class FormService
 				questionIDsMultipleChoice.add(question.ID);
 				
 				MultipleChoiceQuestion q = (MultipleChoiceQuestion)question;
-				multipleChoiceQuestionRepo.Add(q);
+				
+				if(q.MultipleChoiceQuestionID == 0)
+				{
+					multipleChoiceQuestionRepo.Add(q);
+				}
+				else
+				{
+					multipleChoiceQuestionRepo.Update(q);
+				}
 				
 				int size = q.ResponseChoices.size();
 				
@@ -185,24 +204,35 @@ public class FormService
 					questionIDsFreeResponse.add(question.ID);
 
 					FreeResponseQuestion q = (FreeResponseQuestion)question;
-					freeResponseQuestionRepo.Add(q);
+					
+					if(q.FreeResponseQuestionID == 0)
+					{
+						freeResponseQuestionRepo.Add(q);
+					}
+					else
+					{
+						freeResponseQuestionRepo.Update(q);
+					}
 				}
 			}
 			
 			Long[] ids = new Long[questionIDsMultipleChoice.size()];
 			
 			ids = questionIDsMultipleChoice.toArray(ids);
-			
-			questionRepo.DeleteByIDsNotIn(ids, question.FormID);
-			multipleChoiceQuestionRepo.DeleteByQuestionIDsNotIn(ids, question.FormID);
+
+			if(ids.length > 0)
+			{
+				multipleChoiceQuestionRepo.DeleteByQuestionIDsNotIn(ids, question.FormID);
+			}
 			
 			ids = new Long[questionIDsFreeResponse.size()];
 			
 			ids = questionIDsFreeResponse.toArray(ids);
-			
-			questionRepo.DeleteByIDsNotIn(ids, question.FormID);
-			freeResponseQuestionRepo.DeleteByQuestionIDsNotIn(ids, question.FormID);
-			
+
+			if(ids.length > 0)
+			{
+				freeResponseQuestionRepo.DeleteByQuestionIDsNotIn(ids, question.FormID);
+			}			
 		}
 		catch(Exception ex)
 		{
@@ -221,7 +251,7 @@ public class FormService
 		
 		question = questionRepo.GetByID(questionID);
 
-		this.FillQuestion(question);
+		question = this.FillQuestion(question);
 			
 		return question;
 	}
@@ -229,6 +259,7 @@ public class FormService
 	public List<Question> GetQuestionsByFormID(long formID)
 	{
 		List<Question> questions = new ArrayList<Question>();
+		List<Question> modified = new ArrayList<Question>();
 		
 		IQuestionRepository questionRepo = DataContext.GetQuestionRepository();
 		
@@ -236,10 +267,10 @@ public class FormService
 		
 		for(Question question : questions)
 		{
-			this.FillQuestion(question);
+			modified.add(this.FillQuestion(question));
 		}
 		
-		return questions;
+		return modified;
 	}
 	
 	public Form GetFormByID(long formID)
@@ -267,7 +298,7 @@ public class FormService
 		return forms;
 	}
 	
-	private void FillQuestion(Question question)
+	private Question FillQuestion(Question question)
 	{
 		IMultipleChoiceQuestionRepository multipleChoiceQuestionRepo = DataContext.GetMultipleChoiceQuestionRepository();
 		IFreeResponseQuestionRepository freeResponseQuestionRepo = DataContext.GetFreeResponseQuestionRepository();
@@ -299,6 +330,8 @@ public class FormService
 					q.Type = question.Type;
 					q.ResponseChoices = responseRepo.GetByQuestionID(question.ID);
 					
+					multipleChoiceQuestionRepo.GetByQuestionID(q);
+					
 					question = q;
 				}
 				else
@@ -314,11 +347,15 @@ public class FormService
 						q.Question = question.Question;
 						q.Type = question.Type;
 						
+						freeResponseQuestionRepo.GetByQuestionID(q);
+						
 						question = q;
 					}
 				}
 			}
 		}
+		
+		return question;
 	}
 	
 	private void FillForms(List<Form> forms)

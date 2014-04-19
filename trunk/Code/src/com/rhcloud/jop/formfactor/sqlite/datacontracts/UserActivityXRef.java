@@ -4,10 +4,17 @@ import com.rhcloud.jop.formfactor.sqlite.datacontracts.types.BaseColumn;
 
 public class UserActivityXRef extends BaseTable
 {
-	public static final String TABLE_NAME = "tUserActivityXRef";
+	public final String TABLE_NAME = "tUserActivityXRef";
 
-	public static final BaseColumn UserID = new BaseColumn("iUserID", BaseColumn.IntegerType);
-	public static final BaseColumn ActivityID = new BaseColumn("iActivityID", BaseColumn.IntegerType);
+	public BaseColumn UserID;
+	public BaseColumn ActivityID;
+
+	@Override
+	protected void InitTables()
+	{
+		UserID = new BaseColumn("iUserID", BaseColumn.IntegerType);
+		ActivityID = new BaseColumn("iActivityID", BaseColumn.IntegerType);
+	}
 	
 	@Override
 	protected String GetTableName()

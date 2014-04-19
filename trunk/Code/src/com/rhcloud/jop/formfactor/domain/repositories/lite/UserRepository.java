@@ -19,6 +19,7 @@ public class UserRepository implements IUserRepository
 	private SQLiteDatabase liteDB;
 	private UnitOfWork unitOfWork;
 	private final String TAG_NAME = "com.rhcloud.jop.formfactor.domain.dal.repositories.UserRepository";
+	private FormFactorTables tables = FormFactorTables.getInstance();
 	
 	public UserRepository(UnitOfWork unitOfWork)
 	{
@@ -36,10 +37,10 @@ public class UserRepository implements IUserRepository
 			
 			ContentValues values = new ContentValues();
 			
-			values.put(UserContract.Email.GetName(), user.Email);
-			values.put(UserContract.Username.GetName(), user.Username);
+			values.put(tables.UserContract.Email.GetName(), user.Email);
+			values.put(tables.UserContract.Username.GetName(), user.Username);
 	
-			user.ID = SQLiteHelper.logInsert(TAG_NAME, this.liteDB.insert(UserContract.TABLE_NAME, null, values));
+			user.ID = SQLiteHelper.logInsert(TAG_NAME, this.liteDB.insert(tables.UserContract.TABLE_NAME, null, values));
 			
 			this.unitOfWork.CommitTransaction();
 		}
@@ -58,7 +59,7 @@ public class UserRepository implements IUserRepository
 		{
 			this.unitOfWork.BeginTransaction();
 			
-			Cursor cursor = this.liteDB.rawQuery("SELECT * FROM " + UserContract.TABLE_NAME, null);
+			Cursor cursor = this.liteDB.rawQuery("SELECT * FROM " + tables.UserContract.TABLE_NAME, null);
 			
 			if(cursor.moveToFirst())
 			{
@@ -67,8 +68,8 @@ public class UserRepository implements IUserRepository
 					User user = new User();
 					
 					user.ID = cursor.getInt(0);
-					user.Email = cursor.getString(UserContract.Email.Index);
-					user.Username = cursor.getString(UserContract.Username.Index);
+					user.Email = cursor.getString(tables.UserContract.Email.Index);
+					user.Username = cursor.getString(tables.UserContract.Username.Index);
 					
 					users.add(user);
 				}
@@ -94,17 +95,17 @@ public class UserRepository implements IUserRepository
 		{
 			this.unitOfWork.BeginTransaction();
 			
-			String whereClause = " WHERE " + UserContract._ID + " = " + ID;
+			String whereClause = " WHERE " + tables.UserContract._ID + " = " + ID;
 			
-			String query = "SELECT * FROM " + UserContract.TABLE_NAME + whereClause;
+			String query = "SELECT * FROM " + tables.UserContract.TABLE_NAME + whereClause;
 			
 			Cursor cursor = this.liteDB.rawQuery(query, null);
 			
 			if(cursor.moveToFirst())
 			{
 				user.ID = cursor.getInt(0);
-				user.Email = cursor.getString(UserContract.Email.Index);
-				user.Username = cursor.getString(UserContract.Username.Index);
+				user.Email = cursor.getString(tables.UserContract.Email.Index);
+				user.Username = cursor.getString(tables.UserContract.Username.Index);
 			}
 			
 			this.unitOfWork.CommitTransaction();
@@ -126,13 +127,13 @@ public class UserRepository implements IUserRepository
 			
 			ContentValues values = new ContentValues();
 			
-			values.put(UserContract._ID, user.ID);
-			values.put(UserContract.Email.GetName(), user.Email);
-			values.put(UserContract.Username.GetName(), user.Username);
+			values.put(tables.UserContract._ID, user.ID);
+			values.put(tables.UserContract.Email.GetName(), user.Email);
+			values.put(tables.UserContract.Username.GetName(), user.Username);
 	
 			String whereClause = UserContract._ID + " = ?";
 	
-			SQLiteHelper.logUpdate(TAG_NAME, this.liteDB.update(UserContract.TABLE_NAME, values, whereClause, new String[] { "" + user.ID }));
+			SQLiteHelper.logUpdate(TAG_NAME, this.liteDB.update(tables.UserContract.TABLE_NAME, values, whereClause, new String[] { "" + user.ID }));
 			
 			this.unitOfWork.CommitTransaction();
 		}

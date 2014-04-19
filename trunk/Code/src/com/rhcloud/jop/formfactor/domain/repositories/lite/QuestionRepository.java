@@ -19,8 +19,8 @@ public class QuestionRepository implements IQuestionRepository
 {
 	protected SQLiteDatabase liteDB;
 	protected UnitOfWork unitOfWork;
-	
 	private final String TAG_NAME = "com.rhcloud.jop.formfactor.domain.dal.repositories.QuestionRepository";
+	private FormFactorTables tables = FormFactorTables.getInstance();
 	
 	public QuestionRepository(UnitOfWork unitOfWork)
 	{
@@ -38,13 +38,16 @@ public class QuestionRepository implements IQuestionRepository
 			
 			ContentValues values = new ContentValues();
 			
-			values.put(QuestionContract.Question.GetName(), question.Question);
-			values.put(QuestionContract.Number.GetName(), question.Number);
-			values.put(QuestionContract.FormID.GetName(), question.FormID);
-			values.put(QuestionContract.Type.GetName(), question.Type.GetIndex());
-			values.put(QuestionContract.Image.GetName(), question.Image);
+			values.put(tables.QuestionContract.Question.GetName(), question.Question);
+			values.put(tables.QuestionContract.Number.GetName(), question.Number);
+			values.put(tables.QuestionContract.FormID.GetName(), question.FormID);
+			
+			long index = question.Type.GetIndex();
+			
+			values.put(tables.QuestionContract.Type.GetName(), index);
+			values.put(tables.QuestionContract.Image.GetName(), question.Image);
 	
-			question.ID = SQLiteHelper.logInsert(TAG_NAME, this.liteDB.insert(QuestionContract.TABLE_NAME, null, values));
+			question.ID = SQLiteHelper.logInsert(TAG_NAME, this.liteDB.insert(tables.QuestionContract.TABLE_NAME, null, values));
 			
 			this.unitOfWork.CommitTransaction();
 		}
@@ -63,7 +66,7 @@ public class QuestionRepository implements IQuestionRepository
 		{
 			this.unitOfWork.BeginTransaction();
 			
-			Cursor cursor = this.liteDB.rawQuery("SELECT * FROM " + QuestionContract.TABLE_NAME + " ORDER BY " + QuestionContract.Number.GetName(), null);
+			Cursor cursor = this.liteDB.rawQuery("SELECT * FROM " + tables.QuestionContract.TABLE_NAME + " ORDER BY " + tables.QuestionContract.Number.GetName(), null);
 			
 			if(cursor.moveToFirst())
 			{
@@ -72,11 +75,11 @@ public class QuestionRepository implements IQuestionRepository
 					Question question = new Question();
 					
 					question.ID = cursor.getInt(0);
-					question.Question = cursor.getString(QuestionContract.Question.Index);
-					question.Number = cursor.getInt(QuestionContract.Number.Index);
-					question.FormID = cursor.getInt(QuestionContract.FormID.Index);
-					question.Type = QuestionType.values()[(cursor.getInt(QuestionContract.Type.Index))];
-					question.Image = cursor.getBlob(QuestionContract.Image.Index);
+					question.Question = cursor.getString(tables.QuestionContract.Question.Index);
+					question.Number = cursor.getInt(tables.QuestionContract.Number.Index);
+					question.FormID = cursor.getInt(tables.QuestionContract.FormID.Index);
+					question.Type = QuestionType.GetByIndex(cursor.getInt(tables.QuestionContract.Type.Index));
+					question.Image = cursor.getBlob(tables.QuestionContract.Image.Index);
 					
 					questions.add(question);
 				}
@@ -102,9 +105,9 @@ public class QuestionRepository implements IQuestionRepository
 		{
 			this.unitOfWork.BeginTransaction();
 			
-			String whereClause = " WHERE " + QuestionContract.FormID.GetName() + " = " + formID;
+			String whereClause = " WHERE " + tables.QuestionContract.FormID.GetName() + " = " + formID;
 			
-			String query = "SELECT * FROM " + QuestionContract.TABLE_NAME + whereClause;
+			String query = "SELECT * FROM " + tables.QuestionContract.TABLE_NAME + whereClause;
 			
 			Cursor cursor = this.liteDB.rawQuery(query, null);
 			
@@ -115,11 +118,11 @@ public class QuestionRepository implements IQuestionRepository
 					Question question = new Question();
 					
 					question.ID = cursor.getInt(0);
-					question.Question = cursor.getString(QuestionContract.Question.Index);
-					question.Number = cursor.getInt(QuestionContract.Number.Index);
-					question.FormID = cursor.getInt(QuestionContract.FormID.Index);
-					question.Type = QuestionType.values()[cursor.getInt(QuestionContract.Type.Index)];
-					question.Image = cursor.getBlob(QuestionContract.Image.Index);
+					question.Question = cursor.getString(tables.QuestionContract.Question.Index);
+					question.Number = cursor.getInt(tables.QuestionContract.Number.Index);
+					question.FormID = cursor.getInt(tables.QuestionContract.FormID.Index);
+					question.Type = QuestionType.GetByIndex(cursor.getInt(tables.QuestionContract.Type.Index));
+					question.Image = cursor.getBlob(tables.QuestionContract.Image.Index);
 					
 					questions.add(question);
 				}
@@ -145,9 +148,9 @@ public class QuestionRepository implements IQuestionRepository
 		{
 			this.unitOfWork.BeginTransaction();
 			
-			String whereClause = " WHERE " + QuestionContract.FormID.GetName() + " = " + formID;
+			String whereClause = " WHERE " + tables.QuestionContract.FormID.GetName() + " = " + formID;
 			
-			String query = "SELECT _ID FROM " + QuestionContract.TABLE_NAME + whereClause;
+			String query = "SELECT _ID FROM " + tables.QuestionContract.TABLE_NAME + whereClause;
 			
 			Cursor cursor = this.liteDB.rawQuery(query, null);
 			
@@ -183,20 +186,20 @@ public class QuestionRepository implements IQuestionRepository
 			
 			this.unitOfWork.BeginTransaction();
 			
-			String whereClause = " WHERE " + QuestionContract._ID + " = " + ID;
+			String whereClause = " WHERE " + tables.QuestionContract._ID + " = " + ID;
 			
-			String query = "SELECT * FROM " + QuestionContract.TABLE_NAME + whereClause;
+			String query = "SELECT * FROM " + tables.QuestionContract.TABLE_NAME + whereClause;
 			
 			Cursor cursor = this.liteDB.rawQuery(query, null);
 			
 			if(cursor.moveToFirst())
 			{
 				question.ID = cursor.getInt(0);
-				question.Question = cursor.getString(QuestionContract.Question.Index);
-				question.Number = cursor.getInt(QuestionContract.Number.Index);
-				question.FormID = cursor.getInt(QuestionContract.FormID.Index);
-				question.Type = QuestionType.values()[cursor.getInt(QuestionContract.Type.Index)];
-				question.Image = cursor.getBlob(QuestionContract.Image.Index);
+				question.Question = cursor.getString(tables.QuestionContract.Question.Index);
+				question.Number = cursor.getInt(tables.QuestionContract.Number.Index);
+				question.FormID = cursor.getInt(tables.QuestionContract.FormID.Index);
+				question.Type = QuestionType.GetByIndex(cursor.getInt(tables.QuestionContract.Type.Index));
+				question.Image = cursor.getBlob(tables.QuestionContract.Image.Index);
 			}
 			
 			this.unitOfWork.CommitTransaction();
@@ -218,7 +221,7 @@ public class QuestionRepository implements IQuestionRepository
 		{
 			this.unitOfWork.BeginTransaction();
 			
-			String whereClause = "WHERE " + QuestionContract._ID + " NOT IN (";
+			String whereClause = "WHERE " + tables.QuestionContract._ID + " NOT IN (";
 			
 			String[] args = new String[IDs.length + 1];
 			
@@ -238,9 +241,9 @@ public class QuestionRepository implements IQuestionRepository
 			
 			args[IDs.length] = "" + formID;
 			
-			whereClause += " AND " + QuestionContract.FormID.GetName() + " = ?";
+			whereClause += " AND " + tables.QuestionContract.FormID.GetName() + " = ?";
 			
-			String query = "SELECT _ID FROM " + QuestionContract.TABLE_NAME + whereClause;
+			String query = "SELECT _ID FROM " + tables.QuestionContract.TABLE_NAME + whereClause;
 			
 			Cursor cursor = this.liteDB.rawQuery(query, null);
 			
@@ -272,16 +275,16 @@ public class QuestionRepository implements IQuestionRepository
 			
 			ContentValues values = new ContentValues();
 			
-			values.put(QuestionContract._ID, question.ID);
-			values.put(QuestionContract.Question.GetName(), question.Question);
-			values.put(QuestionContract.Number.GetName(), question.Number);
-			values.put(QuestionContract.FormID.GetName(), question.FormID);
-			values.put(QuestionContract.Type.GetName(), question.Type.GetIndex());
-			values.put(QuestionContract.Image.GetName(), question.Image);
+			values.put(tables.QuestionContract._ID, question.ID);
+			values.put(tables.QuestionContract.Question.GetName(), question.Question);
+			values.put(tables.QuestionContract.Number.GetName(), question.Number);
+			values.put(tables.QuestionContract.FormID.GetName(), question.FormID);
+			values.put(tables.QuestionContract.Type.GetName(), question.Type.GetIndex());
+			values.put(tables.QuestionContract.Image.GetName(), question.Image);
 	
-			String whereClause = QuestionContract._ID + " = ?";
+			String whereClause = tables.QuestionContract._ID + " = ?";
 	
-			SQLiteHelper.logUpdate(TAG_NAME, this.liteDB.update(QuestionContract.TABLE_NAME, values, whereClause, new String[] { "" + question.ID }));
+			SQLiteHelper.logUpdate(TAG_NAME, this.liteDB.update(tables.QuestionContract.TABLE_NAME, values, whereClause, new String[] { "" + question.ID }));
 			
 			this.unitOfWork.CommitTransaction();
 		}
@@ -298,7 +301,7 @@ public class QuestionRepository implements IQuestionRepository
 		{
 			this.unitOfWork.BeginTransaction();
 			
-			String whereClause = QuestionContract._ID + " NOT IN (";
+			String whereClause = tables.QuestionContract._ID + " NOT IN (";
 			
 			String[] args = new String[IDs.length + 1];
 			
@@ -318,9 +321,9 @@ public class QuestionRepository implements IQuestionRepository
 			
 			args[IDs.length] = "" + formID;
 			
-			whereClause += " AND " + QuestionContract.FormID.GetName() + " = ?";
+			whereClause += " AND " + tables.QuestionContract.FormID.GetName() + " = ?";
 	
-			SQLiteHelper.logDelete(TAG_NAME, this.liteDB.delete(QuestionContract.TABLE_NAME, whereClause, args));
+			SQLiteHelper.logDelete(TAG_NAME, this.liteDB.delete(tables.QuestionContract.TABLE_NAME, whereClause, args));
 			
 			this.unitOfWork.CommitTransaction();
 		}
@@ -337,9 +340,9 @@ public class QuestionRepository implements IQuestionRepository
 		{
 			this.unitOfWork.BeginTransaction();
 			
-			String whereClause = QuestionContract.FormID.GetName() + " = ?";
+			String whereClause = tables.QuestionContract.FormID.GetName() + " = ?";
 	
-			SQLiteHelper.logDelete(TAG_NAME, this.liteDB.delete(QuestionContract.TABLE_NAME, whereClause, new String[] { "" + formID }));
+			SQLiteHelper.logDelete(TAG_NAME, this.liteDB.delete(tables.QuestionContract.TABLE_NAME, whereClause, new String[] { "" + formID }));
 			
 			this.unitOfWork.CommitTransaction();
 		}
@@ -356,9 +359,9 @@ public class QuestionRepository implements IQuestionRepository
 		{
 			this.unitOfWork.BeginTransaction();
 			
-			String whereClause = QuestionContract._ID + " = ?";
+			String whereClause = tables.QuestionContract._ID + " = ?";
 	
-			SQLiteHelper.logDelete(TAG_NAME, this.liteDB.delete(QuestionContract.TABLE_NAME, whereClause, new String[] { "" + id }));
+			SQLiteHelper.logDelete(TAG_NAME, this.liteDB.delete(tables.QuestionContract.TABLE_NAME, whereClause, new String[] { "" + id }));
 			
 			this.unitOfWork.CommitTransaction();
 		}

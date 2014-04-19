@@ -6,13 +6,14 @@ import com.rhcloud.jop.formfactor.sqlite.datacontracts.types.BaseColumn;
 
 import android.provider.BaseColumns;
 
-public class BaseTable implements BaseColumns
+public abstract class BaseTable implements BaseColumns
 {
 	private boolean isAutoIncrement = true;
 	private final ArrayList<BaseColumn> columns = new ArrayList<BaseColumn>(6);
 	
 	public BaseTable()
 	{
+		this.InitTables();
 		this.AddColumns();
 	}
 	
@@ -69,13 +70,9 @@ public class BaseTable implements BaseColumns
 		columns.add(column);
 	}
 	
-	protected void AddColumns()
-	{
-		
-	}
+	protected abstract void AddColumns();
 	
-	protected String GetTableName()
-	{
-		return "";
-	}
+	protected abstract void InitTables();
+	
+	protected abstract String GetTableName();
 }

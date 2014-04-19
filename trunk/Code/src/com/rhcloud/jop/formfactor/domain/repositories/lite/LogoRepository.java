@@ -17,6 +17,7 @@ public class LogoRepository implements ILogoRepository
 	private SQLiteDatabase liteDB;
 	private IUnitOfWork unitOfWork;
 	private final String TAG_NAME = "com.rhcloud.jop.formfactor.domain.dal.repositories.LogoRepository";
+	private FormFactorTables tables = FormFactorTables.getInstance();
 	
 	public LogoRepository(UnitOfWork unitOfWork)
 	{
@@ -34,10 +35,10 @@ public class LogoRepository implements ILogoRepository
 			
 			ContentValues values = new ContentValues();
 			
-			values.put(LogoContract.Description.GetName(), logo.Description);
-			values.put(LogoContract.Image.GetName(), logo.Image);
+			values.put(tables.LogoContract.Description.GetName(), logo.Description);
+			values.put(tables.LogoContract.Image.GetName(), logo.Image);
 	
-			logo.ID = SQLiteHelper.logInsert(TAG_NAME, this.liteDB.insert(LogoContract.TABLE_NAME, null, values));
+			logo.ID = SQLiteHelper.logInsert(TAG_NAME, this.liteDB.insert(tables.LogoContract.TABLE_NAME, null, values));
 			
 			this.unitOfWork.CommitTransaction();
 		}
@@ -56,17 +57,17 @@ public class LogoRepository implements ILogoRepository
 		{
 			this.unitOfWork.BeginTransaction();
 			
-			String whereClause = " WHERE " + LogoContract._ID + " = " + ID;
+			String whereClause = " WHERE " + tables.LogoContract._ID + " = " + ID;
 			
-			String query = "SELECT * FROM " + LogoContract.TABLE_NAME + whereClause;
+			String query = "SELECT * FROM " + tables.LogoContract.TABLE_NAME + whereClause;
 			
 			Cursor cursor = this.liteDB.rawQuery(query, null);
 			
 			if(cursor.moveToFirst())
 			{
 				logo.ID = cursor.getInt(0);
-				logo.Description = cursor.getString(LogoContract.Description.Index);
-				logo.Image = cursor.getBlob(LogoContract.Image.Index);
+				logo.Description = cursor.getString(tables.LogoContract.Description.Index);
+				logo.Image = cursor.getBlob(tables.LogoContract.Image.Index);
 			}
 			
 			this.unitOfWork.CommitTransaction();
@@ -88,12 +89,12 @@ public class LogoRepository implements ILogoRepository
 			
 			ContentValues values = new ContentValues();
 			
-			values.put(LogoContract._ID, logo.ID);
-			values.put(LogoContract.Description.GetName(), logo.Description);
-			values.put(LogoContract.Image.GetName(), logo.Image);
+			values.put(tables.LogoContract._ID, logo.ID);
+			values.put(tables.LogoContract.Description.GetName(), logo.Description);
+			values.put(tables.LogoContract.Image.GetName(), logo.Image);
 			
-			String whereClause = LogoContract._ID + " = ?";
-			SQLiteHelper.logUpdate(TAG_NAME, this.liteDB.update(LogoContract.TABLE_NAME, values, whereClause, new String[] { "" + logo.ID }));
+			String whereClause = tables.LogoContract._ID + " = ?";
+			SQLiteHelper.logUpdate(TAG_NAME, this.liteDB.update(tables.LogoContract.TABLE_NAME, values, whereClause, new String[] { "" + logo.ID }));
 			
 			this.unitOfWork.CommitTransaction();
 		}

@@ -4,10 +4,17 @@ import com.rhcloud.jop.formfactor.sqlite.datacontracts.types.BaseColumn;
 
 public final class LogoContract extends BaseTable
 {
-	public static final String TABLE_NAME = "tLogo";
+	public final String TABLE_NAME = "tLogo";
 
-	public static final BaseColumn Description = new BaseColumn("sDescription", BaseColumn.TextType);
-	public static final BaseColumn Image = new BaseColumn("blImage", BaseColumn.BlobType);
+	public BaseColumn Description;
+	public BaseColumn Image;
+	
+	@Override
+	protected void InitTables()
+	{
+		Description = new BaseColumn("sDescription", BaseColumn.TextType);
+		Image = new BaseColumn("blImage", BaseColumn.BlobType);
+	}
 	
 	@Override
 	protected String GetTableName ()
