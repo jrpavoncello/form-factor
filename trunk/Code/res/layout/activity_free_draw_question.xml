@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_free_draw_question"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="left">
+    
+    <include layout="@layout/drawer_menu" />
+    
+	<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	    xmlns:tools="http://schemas.android.com/tools"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:orientation="vertical"
+	    android:id="@+id/activity_free_draw_question_container" >
+    
+		<FrameLayout android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:layout_gravity="top"
+		    android:id="@+id/activity_free_draw_action_container"
+	    	android:background="@color/activity_main_recent_background" >
+		    
+		    <LinearLayout
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:orientation="vertical"
+				android:layout_gravity="center" >
+	    
+			    <LinearLayout
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:orientation="horizontal"
+					android:layout_gravity="center" >
+					
+			        <ImageButton
+			            android:layout_width="48dp"
+			            android:layout_height="48dp"
+			            android:id="@+id/activity_free_draw_pencil"
+			            android:src="@drawable/ic_action_free_draw"
+			            android:onClick="pencilClicked"
+			            android:contentDescription="@string/default_content_description" />
+					
+			        <ImageButton
+			            android:layout_width="48dp"
+			            android:layout_height="48dp"
+			            android:id="@+id/activity_free_draw_eraser"
+			            android:src="@drawable/ic_eraser"
+			            android:onClick="eraserClicked"
+			            android:contentDescription="@string/default_content_description" />
+					
+			        <ImageButton
+			            android:layout_width="48dp"
+			            android:layout_height="48dp"
+			            android:id="@+id/activity_free_draw_clear"
+			            android:src="@drawable/ic_drawing_clear"
+			            android:onClick="clearClicked"
+			            android:contentDescription="@string/default_content_description" />
+			        
+			        <ImageButton
+					    android:layout_width="48dp"
+					    android:layout_height="48dp"
+			            android:id="@+id/activity_free_draw_color_black"
+					    android:background="#000000"
+					    android:onClick="paintClicked"
+					    android:tag="#000000"
+					    android:src="@drawable/palette_rectangle"
+					    android:contentDescription="@string/default_content_description" />
+			        
+			        <ImageButton
+					    android:layout_width="48dp"
+					    android:layout_height="48dp"
+			            android:id="@+id/activity_free_draw_color_red"
+					    android:background="#F80012"
+					    android:onClick="paintClicked"
+					    android:tag="#F80012"
+					    android:src="@drawable/palette_rectangle"
+					    android:contentDescription="@string/default_content_description" />
+			        
+			        <ImageButton
+					    android:layout_width="48dp"
+					    android:layout_height="48dp"
+			            android:id="@+id/activity_free_draw_color_gray"
+					    android:background="#777777"
+					    android:onClick="paintClicked"
+					    android:tag="#777777"
+					    android:src="@drawable/palette_rectangle"
+					    android:contentDescription="@string/default_content_description" />
+					
+			   	</LinearLayout>
+				    
+				<com.rhcloud.jop.formfactor.views.questions.FreeDrawQuestionView
+				    android:id="@+id/activity_free_draw_canvas"
+				    android:layout_width="fill_parent"
+				    android:layout_height="fill_parent"
+				    android:layout_gravity="top"
+				    android:layout_marginBottom="3dp"
+				    android:layout_marginLeft="5dp"
+				    android:layout_marginRight="5dp"
+				    android:layout_marginTop="3dp"
+				    android:background="#FFFFFFFF" />
+				
+		   	</LinearLayout>
+	   	</FrameLayout>
+	   	
+	   	<LinearLayout
+		    android:layout_width="fill_parent"
+		    android:layout_height="48dp"
+		    android:orientation="horizontal"
+		    android:layout_gravity="bottom" >
+	   	    
+	   	    <Button
+	   	    	android:id="@+id/activity_free_draw_question_cancel"
+			    android:layout_width="fill_parent"
+			    android:layout_height="fill_parent"
+			    android:layout_weight="1.0"
+			    android:text="@string/action_cancel"
+			    android:onClick="onActionClicked"/>
+	   	    
+			<FrameLayout 
+			    android:layout_width="5dp"
+			    android:layout_height="48dp"
+			    android:background="@color/action_bar_background" >
+		
+			   	<View
+				    android:layout_width="2dp"
+				    android:layout_height="fill_parent"
+				    android:layout_marginTop="4dp"
+				    android:layout_marginBottom="4dp"
+				    android:layout_gravity="center_vertical|center"
+				    android:background="@color/drawer_menu_divider" />
+			</FrameLayout>
+		   	
+	   	    <Button
+	   	    	android:id="@+id/activity_free_draw_question_save"
+			    android:layout_width="fill_parent"
+			    android:layout_height="fill_parent"
+			    android:layout_weight="1.0"
+			    android:text="@string/action_save"
+			    android:onClick="onActionClicked" />
+	   	</LinearLayout>
+	</FrameLayout>
+    
+</android.support.v4.widget.DrawerLayout>

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.rhcloud.jop.formfactor.common.Result;
 import com.rhcloud.jop.formfactor.domain.Form;
+import com.rhcloud.jop.formfactor.domain.FreeDrawQuestion;
 import com.rhcloud.jop.formfactor.domain.IFormFactorDataContext;
 import com.rhcloud.jop.formfactor.domain.MultipleChoiceQuestion;
 import com.rhcloud.jop.formfactor.domain.FreeResponseQuestion;
@@ -12,6 +13,7 @@ import com.rhcloud.jop.formfactor.domain.Question;
 import com.rhcloud.jop.formfactor.domain.QuestionType;
 import com.rhcloud.jop.formfactor.domain.ResponseChoice;
 import com.rhcloud.jop.formfactor.domain.repositories.IFormRepository;
+import com.rhcloud.jop.formfactor.domain.repositories.IFreeDrawQuestionRepository;
 import com.rhcloud.jop.formfactor.domain.repositories.IFreeResponseQuestionRepository;
 import com.rhcloud.jop.formfactor.domain.repositories.ILogoRepository;
 import com.rhcloud.jop.formfactor.domain.repositories.IMultipleChoiceQuestionRepository;
@@ -135,6 +137,7 @@ public class FormService
 			IResponseChoiceRepository responseRepo = DataContext.GetResponseChoiceRepository();
 			IMultipleChoiceQuestionRepository multipleChoiceQuestionRepo = DataContext.GetMultipleChoiceQuestionRepository();
 			IFreeResponseQuestionRepository freeResponseQuestionRepo = DataContext.GetFreeResponseQuestionRepository();
+			IFreeDrawQuestionRepository freeDrawQuestionRepo = DataContext.GetFreeDrawQuestionRepository();
 			
 			if(question.ID == 0)
 			{
@@ -147,6 +150,7 @@ public class FormService
 
 			ArrayList<Long> questionIDsMultipleChoice = new ArrayList<Long>();
 			ArrayList<Long> questionIDsFreeResponse = new ArrayList<Long>();
+			ArrayList<Long> questionIDsFreeDraw = new ArrayList<Long>();
 			
 			if(question instanceof MultipleChoiceQuestion)
 			{
@@ -214,6 +218,21 @@ public class FormService
 						freeResponseQuestionRepo.Update(q);
 					}
 				}
+				else
+				{
+					questionIDsFreeDraw.add(question.ID);
+
+					FreeDrawQuestion q = (FreeDrawQuestion)question;
+					
+					if(q.FreeDrawQuestionID == 0)
+					{
+						freeDrawQuestionRepo.Add(q);
+					}
+					else
+					{
+						freeDrawQuestionRepo.Update(q);
+					}
+				}
 			}
 			
 			Long[] ids = new Long[questionIDsMultipleChoice.size()];
@@ -232,6 +251,15 @@ public class FormService
 			if(ids.length > 0)
 			{
 				freeResponseQuestionRepo.DeleteByQuestionIDsNotIn(ids, question.FormID);
+			}
+			
+			ids = new Long[questionIDsFreeDraw.size()];
+			
+			ids = questionIDsFreeDraw.toArray(ids);
+
+			if(ids.length > 0)
+			{
+				freeDrawQuestionRepo.DeleteByQuestionIDsNotIn(ids, question.FormID);
 			}			
 		}
 		catch(Exception ex)
@@ -302,6 +330,7 @@ public class FormService
 	{
 		IMultipleChoiceQuestionRepository multipleChoiceQuestionRepo = DataContext.GetMultipleChoiceQuestionRepository();
 		IFreeResponseQuestionRepository freeResponseQuestionRepo = DataContext.GetFreeResponseQuestionRepository();
+		IFreeDrawQuestionRepository freeDrawQuestionRepo = DataContext.GetFreeDrawQuestionRepository();
 		IResponseChoiceRepository responseRepo = DataContext.GetResponseChoiceRepository();
 		
 		if(question instanceof MultipleChoiceQuestion)
@@ -309,50 +338,61 @@ public class FormService
 			MultipleChoiceQuestion q = (MultipleChoiceQuestion)question;
 			multipleChoiceQuestionRepo.GetByQuestionID(q);
 		}
-		else
+		else if(question instanceof FreeResponseQuestion)
 		{
-			if(question instanceof FreeResponseQuestion)
-			{
-				FreeResponseQuestion q = (FreeResponseQuestion)question;
-				freeResponseQuestionRepo.GetByQuestionID(q);
-			}
-			else
-			{
-				if(question.Type == QuestionType.MultipleChoice)
-				{
-					MultipleChoiceQuestion q = new MultipleChoiceQuestion();
-					
-					q.ID = question.ID;
-					q.FormID = question.FormID;
-					q.Image = question.Image;
-					q.Number = question.Number;
-					q.Question = question.Question;
-					q.Type = question.Type;
-					q.ResponseChoices = responseRepo.GetByQuestionID(question.ID);
-					
-					multipleChoiceQuestionRepo.GetByQuestionID(q);
-					
-					question = q;
-				}
-				else
-				{
-					if(question.Type == QuestionType.FreeResponse)
-					{
-						FreeResponseQuestion q = new FreeResponseQuestion();
-						
-						q.ID = question.ID;
-						q.FormID = question.FormID;
-						q.Image = question.Image;
-						q.Number = question.Number;
-						q.Question = question.Question;
-						q.Type = question.Type;
-						
-						freeResponseQuestionRepo.GetByQuestionID(q);
-						
-						question = q;
-					}
-				}
-			}
+			FreeResponseQuestion q = (FreeResponseQuestion)question;
+			freeResponseQuestionRepo.GetByQuestionID(q);
+		}
+		else if(question instanceof FreeDrawQuestion)
+		{
+			FreeDrawQuestion q = (FreeDrawQuestion)question;
+			freeDrawQuestionRepo.GetByQuestionID(q);
+		}
+		else if(question.Type == QuestionType.MultipleChoice)
+		{
+			MultipleChoiceQuestion q = new MultipleChoiceQuestion();
+			
+			q.ID = question.ID;
+			q.FormID = question.FormID;
+			q.Image = question.Image;
+			q.Number = question.Number;
+			q.Question = question.Question;
+			q.Type = question.Type;
+			q.ResponseChoices = responseRepo.GetByQuestionID(question.ID);
+			
+			multipleChoiceQuestionRepo.GetByQuestionID(q);
+			
+			question = q;
+		}
+		else if(question.Type == QuestionType.FreeResponse)
+		{
+			FreeResponseQuestion q = new FreeResponseQuestion();
+			
+			q.ID = question.ID;
+			q.FormID = question.FormID;
+			q.Image = question.Image;
+			q.Number = question.Number;
+			q.Question = question.Question;
+			q.Type = question.Type;
+			
+			freeResponseQuestionRepo.GetByQuestionID(q);
+			
+			question = q;
+		}
+		else if(question.Type == QuestionType.FreeDraw)
+		{
+			FreeDrawQuestion q = new FreeDrawQuestion();
+			
+			q.ID = question.ID;
+			q.FormID = question.FormID;
+			q.Image = question.Image;
+			q.Number = question.Number;
+			q.Question = question.Question;
+			q.Type = question.Type;
+			
+			freeDrawQuestionRepo.GetByQuestionID(q);
+			
+			question = q;
 		}
 		
 		return question;

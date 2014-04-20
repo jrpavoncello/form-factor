@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/view_group_free_draw"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingTop="5dp" >
+				
+   	<View
+	    android:layout_width="fill_parent"
+	    android:layout_height="2dp"
+	    android:background="@color/action_bar_background" />
+    
+    <ImageView
+        android:id="@+id/view_group_free_draw_image"
+    	android:layout_width="match_parent"
+		android:layout_height="240dp"
+		android:paddingLeft="10dp"
+		android:paddingRight="10dp"
+		android:contentDescription="@string/default_content_description"
+		android:background="@color/text_view_text_background" />
+				
+   	<View
+	    android:layout_width="fill_parent"
+	    android:layout_height="2dp"
+	    android:background="@color/action_bar_background" />
+    
+</LinearLayout>

@@ -58,6 +58,23 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.rhcloud.jop.formfactor.views.CreateActivity" />
         </activity>
+        <activity
+            android:name="com.rhcloud.jop.formfactor.views.questions.FreeDrawQuestionActivity"
+            android:label="@string/activity_free_draw_title"
+            android:parentActivityName="com.rhcloud.jop.formfactor.views.CreateActivity"
+            android:screenOrientation="portrait" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.rhcloud.jop.formfactor.views.CreateActivity" />
+        </activity>
+        <activity
+            android:name="com.rhcloud.jop.formfactor.views.questions.FreeDrawQuestionEditActivity"
+            android:label="@string/activity_free_draw_edit_title"
+            android:parentActivityName="com.rhcloud.jop.formfactor.views.CreateActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.rhcloud.jop.formfactor.views.CreateActivity" />
+        </activity>
     </application>
 
 </manifest>

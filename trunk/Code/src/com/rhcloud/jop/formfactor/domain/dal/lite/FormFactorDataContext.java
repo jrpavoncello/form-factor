@@ -17,6 +17,7 @@ public class FormFactorDataContext implements IFormFactorDataContext
 	private IQuestionRepository QuestionRepo;
 	private IMultipleChoiceQuestionRepository MultipleChoiceQuestionRepository;
 	private IFreeResponseQuestionRepository FreeResponseQuestionRepository;
+	private IFreeDrawQuestionRepository FreeDrawQuestionRepository;
 	private IResponseRepository ResponseRepo;
 	private IResponseChoiceRepository ResponseChoiceRepo;
 	private ILogoRepository LogoRepo;
@@ -29,6 +30,7 @@ public class FormFactorDataContext implements IFormFactorDataContext
 		this.QuestionRepo = new QuestionRepository(unit);
 		this.MultipleChoiceQuestionRepository = new MultipleChoiceQuestionRepository(unit);
 		this.FreeResponseQuestionRepository = new FreeResponseQuestionRepository(unit);
+		this.FreeDrawQuestionRepository = new FreeDrawQuestionRepository(unit);
 		this.FormRepo = new FormRepository(unit);
 		this.ResponseRepo = new ResponseRepository(unit);
 		this.ResponseChoiceRepo = new ResponseChoiceRepository(unit);
@@ -88,5 +90,11 @@ public class FormFactorDataContext implements IFormFactorDataContext
 	public IFreeResponseQuestionRepository GetFreeResponseQuestionRepository()
 	{
 		return this.FreeResponseQuestionRepository;
+	}
+
+	@Override
+	public IFreeDrawQuestionRepository GetFreeDrawQuestionRepository()
+	{
+		return this.FreeDrawQuestionRepository;
 	}
 }

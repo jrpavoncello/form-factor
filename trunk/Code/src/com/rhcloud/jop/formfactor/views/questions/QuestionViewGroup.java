@@ -25,6 +25,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public abstract class QuestionViewGroup extends LinearLayout implements OnMenuItemClickListener, View.OnClickListener
 {
@@ -38,6 +39,7 @@ public abstract class QuestionViewGroup extends LinearLayout implements OnMenuIt
 	private List<OnQuestionDeleteListener> mQuestionDeleteListeners = new ArrayList<OnQuestionDeleteListener>(1);
 	private List<OnMenuItemClickListener> mOnMenuItemClickListener = new ArrayList<OnMenuItemClickListener>(1);
 	protected PopupMenu mPopupMenu;
+	private TextView mQuestionNumber;
 
 	private boolean mIsCreateMode = true;
 	private AttributeSet attrs;
@@ -209,6 +211,9 @@ public abstract class QuestionViewGroup extends LinearLayout implements OnMenuIt
 		
 		this.mOverflowButton = (ImageButton)this.findViewById(R.id.question_overflow_button);
 		this.mOverflowButton.setOnClickListener(this);
+		
+		this.mQuestionNumber = (TextView)this.findViewById(R.id.view_group_question_number);
+		this.mQuestionNumber.setText("" + this.mQuestion.Number);
 		
 		a.recycle();
 	}

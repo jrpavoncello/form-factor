@@ -11,6 +11,8 @@ import com.rhcloud.jop.formfactor.domain.services.FormService;
 import com.rhcloud.jop.formfactor.domain.services.UserService;
 import com.rhcloud.jop.formfactor.sqlite.FormFactorDb;
 import com.rhcloud.jop.formfactor.views.MainActivityFragment.DrawerListener;
+import com.rhcloud.jop.formfactor.views.questions.FreeDrawQuestionActivity;
+import com.rhcloud.jop.formfactor.views.questions.FreeResponseQuestionEditActivity;
 import com.rhcloud.jop.formfactor.views.questions.MultipleChoiceQuestion;
 import com.rhcloud.jop.formfactor.views.questions.QuestionViewGroup;
 
@@ -18,6 +20,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -48,7 +51,34 @@ public class CreateActivity extends FormFactorFragmentActivity implements OnQues
 
 	public void addFreeDraw()
 	{
+		com.rhcloud.jop.formfactor.domain.FreeDrawQuestion question = new com.rhcloud.jop.formfactor.domain.FreeDrawQuestion();
+		question.FormID = this.mForm.ID;
+		question.Type = QuestionType.FreeDraw;
 		
+		this.addFreeDraw(question);
+	}
+	
+	public void addFreeDraw(Question question)
+	{
+		question.Number = this.mQuestions.size() + 1;
+		
+		LinearLayout questionsView = (LinearLayout)this.findViewById(R.id.activity_create_questions);
+		
+		com.rhcloud.jop.formfactor.views.questions.FreeDrawQuestion viewGroup = new com.rhcloud.jop.formfactor.views.questions.FreeDrawQuestion(this);
+		
+		viewGroup.setOnQuestionDeleteListener(this);
+		
+		viewGroup.setData(question);
+		
+		this.mQuestions.add(viewGroup);
+		
+		questionsView.addView(viewGroup);
+		
+		UnitOfWork unitOfWork = new UnitOfWork(FormFactorDb.getInstance(this));
+		FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
+		FormService formService = new FormService(dataContext);
+		
+		formService.AddUpdateQuestion(question);
 	}
 	
 	public void addFreeResponse()
@@ -65,6 +95,8 @@ public class CreateActivity extends FormFactorFragmentActivity implements OnQues
 	
 	public void addFreeResponse(Question question)
 	{
+		question.Number = this.mQuestions.size() + 1;
+		
 		LinearLayout questionsView = (LinearLayout)this.findViewById(R.id.activity_create_questions);
 		
 		com.rhcloud.jop.formfactor.views.questions.FreeResponseQuestion freeResponseViewGroup = new com.rhcloud.jop.formfactor.views.questions.FreeResponseQuestion(this);
@@ -97,6 +129,8 @@ public class CreateActivity extends FormFactorFragmentActivity implements OnQues
 	
 	public void addMultipleChoice(Question question)
 	{
+		question.Number = this.mQuestions.size() + 1;
+		
 		LinearLayout questionsView = (LinearLayout)this.findViewById(R.id.activity_create_questions);
 		
 		MultipleChoiceQuestion multipleChoiceViewGroup = new MultipleChoiceQuestion(this);
@@ -114,6 +148,17 @@ public class CreateActivity extends FormFactorFragmentActivity implements OnQues
 		FormService formService = new FormService(dataContext);
 		
 		formService.AddUpdateQuestion(question);
+	}
+	
+	private void setQuestionNumbers()
+	{
+		for(int i = 0; i < this.mQuestions.size(); i++)
+		{
+			QuestionViewGroup questionViewGroup = this.mQuestions.get(i);
+			Question question = questionViewGroup.getQuestion();
+			
+			question.Number = i + 1;
+		}
 	}
 
 	@Override
@@ -175,14 +220,15 @@ public class CreateActivity extends FormFactorFragmentActivity implements OnQues
 				return true;
 				
 			case R.id.menu_create_edit_response_delete:
-				addMultipleChoice();
+				this.addMultipleChoice();
 				return true;
 				
 			case R.id.activity_create_add_new_free_draw:
+				this.addFreeDraw();
 				return true;
 				
 			case R.id.activity_create_add_new_free_response:
-				addFreeResponse();
+				this.addFreeResponse();
 				return true;
 				
 			default:
@@ -433,6 +479,13 @@ public class CreateActivity extends FormFactorFragmentActivity implements OnQues
 						if(question.Type == QuestionType.FreeResponse)
 						{
 							this.addFreeResponse(question);
+						}
+						else
+						{
+							if(question.Type == QuestionType.FreeDraw)
+							{
+								this.addFreeDraw(question);
+							}
 						}
 					}
 				}

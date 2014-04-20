@@ -13,4 +13,5 @@ public interface IFormFactorDataContext
 	public IMultipleChoiceQuestionRepository GetMultipleChoiceQuestionRepository();
 	public IFreeResponseQuestionRepository GetFreeResponseQuestionRepository();
 	public IResponseChoiceRepository GetResponseChoiceRepository();
+	public IFreeDrawQuestionRepository GetFreeDrawQuestionRepository();
 }

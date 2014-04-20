@@ -17,6 +17,8 @@
 	<string name="item_detail_title">Item Detail</string>
 	<string name="settings_title">Settings</string>
 	<string name="activity_question_edit_title">Edit Question</string>
+	<string name="activity_free_draw_title">Free Draw</string>
+	<string name="activity_free_draw_edit_title">Edit Question</string>
 	<string name="activity_main_swipe_complete">Complete</string>
 	<string name="activity_main_swipe_create">Create</string>
 	<string name="activity_main_welcome_to">Welcome to&#8230;</string>

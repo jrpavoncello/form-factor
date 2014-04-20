@@ -6,6 +6,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     
+    <TextView 
+        android:id="@+id/view_group_question_number"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+		android:textAppearance="?android:attr/textAppearanceLarge" />
+    
    	<View
 	    android:layout_width="fill_parent"
 	    android:layout_height="3dp"
@@ -23,6 +29,7 @@
 	   	    android:id="@+id/question_edit_text"
 			android:paddingLeft="10dp"
 			android:paddingRight="10dp"
+			android:layout_marginRight="40dp"
 			android:textAppearance="?android:attr/textAppearanceMedium"
 			android:textCursorDrawable="@null"
 	        android:background="@color/activity_main_window_background"
@@ -65,5 +72,5 @@
    	    android:layout_height = "wrap_content"
    	    android:layout_width = "fill_parent"
    	    android:orientation="vertical"
-   	    android:paddingBottom="10dp" />
+   	    android:paddingBottom="30dp" />
 </LinearLayout>
