@@ -43,6 +43,7 @@ public class CreateActivity extends FormFactorFragmentActivity implements OnQues
 	private static final String TAG_NAME = "CreateActivity";
 	private boolean mHasResumedState = false;
 	private boolean mHasSavedState = false;
+	private LinearLayout mQuestionsViewGroup;
 	
 	public CreateActivity()
 	{
@@ -60,9 +61,7 @@ public class CreateActivity extends FormFactorFragmentActivity implements OnQues
 	
 	public void addFreeDraw(Question question)
 	{
-		question.Number = this.mQuestions.size() + 1;
-		
-		LinearLayout questionsView = (LinearLayout)this.findViewById(R.id.activity_create_questions);
+		question.Number = this.mQuestionsViewGroup.getChildCount() + 1;
 		
 		com.rhcloud.jop.formfactor.views.questions.FreeDrawQuestion viewGroup = new com.rhcloud.jop.formfactor.views.questions.FreeDrawQuestion(this);
 		
@@ -72,7 +71,7 @@ public class CreateActivity extends FormFactorFragmentActivity implements OnQues
 		
 		this.mQuestions.add(viewGroup);
 		
-		questionsView.addView(viewGroup);
+		this.mQuestionsViewGroup.addView(viewGroup);
 		
 		UnitOfWork unitOfWork = new UnitOfWork(FormFactorDb.getInstance(this));
 		FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
@@ -95,9 +94,7 @@ public class CreateActivity extends FormFactorFragmentActivity implements OnQues
 	
 	public void addFreeResponse(Question question)
 	{
-		question.Number = this.mQuestions.size() + 1;
-		
-		LinearLayout questionsView = (LinearLayout)this.findViewById(R.id.activity_create_questions);
+		question.Number = this.mQuestionsViewGroup.getChildCount() + 1;
 		
 		com.rhcloud.jop.formfactor.views.questions.FreeResponseQuestion freeResponseViewGroup = new com.rhcloud.jop.formfactor.views.questions.FreeResponseQuestion(this);
 		
@@ -107,7 +104,7 @@ public class CreateActivity extends FormFactorFragmentActivity implements OnQues
 		
 		this.mQuestions.add(freeResponseViewGroup);
 		
-		questionsView.addView(freeResponseViewGroup);
+		this.mQuestionsViewGroup.addView(freeResponseViewGroup);
 		
 		UnitOfWork unitOfWork = new UnitOfWork(FormFactorDb.getInstance(this));
 		FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
@@ -129,9 +126,7 @@ public class CreateActivity extends FormFactorFragmentActivity implements OnQues
 	
 	public void addMultipleChoice(Question question)
 	{
-		question.Number = this.mQuestions.size() + 1;
-		
-		LinearLayout questionsView = (LinearLayout)this.findViewById(R.id.activity_create_questions);
+		question.Number = this.mQuestionsViewGroup.getChildCount() + 1;
 		
 		MultipleChoiceQuestion multipleChoiceViewGroup = new MultipleChoiceQuestion(this);
 		
@@ -141,7 +136,7 @@ public class CreateActivity extends FormFactorFragmentActivity implements OnQues
 		
 		this.mQuestions.add(multipleChoiceViewGroup);
 		
-		questionsView.addView(multipleChoiceViewGroup);
+		this.mQuestionsViewGroup.addView(multipleChoiceViewGroup);
 		
 		UnitOfWork unitOfWork = new UnitOfWork(FormFactorDb.getInstance(this));
 		FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
@@ -152,12 +147,10 @@ public class CreateActivity extends FormFactorFragmentActivity implements OnQues
 	
 	private void setQuestionNumbers()
 	{
-		for(int i = 0; i < this.mQuestions.size(); i++)
+		for(int i = 0; i < this.mQuestionsViewGroup.getChildCount(); i++)
 		{
-			QuestionViewGroup questionViewGroup = this.mQuestions.get(i);
-			Question question = questionViewGroup.getQuestion();
-			
-			question.Number = i + 1;
+			QuestionViewGroup viewGroup = (QuestionViewGroup)this.mQuestionsViewGroup.getChildAt(i);
+			viewGroup.setQuestionNumber(i + 1);
 		}
 	}
 
@@ -166,12 +159,14 @@ public class CreateActivity extends FormFactorFragmentActivity implements OnQues
 	{
 		setContentView(R.layout.activity_create);
 		super.onCreate(savedInstanceState);
+        
+        DrawerLayout drawer = (DrawerLayout)this.findViewById(R.id.activity_create);
+        
+		this.mQuestionsViewGroup = (LinearLayout)this.findViewById(R.id.activity_create_questions);
 		
 		this.setData(savedInstanceState);
         
         this.setTitle(this.getResources().getString(R.string.drawer_menu_title));
-        
-        DrawerLayout drawer = (DrawerLayout)this.findViewById(R.id.activity_create);
 		
 		ActivityHelper.setupForKeyboardHide(this, drawer);
 	}
@@ -514,6 +509,8 @@ public class CreateActivity extends FormFactorFragmentActivity implements OnQues
 			if(question.ID == this.mQuestions.get(i).getQuestion().ID)
 			{
 				questionsView.removeViewAt(i);
+				this.mQuestions.remove(i);
+				break;
 			}
 		}
 		
@@ -521,5 +518,7 @@ public class CreateActivity extends FormFactorFragmentActivity implements OnQues
 		FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
 		
 		dataContext.GetQuestionRepository().DeleteByID(question.ID);
+		
+		this.setQuestionNumbers();
 	}
 }

@@ -10,6 +10,9 @@
         android:id="@+id/view_group_question_number"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
+	    android:textColor="@color/text_view_text_primary"
+	    android:paddingLeft="10dp"
+	    android:paddingBottom="5dp"
 		android:textAppearance="?android:attr/textAppearanceLarge" />
     
    	<View

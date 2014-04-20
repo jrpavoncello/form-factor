@@ -98,7 +98,6 @@ public class FormFactorFragmentActivity extends FragmentActivity
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
         
-        
         mDrawerList = (ListView)this.mActivity.findViewById((R.id.fragment_menu));
         
         mDrawerList.setAdapter(new DrawerItemArrayAdapter(this, R.layout.drawer_list_item, gatherDrawerItems()));

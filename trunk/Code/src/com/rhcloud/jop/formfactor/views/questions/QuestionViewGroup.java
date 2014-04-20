@@ -213,7 +213,11 @@ public abstract class QuestionViewGroup extends LinearLayout implements OnMenuIt
 		this.mOverflowButton.setOnClickListener(this);
 		
 		this.mQuestionNumber = (TextView)this.findViewById(R.id.view_group_question_number);
-		this.mQuestionNumber.setText("" + this.mQuestion.Number);
+		
+		if(this.mQuestion.Number != 0)
+		{
+			this.mQuestionNumber.setText("" + this.mQuestion.Number);
+		}
 		
 		a.recycle();
 	}
@@ -223,6 +227,8 @@ public abstract class QuestionViewGroup extends LinearLayout implements OnMenuIt
 		this.mQuestion = question;
 		
 		this.mQuestionEditText.setText(question.Question);
+		
+		this.mQuestionNumber.setText(question.Number + ")");
 		
 		if(this.mQuestion.Image != null)
 		{
@@ -254,9 +260,15 @@ public abstract class QuestionViewGroup extends LinearLayout implements OnMenuIt
 		this.mOnMenuItemClickListener.add(listener);
 	}
 
-	protected void setQuestionText(String question)
+	public void setQuestionText(String question)
 	{
 		this.mQuestion.Question = question;
 		this.mQuestionEditText.setText(question);
+	}
+	
+	public void setQuestionNumber(int number)
+	{
+		this.mQuestion.Number = number;
+		this.mQuestionNumber.setText(number + ")");
 	}
 }

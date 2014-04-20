@@ -75,6 +75,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.rhcloud.jop.formfactor.views.CreateActivity" />
         </activity>
+        <activity
+            android:name="com.rhcloud.jop.formfactor.views.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName="com.rhcloud.jop.formfactor.views.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.rhcloud.jop.formfactor.views.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

@@ -341,7 +341,8 @@ public class MultipleChoiceQuestion extends QuestionViewGroup implements OnCheck
 	}
 
 	@Override
-	protected void onQuestionDeleting() {
+	protected void onQuestionDeleting()
+	{
 		// TODO Auto-generated method stub
 		
 	}

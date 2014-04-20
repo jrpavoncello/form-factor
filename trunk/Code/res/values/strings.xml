@@ -50,5 +50,9 @@
 	<string name="Specify_a">Specify a&#032;</string>
 	<string name="default_multiple_choice_response">Example Response</string>
 	<string name="default_content_description">image</string>
+	<string name="pref_sync">Sync</string>
+	<string name="pref_sync_summary">Sync</string>
+	<string name="pref_settings_header">Settings</string>
+	<string name="pref_settings_header_summary">Some preferences that could be helpful!</string>
 
 </resources>

@@ -1,0 +1,8 @@
+<preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <header android:fragment="com.rhcloud.jop.formfactor.views.SettingsActivity$SettingsFragment"
+            android:icon="@drawable/ic_action_overflow"
+            android:title="pref_settings_header"
+            android:summary="@string/pref_settings_header_summary" />
+
+</preference-headers>
