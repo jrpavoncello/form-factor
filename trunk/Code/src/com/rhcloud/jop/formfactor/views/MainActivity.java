@@ -1,289 +1,274 @@
 package com.rhcloud.jop.formfactor.views;
 
-import java.util.List;
-
 import com.rhcloud.jop.formfactor.R;
-import com.rhcloud.jop.formfactor.domain.UnitOfWork;
-import com.rhcloud.jop.formfactor.domain.User;
-import com.rhcloud.jop.formfactor.domain.dal.lite.FormFactorDataContext;
-import com.rhcloud.jop.formfactor.domain.services.UserService;
-import com.rhcloud.jop.formfactor.sqlite.FormFactorDb;
-import com.rhcloud.jop.formfactor.views.MainActivityFragment.DrawerListener;
 
-import android.app.ActionBar;
-import android.app.FragmentTransaction;
-import android.content.Context;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Configuration;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.util.Log;
-import android.view.LayoutInflater;
+import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
+import android.widget.TextView;
 
-public class MainActivity extends FormFactorFragmentActivity implements ActionBar.TabListener, DrawerListener
-{
-    private ViewPager mViewPager;
-	private FormFactorPagerAdapter mAppSectionsPagerAdapter;
-	static MainActivity mActivity = null;
-	User mCurrentUser = null;
-	
-    private static final String LOG_TAG = "FormFactorFragmentActivity";
+/**
+ * Activity which displays a login screen to the user, offering registration as
+ * well.
+ */
+public class MainActivity extends Activity {
+	/**
+	 * A dummy authentication store containing known user names and passwords.
+	 * TODO: remove after connecting to a real authentication system.
+	 */
+	private static final String[] DUMMY_CREDENTIALS = new String[]{ "foo@example.com:hello", "bar@example.com:world" };
 
-	public MainActivity()
-	{
-		super.setData(this, R.id.activity_main);
-	}
-	
-	FormFactorDb getDatabaseInstance()
-	{
-		return super.formFactorDb;
-	}
+	/**
+	 * The default email to populate the email field with.
+	 */
+	public static final String EXTRA_EMAIL = "com.example.android.authenticatordemo.extra.EMAIL";
+
+	/**
+	 * Keep track of the login task to ensure we can cancel it if requested.
+	 */
+	private UserLoginTask mAuthTask = null;
+
+	// Values for email and password at the time of the login attempt.
+	private String mEmail;
+	private String mPassword;
+
+	// UI references.
+	private EditText mEmailView;
+	private EditText mPasswordView;
+	private View mLoginFormView;
+	private View mLoginStatusView;
+	private TextView mLoginStatusMessageView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
-		//setContentView must be called first so that super.onCreate has access to this activity's layout
-		setContentView(R.layout.activity_main);
 		super.onCreate(savedInstanceState);
-		formFactorDb = FormFactorDb.getInstance(this);
 
-        // Create the adapter that will return a fragment for each of the sections
-        mAppSectionsPagerAdapter = new FormFactorPagerAdapter(getSupportFragmentManager(), this);
+		setContentView(R.layout.activity_main);
 
-        // Set up the action bar.
-        final ActionBar actionBar = getActionBar();
-        
-        this.setTitle(this.getResources().getString(R.string.drawer_menu_title));
+		// Set up the login form.
+		mEmail = getIntent().getStringExtra(EXTRA_EMAIL);
+		mEmailView = (EditText) findViewById(R.id.email);
+		mEmailView.setText(mEmail);
 
-        // Specify that we will be displaying tabs in the action bar.
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
-        this.mViewPager = (ViewPager)findViewById(R.id.pager);
-        this.mViewPager.setAdapter(mAppSectionsPagerAdapter);
-        this.mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener()
-        {
-            @Override
-            public void onPageSelected(int position)
-            {
-                actionBar.setSelectedNavigationItem(position);
-                
-                if(position == 0)
-                {
-                	MainActivity.launchCreateActivity();
-                }
-            }
-        });
-
-        // For each of the sections in the app, add a tab to the action bar.
-        for (int i = 0; i < mAppSectionsPagerAdapter.getCount(); i++)
-        {
-            // Create a tab with text corresponding to the page title defined by the adapter.
-            // Also specify this Activity object, which implements the TabListener interface, as the
-            // listener for when this tab is selected.
-            actionBar.addTab(actionBar.newTab().setText(mAppSectionsPagerAdapter.getPageTitle(i)).setTabListener(this));
-        }
-        
-        this.mViewPager.setCurrentItem(1);
-        
-        MainActivity.mActivity = this;
-    }
-	
-	public synchronized static void setData()
-	{
-		try
+		mPasswordView = (EditText) findViewById(R.id.password);
+		mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener()
 		{
-			UnitOfWork unitOfWork = new UnitOfWork(mActivity.getDatabaseInstance());
-			FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
-			
-			UserService userService = new UserService(dataContext);
-			
-			List<User> users = userService.GetAllUsers();
-			
-			if(!users.isEmpty())
+			@Override
+			public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent)
 			{
-				mActivity.mCurrentUser = users.get(0);
+				if (id == R.id.login || id == EditorInfo.IME_NULL)
+				{
+					attemptLogin();
+					return true;
+				}
+				
+				return false;
 			}
-			else
+		});
+
+		mLoginFormView = findViewById(R.id.login_form);
+		mLoginStatusView = findViewById(R.id.login_status);
+		mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
+
+		findViewById(R.id.sign_in_button).setOnClickListener(
+			new View.OnClickListener() 
 			{
-				mActivity.mCurrentUser = new User();
-				
-				mActivity.mCurrentUser.Username = "default";
-				mActivity.mCurrentUser.Email = "default";
-				
-				userService.CreateUpdateUser(mActivity.mCurrentUser);
-			}
-		}
-		catch(Exception ex)
-		{
-			
-		}
-		finally
-		{
-			
-		}
+				@Override
+				public void onClick(View view)
+				{
+					attemptLogin();
+				}
+			});
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
-		// Inflate the menu; this adds items to the action bar if it is present.
+		super.onCreateOptionsMenu(menu);
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-	
-	public static void launchCreateActivity()
+
+	/**
+	 * Attempts to sign in or register the account specified by the login form.
+	 * If there are form errors (invalid email, missing fields, etc.), the
+	 * errors are presented and no actual login attempt is made.
+	 */
+	public void attemptLogin()
 	{
-		if(mActivity != null)
+		if (mAuthTask != null)
 		{
-			Intent intent = new Intent(mActivity, CreateActivity.class);
-			mActivity.startActivity(intent);
+			return;
+		}
+
+		// Reset errors.
+		mEmailView.setError(null);
+		mPasswordView.setError(null);
+
+		// Store values at the time of the login attempt.
+		mEmail = mEmailView.getText().toString();
+		mPassword = mPasswordView.getText().toString();
+
+		boolean cancel = false;
+		View focusView = null;
+
+		// Check for a valid password.
+		if (TextUtils.isEmpty(mPassword))
+		{
+			mPasswordView.setError(getString(R.string.error_field_required));
+			focusView = mPasswordView;
+			cancel = true;
+		} 
+		else if (mPassword.length() < 4)
+		{
+			mPasswordView.setError(getString(R.string.error_invalid_password));
+			focusView = mPasswordView;
+			cancel = true;
+		}
+
+		// Check for a valid email address.
+		if (TextUtils.isEmpty(mEmail))
+		{
+			mEmailView.setError(getString(R.string.error_field_required));
+			focusView = mEmailView;
+			cancel = true;
+		} 
+		else if (!mEmail.contains("@"))
+		{
+			mEmailView.setError(getString(R.string.error_invalid_email));
+			focusView = mEmailView;
+			cancel = true;
+		}
+
+		if (cancel)
+		{
+			// There was an error; don't attempt login and focus the first
+			// form field with an error.
+			focusView.requestFocus();
+		} 
+		else
+		{
+			// Show a progress spinner, and kick off a background task to
+			// perform the user login attempt.
+			mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
+			showProgress(true);
+			mAuthTask = new UserLoginTask();
+			mAuthTask.execute((Void) null);
 		}
 	}
-	
-	@Override
-	public void onRestart()
+
+	private void showProgress(final boolean show)
 	{
-        mViewPager.setCurrentItem(1);
-		mActivity = this;
-		super.onRestart();
-	}
-	
-	@Override
-	public void onStop()
-	{
-		mActivity = null;
-		super.onStop();
+		// On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+		// for very easy animations. If available, use these APIs to fade-in
+		// the progress spinner.
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) 
+		{
+			int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+			mLoginStatusView.setVisibility(View.VISIBLE);
+			mLoginStatusView.animate().setDuration(shortAnimTime)
+				.alpha(show ? 1 : 0)
+				.setListener(new AnimatorListenerAdapter()
+				{
+					@Override
+					public void onAnimationEnd(Animator animation) 
+					{
+						mLoginStatusView.setVisibility(show ? View.VISIBLE : View.GONE);
+					}
+				});
+
+			mLoginFormView.setVisibility(View.VISIBLE);
+			mLoginFormView.animate().setDuration(shortAnimTime)
+				.alpha(show ? 0 : 1)
+				.setListener(new AnimatorListenerAdapter()
+				{
+					@Override
+					public void onAnimationEnd(Animator animation) 
+					{
+						mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+					}
+				});
+		} 
+		else
+		{
+			// The ViewPropertyAnimator APIs are not available, so simply show
+			// and hide the relevant UI components.
+			mLoginStatusView.setVisibility(show ? View.VISIBLE : View.GONE);
+			mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+		}
 	}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item)
+	/**
+	 * Represents an asynchronous login/registration task used to authenticate
+	 * the user.
+	 */
+	public class UserLoginTask extends AsyncTask<Void, Void, Boolean>
 	{
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.menu_create_settings)
+		@Override
+		protected Boolean doInBackground(Void... params)
 		{
+			// TODO: attempt authentication against a network service.
+
+			try
+			{
+				// Simulate network access.
+				Thread.sleep(2000);
+			} 
+			catch (InterruptedException e)
+			{
+				return false;
+			}
+
+			for (String credential : DUMMY_CREDENTIALS)
+			{
+				String[] pieces = credential.split(":");
+				
+				if (pieces[0].equals(mEmail))
+				{
+					// Account exists, return true if the password matches.
+					return pieces[1].equals(mPassword);
+				}
+			}
+
+			// TODO: register the new account here.
 			return true;
 		}
-		return super.onOptionsItemSelected(item);
-	}
 
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState)
-    {
-        super.onPostCreate(savedInstanceState);
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig)
-    {
-        super.onConfigurationChanged(newConfig);
-    }
-
-    /* Called whenever we call invalidateOptionsMenu() */
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu)
-    {
-        // If the nav drawer is open, hide action items related to the content view
-        return super.onPrepareOptionsMenu(menu);
-    }
-
-    @Override
-    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction)
-    {
-    	
-    }
-
-    @Override
-    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction)
-    {
-        // When the given tab is selected, switch to the corresponding page in the ViewPager.
-        mViewPager.setCurrentItem(tab.getPosition());
-    }
-
-    @Override
-    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction)
-    {
-    	
-    }
-
-	@Override
-	public void prepareDrawerLayout(Menu menu)
-	{
-		this.onPrepareOptionsMenu(menu);
-	}
-
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to one of the primary
-     * sections of the app.
-     */
-    public static class FormFactorPagerAdapter extends FragmentPagerAdapter
-    {
-    	private String activityTitles[];
-
-        public FormFactorPagerAdapter(FragmentManager fm, Context context)
-        {
-            super(fm);
-            
-            this.activityTitles = new String[getCount()];
-            
-            this.activityTitles[0] = context.getResources().getString(R.string.activity_create_title);
-            this.activityTitles[1] = context.getResources().getString(R.string.activity_main_title);
-            this.activityTitles[2] = context.getResources().getString(R.string.activity_complete_title);
-        }
-
-        @Override
-        public Fragment getItem(int tabIndex)
-        {
-            switch (tabIndex)
-            {
-                case 0:
-                    return new CreateActivityFragment();
-                case 1:
-                	return MainActivityFragment.newInstance();
-                default:
-                	return new CompleteActivityFragment();
-            }
-        }
-
-        @Override
-        public int getCount() 
-        {
-            return 3;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int tabIndex) 
-        {
-        	return this.activityTitles[tabIndex];
-        }
-    }
-
-    public static class CreateActivityFragment extends Fragment
-    {
 		@Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-        {
-            View rootView = inflater.inflate(R.layout.activity_create_placeholder, container, false);
-            return rootView;
-        }
-    }
+		protected void onPostExecute(final Boolean success)
+		{
+			mAuthTask = null;
+			showProgress(false);
 
-    public static class CompleteActivityFragment extends Fragment
-    {
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-        {
-            View rootView = inflater.inflate(R.layout.activity_complete, container, false);
-            return rootView;
-        }
-    }
+			if (success)
+			{
+				Intent intent = new Intent(MainActivity.this, MainMenuActivity.class);
+				MainActivity.this.startActivity(intent);
+			} 
+			else 
+			{
+				mPasswordView.setError(getString(R.string.error_incorrect_password));
+				mPasswordView.requestFocus();
+			}
+		}
+
+		@Override
+		protected void onCancelled()
+		{
+			mAuthTask = null;
+			showProgress(false);
+		}
+	}
 }

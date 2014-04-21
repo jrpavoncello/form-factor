@@ -2,7 +2,7 @@ package com.rhcloud.jop.formfactor.sqlite;
 
 import com.rhcloud.jop.formfactor.domain.Connection;
 import com.rhcloud.jop.formfactor.domain.IDatabase;
-import com.rhcloud.jop.formfactor.views.MainActivity;
+import com.rhcloud.jop.formfactor.views.MainMenuActivity;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -46,11 +46,11 @@ public class FormFactorDb implements IDatabase
 
 			try
 			{
-				MainActivity activity = (MainActivity)params[0];
+				MainMenuActivity activity = (MainMenuActivity)params[0];
 				
 				if(activity != null)
 				{
-					MainActivity.setData();
+					MainMenuActivity.setData();
 				}
 			}
 			catch(Exception ex)

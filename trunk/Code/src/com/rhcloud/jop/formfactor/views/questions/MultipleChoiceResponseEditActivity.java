@@ -8,7 +8,7 @@ import com.rhcloud.jop.formfactor.domain.dal.lite.FormFactorDataContext;
 import com.rhcloud.jop.formfactor.sqlite.FormFactorDb;
 import com.rhcloud.jop.formfactor.views.BundleKeys;
 import com.rhcloud.jop.formfactor.views.FormFactorFragmentActivity;
-import com.rhcloud.jop.formfactor.views.MainActivityFragment.DrawerListener;
+import com.rhcloud.jop.formfactor.views.MainMenuActivityFragment.DrawerListener;
 
 import android.app.ActionBar.Tab;
 import android.app.Activity;

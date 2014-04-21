@@ -1,8 +1,8 @@
 package com.rhcloud.jop.formfactor.views;
 
 import com.rhcloud.jop.formfactor.R;
-import com.rhcloud.jop.formfactor.views.MainActivity.FormFactorPagerAdapter;
-import com.rhcloud.jop.formfactor.views.MainActivityFragment.DrawerListener;
+import com.rhcloud.jop.formfactor.views.MainMenuActivity.FormFactorPagerAdapter;
+import com.rhcloud.jop.formfactor.views.MainMenuActivityFragment.DrawerListener;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;

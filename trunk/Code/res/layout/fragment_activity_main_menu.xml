@@ -12,13 +12,13 @@
     <ScrollView
 	    android:layout_width="fill_parent"
 	    android:layout_height="fill_parent">
-    
+	    
 		<LinearLayout
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
 			android:orientation="vertical" 
 			android:id="@+id/main_menu"
-			tools:context="com.rhcloud.jop.formfactor.views.MainActivity"
+			tools:context="com.rhcloud.jop.formfactor.views.MainMenuActivity"
 			tools:ignore="MergeRootFrame" >
 		    
 		    <TextView
@@ -27,7 +27,7 @@
 		        android:layout_height="wrap_content"
 		        android:paddingLeft="20dp"
 		        android:textSize="30sp"
-		        android:paddingTop="10dp"
+		        android:paddingTop="40dp"
 		        android:textStyle="italic"
 		        android:textColor="@color/text_view_text_secondary"
 		        android:text="@string/activity_main_welcome_to"
@@ -37,13 +37,14 @@
 		        android:id="@+id/main_activity_welcome_title"
 		        android:layout_width="fill_parent"
 		        android:layout_height="wrap_content"
-		        android:paddingLeft="64dp"
-		        android:paddingBottom="10dp"
+		        android:paddingLeft="34dp"
+		        android:paddingBottom="20dp"
 		        android:textSize="46sp"
 		        android:textAlignment="center"
+		        android:paddingTop="20dp"
 		        android:textStyle="bold"
-		        android:text="@string/app_name"
 		        android:textColor="@color/text_view_text_primary"
+		        android:text="@string/app_name"
 		        android:textAppearance="?android:attr/textAppearanceLarge" />
 		
 		   	<View
@@ -56,7 +57,7 @@
 		    <FrameLayout
 		        android:layout_width="match_parent"
 		        android:layout_height="wrap_content"
-	        	android:paddingTop="10dp" >
+		        android:paddingTop="20dp" >
 		
 		        <TextView
 		            android:id="@+id/main_activity_create"
@@ -67,7 +68,7 @@
 		        	android:textColor="@color/text_view_text_secondary"
 		            android:text="@string/activity_main_swipe_create"
 		            android:textAppearance="?android:attr/textAppearanceLarge" />
-		
+		        
 		        <TextView
 		            android:id="@+id/main_activity_complete"
 		            android:layout_width="wrap_content"
@@ -90,6 +91,7 @@
 		          android:layout_width="100dp"
 		          android:layout_height="76dp"
 		          android:layout_gravity="left"
+		          android:contentDescription="@id/main_activity_swipe_right"
 		          android:src="@drawable/ic_swipe_right" />
 		
 		      <ImageView
@@ -97,35 +99,37 @@
 		          android:layout_width="100dp"
 		          android:layout_height="76dp"
 		          android:layout_gravity="right"
+		          android:contentDescription="@id/main_activity_swipe_right"
 		          android:src="@drawable/ic_swipe_left" />
+		      
 		    </FrameLayout>
 		    
 		    <LinearLayout 
 		        android:id="@+id/main_activity_recent_activities"
 				android:layout_width="fill_parent"
 				android:layout_height="fill_parent"
-				android:background="@color/activity_main_recent_background"
 				android:paddingBottom="150dp"
 				android:orientation="vertical">
 		      	<View
 				    android:layout_width="fill_parent"
-				    android:layout_height="1dp"
+				    android:layout_height="3dp"
 				    android:background="@color/drawer_menu_divider" />
 
 	   	        <TextView
 	   	            android:id="@+id/main_activity_recent_activity"
 	   	            android:layout_width="fill_parent"
 	   	            android:layout_height="wrap_content"
-	   	            android:background="@color/action_bar_background"
-	   	            android:paddingTop="5dp"
+	   	            android:background="@color/action_bar_background_secondary"
 	   	            android:paddingBottom="5dp"
 	   	            android:paddingLeft="20dp"
+	   	            android:paddingTop="5dp"
 	   	            android:text="@string/activity_main_recent_activity"
+	   	            android:textColor="@color/text_view_text_menu"
 	   	            android:textAppearance="?android:attr/textAppearanceLarge" />
 
 		      	<View
 				    android:layout_width="fill_parent"
-				    android:layout_height="1dp"
+				    android:layout_height="3dp"
 				    android:background="@color/drawer_menu_divider" />
 		    </LinearLayout>
 		</LinearLayout>

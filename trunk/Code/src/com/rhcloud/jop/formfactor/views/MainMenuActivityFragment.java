@@ -10,13 +10,13 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class MainActivityFragment extends Fragment
+public class MainMenuActivityFragment extends Fragment
 {
 	private DrawerListener mDrawerListener;
 	
-	public static MainActivityFragment newInstance()
+	public static MainMenuActivityFragment newInstance()
 	{
-		MainActivityFragment newFragment = new MainActivityFragment();
+		MainMenuActivityFragment newFragment = new MainMenuActivityFragment();
 		
         return newFragment;
 	}
@@ -24,7 +24,7 @@ public class MainActivityFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View rootView = inflater.inflate(R.layout.fragment_activity_main, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_activity_main_menu, container, false);
         
         return rootView;
     }

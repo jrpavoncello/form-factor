@@ -31,8 +31,8 @@ public class DrawerItemArrayAdapter extends ArrayAdapter<DrawerItem>
         LayoutInflater inflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         convertView = inflater.inflate(R.layout.drawer_list_item, parent, false);
 
-        TextView tv = (TextView)convertView.findViewById(R.id.drawer_menu_item_text);
-        ImageView iv = (ImageView)convertView.findViewById(R.id.drawer_menu_item_image);
+        TextView tv = (TextView)convertView.findViewById(R.id.drawer_list_item_text);
+        ImageView iv = (ImageView)convertView.findViewById(R.id.drawer_list_item_image);
 
         tv.setText(mDrawerItems[position].getItemText());
         iv.setImageDrawable(mDrawerItems[position].getImage());

@@ -1,24 +1,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/form_list_item"
+	android:id="@+id/drawer_list_item"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	android:orientation="vertical"> 
    	
 	<LinearLayout
-	    android:id="@+id/form_list_item_text_group"
+	    android:id="@+id/drawer_list_item_text_group"
 	    android:layout_width="match_parent"
 	    android:layout_height="47dp"
 	    android:orientation="horizontal">
 	    
 	    <ImageView 
-	        android:id="@+id/form_list_item_image"
+	        android:id="@+id/drawer_list_item_image"
 	        android:layout_width="48dp"
 	        android:layout_height="fill_parent"
 	        android:layout_gravity="left"
 	        android:src="@drawable/ic_home" /> 
 	        
 	    <TextView 
-	        android:id="@+id/form_list_item_text" 
+	        android:id="@+id/drawer_list_item_text" 
 	        android:layout_width="fill_parent"
 	        android:layout_height="48dp"
 	        android:textSize="20sp"

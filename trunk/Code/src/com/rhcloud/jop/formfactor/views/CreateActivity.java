@@ -10,7 +10,7 @@ import com.rhcloud.jop.formfactor.domain.dal.lite.FormFactorDataContext;
 import com.rhcloud.jop.formfactor.domain.services.FormService;
 import com.rhcloud.jop.formfactor.domain.services.UserService;
 import com.rhcloud.jop.formfactor.sqlite.FormFactorDb;
-import com.rhcloud.jop.formfactor.views.MainActivityFragment.DrawerListener;
+import com.rhcloud.jop.formfactor.views.MainMenuActivityFragment.DrawerListener;
 import com.rhcloud.jop.formfactor.views.questions.FreeDrawQuestionActivity;
 import com.rhcloud.jop.formfactor.views.questions.FreeResponseQuestionEditActivity;
 import com.rhcloud.jop.formfactor.views.questions.MultipleChoiceQuestion;

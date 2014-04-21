@@ -15,7 +15,7 @@
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
 			android:orientation="vertical" 
-			tools:context="com.rhcloud.jop.formfactor.views.MainActivity"
+			tools:context="com.rhcloud.jop.formfactor.views.MainMenuActivity"
 			tools:ignore="MergeRootFrame" >
 			
 		    <EditText
@@ -104,7 +104,7 @@
 				android:paddingBottom="20dp"
 				android:orientation="vertical" 
 				android:id="@+id/activity_create_questions"
-				tools:context="com.rhcloud.jop.formfactor.views.MainActivity"
+				tools:context="com.rhcloud.jop.formfactor.views.MainMenuActivity"
 				tools:ignore="MergeRootFrame" >
 				
 		    </LinearLayout>
