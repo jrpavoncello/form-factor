@@ -1,8 +1,4 @@
 package com.rhcloud.jop.formfactor.domain.services;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import com.rhcloud.jop.formfactor.common.Result;
 import com.rhcloud.jop.formfactor.domain.IFormFactorDataContext;
 import com.rhcloud.jop.formfactor.domain.User;
@@ -46,24 +42,24 @@ public class UserService
 		return result;
 	}
 	
-	public List<User> GetAllUsers()
-	{
-		List<User> users = new ArrayList<User>();
-		
-		IUserRepository userRepo = this.DataContext.GetUserRepository();
-		
-		users.addAll(userRepo.GetAll());
-		
-		return users;
-	}
-	
-	public User GetUserByID(long ID)
+	public boolean IsValidAuthentication(String username, byte[] passwordHash)
 	{
 		User user = null;
 		
 		IUserRepository userRepo = this.DataContext.GetUserRepository();
 		
-		user = userRepo.GetByID(ID);
+		user = userRepo.GetByUserNamePassword(username, passwordHash);
+		
+		return user != null;
+	}
+	
+	public User GetUser(String username, byte[] passwordHash)
+	{
+		User user = null;
+		
+		IUserRepository userRepo = this.DataContext.GetUserRepository();
+		
+		user = userRepo.GetByUserNamePassword(username, passwordHash);
 		
 		return user;
 	}

@@ -1,8 +1,5 @@
 package com.rhcloud.jop.formfactor.domain.repositories.lite;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -39,6 +36,7 @@ public class UserRepository implements IUserRepository
 			
 			values.put(tables.UserContract.Email.GetName(), user.Email);
 			values.put(tables.UserContract.Username.GetName(), user.Username);
+			values.put(tables.UserContract.Password.GetName(), user.Password);
 	
 			user.ID = SQLiteHelper.logInsert(TAG_NAME, this.liteDB.insert(tables.UserContract.TABLE_NAME, null, values));
 			
@@ -48,74 +46,6 @@ public class UserRepository implements IUserRepository
 		{
 			this.unitOfWork.AbortTransaction();
 		}
-	}
-
-	@Override
-	public List<User> GetAll()
-	{
-		List<User> users = new ArrayList<User>();
-
-		try
-		{
-			this.unitOfWork.BeginTransaction();
-			
-			Cursor cursor = this.liteDB.rawQuery("SELECT * FROM " + tables.UserContract.TABLE_NAME, null);
-			
-			if(cursor.moveToFirst())
-			{
-				do
-				{
-					User user = new User();
-					
-					user.ID = cursor.getInt(0);
-					user.Email = cursor.getString(tables.UserContract.Email.Index);
-					user.Username = cursor.getString(tables.UserContract.Username.Index);
-					
-					users.add(user);
-				}
-				while(cursor.moveToNext());
-			}
-			
-			this.unitOfWork.CommitTransaction();
-		}
-		catch(Exception ex)
-		{
-			this.unitOfWork.AbortTransaction();
-		}
-		
-		return users;
-	}
-
-	@Override
-	public User GetByID(long ID)
-	{
-		User user = new User();
-
-		try
-		{
-			this.unitOfWork.BeginTransaction();
-			
-			String whereClause = " WHERE " + tables.UserContract._ID + " = " + ID;
-			
-			String query = "SELECT * FROM " + tables.UserContract.TABLE_NAME + whereClause;
-			
-			Cursor cursor = this.liteDB.rawQuery(query, null);
-			
-			if(cursor.moveToFirst())
-			{
-				user.ID = cursor.getInt(0);
-				user.Email = cursor.getString(tables.UserContract.Email.Index);
-				user.Username = cursor.getString(tables.UserContract.Username.Index);
-			}
-			
-			this.unitOfWork.CommitTransaction();
-		}
-		catch(Exception ex)
-		{
-			this.unitOfWork.AbortTransaction();
-		}
-		
-		return user;
 	}
 
 	@Override
@@ -130,6 +60,7 @@ public class UserRepository implements IUserRepository
 			values.put(tables.UserContract._ID, user.ID);
 			values.put(tables.UserContract.Email.GetName(), user.Email);
 			values.put(tables.UserContract.Username.GetName(), user.Username);
+			values.put(tables.UserContract.Password.GetName(), user.Password);
 	
 			String whereClause = UserContract._ID + " = ?";
 	
@@ -141,5 +72,39 @@ public class UserRepository implements IUserRepository
 		{
 			this.unitOfWork.AbortTransaction();
 		}
+	}
+
+	@Override
+	public User GetByUserNamePassword(String username, byte[] password)
+	{
+		User user = null;
+
+		try
+		{
+			this.unitOfWork.BeginTransaction();
+			
+			String whereClause = " WHERE " + tables.UserContract.Username.GetName() + " = ? AND " + tables.UserContract.Password.GetName() + " = ?";
+			
+			String query = "SELECT * FROM " + tables.UserContract.TABLE_NAME + whereClause;
+			
+			Cursor cursor = this.liteDB.rawQuery(query, null);
+			
+			if(cursor.moveToFirst())
+			{
+				user = new User();
+				user.ID = cursor.getInt(0);
+				user.Email = cursor.getString(tables.UserContract.Email.Index);
+				user.Username = cursor.getString(tables.UserContract.Username.Index);
+				user.Password = cursor.getBlob(tables.UserContract.Email.Index);
+			}
+			
+			this.unitOfWork.CommitTransaction();
+		}
+		catch(Exception ex)
+		{
+			this.unitOfWork.AbortTransaction();
+		}
+		
+		return user;
 	}
 }

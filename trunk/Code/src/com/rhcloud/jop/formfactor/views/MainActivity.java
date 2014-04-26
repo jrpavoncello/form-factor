@@ -1,5 +1,9 @@
 package com.rhcloud.jop.formfactor.views;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.SecureRandom;
+
 import com.rhcloud.jop.formfactor.R;
 
 import android.animation.Animator;
@@ -21,17 +25,8 @@ import android.widget.TextView;
  * Activity which displays a login screen to the user, offering registration as
  * well.
  */
-public class MainActivity extends Activity {
-	/**
-	 * A dummy authentication store containing known user names and passwords.
-	 * TODO: remove after connecting to a real authentication system.
-	 */
-	private static final String[] DUMMY_CREDENTIALS = new String[]{ "foo@example.com:hello", "bar@example.com:world" };
-
-	/**
-	 * The default email to populate the email field with.
-	 */
-	public static final String EXTRA_EMAIL = "com.example.android.authenticatordemo.extra.EMAIL";
+public class MainActivity extends Activity
+{
 
 	/**
 	 * Keep track of the login task to ensure we can cancel it if requested.
@@ -57,7 +52,7 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 
 		// Set up the login form.
-		mEmail = getIntent().getStringExtra(EXTRA_EMAIL);
+		mEmail = getIntent().getStringExtra(BundleKeys.LoginEmail);
 		mEmailView = (EditText) findViewById(R.id.email);
 		mEmailView.setText(mEmail);
 
@@ -218,7 +213,7 @@ public class MainActivity extends Activity {
 	{
 		@Override
 		protected Boolean doInBackground(Void... params)
-		{
+		{			
 			// TODO: attempt authentication against a network service.
 
 			try
@@ -237,8 +232,9 @@ public class MainActivity extends Activity {
 				
 				if (pieces[0].equals(mEmail))
 				{
-					// Account exists, return true if the password matches.
-					return pieces[1].equals(mPassword);
+					MessageDigest digest = MessageDigest.getInstance("SHA-256");
+					byte[] hash = digest.digest(mPassword.getBytes("UTF-8"));
+					return pieces[1].equals(hash);
 				}
 			}
 

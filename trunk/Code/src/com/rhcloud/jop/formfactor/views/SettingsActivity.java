@@ -34,8 +34,8 @@ public class SettingsActivity extends PreferenceActivity
 		{ 
 			super.onCreate(savedInstanceState); 
 		 
-				// Load the preferences from an XML resource 
-				addPreferencesFromResource(R.xml.pref_general); 
+			// Load the preferences from an XML resource 
+			addPreferencesFromResource(R.xml.pref_general); 
 		} 
 	}
 
@@ -46,8 +46,8 @@ public class SettingsActivity extends PreferenceActivity
 		{ 
 			super.onCreate(savedInstanceState); 
 		
-				// Load the preferences from an XML resource 
-				addPreferencesFromResource(R.xml.pref_general); 
+			// Load the preferences from an XML resource 
+			addPreferencesFromResource(R.xml.pref_general); 
 		} 
 	} 
 }

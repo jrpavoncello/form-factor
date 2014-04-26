@@ -8,4 +8,5 @@ public class BundleKeys
 	public static final String ResponseChoiceID = "ResponseChoiceID";
 	public static final String QuestionID = "QuestionID";
 	public static final String FreeDrawImage = "FreeDrawImage";
+	public static final String LoginEmail = "LoginEmail";
 }

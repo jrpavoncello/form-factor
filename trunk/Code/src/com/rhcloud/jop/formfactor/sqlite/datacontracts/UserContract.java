@@ -7,14 +7,16 @@ public final class UserContract extends BaseTable
 {
 	public final String TABLE_NAME = "tUser";
 
-	public BaseColumn Username = new BaseColumn("sUsername", BaseColumn.TextType);
-	public BaseColumn Email = new BaseColumn("sEmail", BaseColumn.TextType);
+	public BaseColumn Username;
+	public BaseColumn Email;
+	public BaseColumn Password;
 
 	@Override
 	protected void InitTables()
 	{
 		Username = new BaseColumn("sUsername", BaseColumn.TextType);
 		Email = new BaseColumn("sEmail", BaseColumn.TextType);
+		Password = new BaseColumn("blPassword", BaseColumn.BlobType);
 	}
 	
 	@Override
@@ -28,5 +30,6 @@ public final class UserContract extends BaseTable
 	{
 		super.AddColumnCreate(Username);
 		super.AddColumnCreate(Email);
+		super.AddColumnCreate(Password);
 	}
 }
