@@ -1,18 +1,27 @@
 package com.rhcloud.jop.formfactor.views;
 
-import java.math.BigInteger;
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
-import java.security.SecureRandom;
+import java.security.NoSuchAlgorithmException;
 
 import com.rhcloud.jop.formfactor.R;
+import com.rhcloud.jop.formfactor.common.Result;
+import com.rhcloud.jop.formfactor.domain.UnitOfWork;
+import com.rhcloud.jop.formfactor.domain.User;
+import com.rhcloud.jop.formfactor.domain.dal.lite.FormFactorDataContext;
+import com.rhcloud.jop.formfactor.domain.services.UserService;
+import com.rhcloud.jop.formfactor.sqlite.FormFactorDB;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -25,9 +34,8 @@ import android.widget.TextView;
  * Activity which displays a login screen to the user, offering registration as
  * well.
  */
-public class MainActivity extends Activity
+public class MainActivity extends Activity implements IDatabaseReadyListener
 {
-
 	/**
 	 * Keep track of the login task to ensure we can cancel it if requested.
 	 */
@@ -36,6 +44,8 @@ public class MainActivity extends Activity
 	// Values for email and password at the time of the login attempt.
 	private String mEmail;
 	private String mPassword;
+	private boolean mIsRegistering = false;
+	private boolean mIsDBReady = false;
 
 	// UI references.
 	private EditText mEmailView;
@@ -43,6 +53,7 @@ public class MainActivity extends Activity
 	private View mLoginFormView;
 	private View mLoginStatusView;
 	private TextView mLoginStatusMessageView;
+	private FormFactorDB mFormFactorDB = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -50,6 +61,13 @@ public class MainActivity extends Activity
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_main);
+		
+		this.mFormFactorDB = FormFactorDB.getInstance(this);
+		
+		if(this.mFormFactorDB != null && this.mFormFactorDB.getDB() != null)
+		{
+			this.loginPreferredUser();
+		}
 
 		// Set up the login form.
 		mEmail = getIntent().getStringExtra(BundleKeys.LoginEmail);
@@ -85,6 +103,50 @@ public class MainActivity extends Activity
 					attemptLogin();
 				}
 			});
+
+		findViewById(R.id.register_button).setOnClickListener(
+			new View.OnClickListener() 
+			{
+				@Override
+				public void onClick(View view)
+				{
+					registerUser();
+				}
+			});
+	}
+
+	@Override
+	public void OnDatabaseReady()
+	{
+		mIsDBReady = true;
+		this.loginPreferredUser();
+	}
+	
+	private void loginPreferredUser()
+	{
+		UnitOfWork unitOfWork = new UnitOfWork(this.mFormFactorDB);
+		FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
+		
+		UserService userService = new UserService(dataContext);
+		
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+		
+		String username = pref.getString("pref_username", null);
+		
+		String temp = pref.getString("pref_password", null);
+		
+		if(temp != null && username != null)
+		{
+			char[] password = temp.toCharArray();
+			
+			User user = userService.GetUser(username, password);
+			
+			if(user != null && user.ID != 0)
+			{
+				Intent intent = new Intent(this, MainMenuActivity.class);
+				this.startActivity(intent);
+			}
+		}
 	}
 
 	@Override
@@ -205,6 +267,12 @@ public class MainActivity extends Activity
 		}
 	}
 
+	private void registerUser()
+	{
+		this.mIsRegistering = true;
+		this.attemptLogin();
+	}
+
 	/**
 	 * Represents an asynchronous login/registration task used to authenticate
 	 * the user.
@@ -213,33 +281,102 @@ public class MainActivity extends Activity
 	{
 		@Override
 		protected Boolean doInBackground(Void... params)
-		{			
-			// TODO: attempt authentication against a network service.
-
+		{
+			boolean result = true;
+			
+			UnitOfWork unitOfWork = new UnitOfWork(mFormFactorDB);
+			FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
+			
+			UserService userService = new UserService(dataContext);
+			
+			byte[] hash = null;
+			MessageDigest digest;
 			try
 			{
-				// Simulate network access.
-				Thread.sleep(2000);
-			} 
-			catch (InterruptedException e)
-			{
-				return false;
+				digest = MessageDigest.getInstance("SHA-256");
+				hash = digest.digest(mPassword.getBytes("UTF-8"));
 			}
-
-			for (String credential : DUMMY_CREDENTIALS)
+			catch (NoSuchAlgorithmException e)
 			{
-				String[] pieces = credential.split(":");
+				result = false;
+			}
+			catch (UnsupportedEncodingException e)
+			{
+				result = false;
+			}
+			
+			if(hash != null)
+			{
+				char[] password = null;
 				
-				if (pieces[0].equals(mEmail))
+				try
 				{
-					MessageDigest digest = MessageDigest.getInstance("SHA-256");
-					byte[] hash = digest.digest(mPassword.getBytes("UTF-8"));
-					return pieces[1].equals(hash);
+					password = new String(hash, "UTF-8").toCharArray();
+				} 
+				catch (UnsupportedEncodingException e)
+				{
+					result = false;
+				}
+				
+				if(result)
+				{
+					User user = userService.GetUser(mEmail, password);
+	
+					if(user != null && user.ID != 0)
+					{
+						if(mIsRegistering)
+						{
+							result = false;
+						}
+						else
+						{
+							Editor settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext()).edit();
+							
+							settings.putString("pref_username", mEmail);
+							settings.putString("pref_password", new String(password));
+							settings.commit();
+						}
+					}
+					else
+					{
+						if(mIsRegistering)
+						{
+							user = new User();
+							
+							user.Username = mEmail;
+							user.Email = mEmail;
+							user.Password = password;
+							
+							result = !userService.IsValidAuthentication(user.Username, user.Password);
+							
+							if(result)
+							{
+								Result userResult = userService.CreateUpdateUser(user);
+						    	
+								if(userResult.Success)
+								{
+									Editor settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext()).edit();
+									
+									settings.putString("pref_username", mEmail);
+									settings.putString("pref_password", new String(password));
+									settings.commit();
+								}
+								else
+								{
+									result = false;
+								}
+							}
+						}
+						else
+						{
+							result = false;
+						}
+					}
 				}
 			}
 
 			// TODO: register the new account here.
-			return true;
+			return result;
 		}
 
 		@Override
@@ -252,11 +389,23 @@ public class MainActivity extends Activity
 			{
 				Intent intent = new Intent(MainActivity.this, MainMenuActivity.class);
 				MainActivity.this.startActivity(intent);
+				
+				mIsRegistering = false;
 			} 
 			else 
 			{
-				mPasswordView.setError(getString(R.string.error_incorrect_password));
+				if(!mIsRegistering)
+				{
+					mPasswordView.setError(getString(R.string.error_incorrect_password));
+				}
+				else
+				{
+					mPasswordView.setError(getString(R.string.error_register_failed));
+				}
+				
 				mPasswordView.requestFocus();
+				
+				mIsRegistering = false;
 			}
 		}
 

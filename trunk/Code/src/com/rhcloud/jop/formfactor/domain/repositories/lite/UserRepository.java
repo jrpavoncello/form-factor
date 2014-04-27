@@ -1,14 +1,18 @@
 package com.rhcloud.jop.formfactor.domain.repositories.lite;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteStatement;
 
 import com.rhcloud.jop.formfactor.common.SQLiteHelper;
 import com.rhcloud.jop.formfactor.domain.UnitOfWork;
 import com.rhcloud.jop.formfactor.domain.User;
 import com.rhcloud.jop.formfactor.domain.repositories.IUserRepository;
-import com.rhcloud.jop.formfactor.sqlite.FormFactorDb;
+import com.rhcloud.jop.formfactor.sqlite.FormFactorDB;
 import com.rhcloud.jop.formfactor.sqlite.datacontracts.*;
 
 public class UserRepository implements IUserRepository
@@ -20,7 +24,7 @@ public class UserRepository implements IUserRepository
 	
 	public UserRepository(UnitOfWork unitOfWork)
 	{
-		FormFactorDb formFactorDB = (FormFactorDb)unitOfWork.GetDB();
+		FormFactorDB formFactorDB = (FormFactorDB)unitOfWork.GetDB();
 		this.unitOfWork = unitOfWork;
 		this.liteDB = formFactorDB.getDB();
 	}
@@ -36,7 +40,7 @@ public class UserRepository implements IUserRepository
 			
 			values.put(tables.UserContract.Email.GetName(), user.Email);
 			values.put(tables.UserContract.Username.GetName(), user.Username);
-			values.put(tables.UserContract.Password.GetName(), user.Password);
+			values.put(tables.UserContract.Password.GetName(), new String(user.Password));
 	
 			user.ID = SQLiteHelper.logInsert(TAG_NAME, this.liteDB.insert(tables.UserContract.TABLE_NAME, null, values));
 			
@@ -46,6 +50,43 @@ public class UserRepository implements IUserRepository
 		{
 			this.unitOfWork.AbortTransaction();
 		}
+	}
+
+	@Override
+	public List<User> GetAll()
+	{
+		List<User> users = new ArrayList<User>();
+
+		try
+		{
+			this.unitOfWork.BeginTransaction();
+			
+			Cursor cursor = this.liteDB.rawQuery("SELECT * FROM " + tables.UserContract.TABLE_NAME, null);
+			
+			if(cursor.moveToFirst())
+			{
+				do
+				{
+					User user = new User();
+					
+					user.ID = cursor.getInt(0);
+					user.Email = cursor.getString(tables.UserContract.Email.Index);
+					user.Username = cursor.getString(tables.UserContract.Username.Index);
+					user.Password = cursor.getString(tables.UserContract.Password.Index).toCharArray();
+					
+					users.add(user);
+				}
+				while(cursor.moveToNext());
+			}
+			
+			this.unitOfWork.CommitTransaction();
+		}
+		catch(Exception ex)
+		{
+			this.unitOfWork.AbortTransaction();
+		}
+		
+		return users;
 	}
 
 	@Override
@@ -60,7 +101,7 @@ public class UserRepository implements IUserRepository
 			values.put(tables.UserContract._ID, user.ID);
 			values.put(tables.UserContract.Email.GetName(), user.Email);
 			values.put(tables.UserContract.Username.GetName(), user.Username);
-			values.put(tables.UserContract.Password.GetName(), user.Password);
+			values.put(tables.UserContract.Password.GetName(), new String(user.Password));
 	
 			String whereClause = UserContract._ID + " = ?";
 	
@@ -75,7 +116,7 @@ public class UserRepository implements IUserRepository
 	}
 
 	@Override
-	public User GetByUserNamePassword(String username, byte[] password)
+	public User GetByUserNamePassword(String username, char[] password)
 	{
 		User user = null;
 
@@ -87,7 +128,7 @@ public class UserRepository implements IUserRepository
 			
 			String query = "SELECT * FROM " + tables.UserContract.TABLE_NAME + whereClause;
 			
-			Cursor cursor = this.liteDB.rawQuery(query, null);
+			Cursor cursor = this.liteDB.rawQuery(query, new String[] { username, new String(password) });
 			
 			if(cursor.moveToFirst())
 			{
@@ -95,7 +136,7 @@ public class UserRepository implements IUserRepository
 				user.ID = cursor.getInt(0);
 				user.Email = cursor.getString(tables.UserContract.Email.Index);
 				user.Username = cursor.getString(tables.UserContract.Username.Index);
-				user.Password = cursor.getBlob(tables.UserContract.Email.Index);
+				user.Password = cursor.getString(tables.UserContract.Password.Index).toCharArray();
 			}
 			
 			this.unitOfWork.CommitTransaction();

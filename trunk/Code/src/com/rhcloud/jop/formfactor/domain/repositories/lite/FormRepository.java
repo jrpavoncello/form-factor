@@ -11,7 +11,7 @@ import com.rhcloud.jop.formfactor.common.SQLiteHelper;
 import com.rhcloud.jop.formfactor.domain.Form;
 import com.rhcloud.jop.formfactor.domain.UnitOfWork;
 import com.rhcloud.jop.formfactor.domain.repositories.IFormRepository;
-import com.rhcloud.jop.formfactor.sqlite.FormFactorDb;
+import com.rhcloud.jop.formfactor.sqlite.FormFactorDB;
 import com.rhcloud.jop.formfactor.sqlite.datacontracts.*;
 
 public class FormRepository implements IFormRepository
@@ -23,7 +23,7 @@ public class FormRepository implements IFormRepository
 	
 	public FormRepository(UnitOfWork unitOfWork)
 	{
-		FormFactorDb formFactorDB = (FormFactorDb)unitOfWork.GetDB();
+		FormFactorDB formFactorDB = (FormFactorDB)unitOfWork.GetDB();
 		this.unitOfWork = unitOfWork;
 		this.liteDB = formFactorDB.getDB();
 	}

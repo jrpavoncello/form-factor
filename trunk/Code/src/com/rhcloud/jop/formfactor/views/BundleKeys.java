@@ -9,4 +9,6 @@ public class BundleKeys
 	public static final String QuestionID = "QuestionID";
 	public static final String FreeDrawImage = "FreeDrawImage";
 	public static final String LoginEmail = "LoginEmail";
+	public static final String OpenFormActionID = "OpenFormActionID";
+	public static final String CreateNew = "CreateNew";
 }

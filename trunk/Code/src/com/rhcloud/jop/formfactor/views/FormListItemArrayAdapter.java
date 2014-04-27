@@ -32,10 +32,8 @@ public class FormListItemArrayAdapter extends ArrayAdapter<FormListItem>
         convertView = inflater.inflate(R.layout.form_list_item, parent, false);
 
         TextView tv = (TextView)convertView.findViewById(R.id.form_list_item_text);
-        ImageView iv = (ImageView)convertView.findViewById(R.id.form_list_item_image);
         
         tv.setText(mFormListItems[position].getItemText());
-        iv.setImageDrawable(mFormListItems[position].getImage());
     	
     	return convertView;
     }

@@ -61,8 +61,6 @@ public class FormService
 				if(form.ID == 0)
 				{
 					formRepo.Add(form);
-					
-					form.Title = "New Form " + form.ID;
 				}
 				else
 				{
@@ -87,9 +85,11 @@ public class FormService
 				
 				IMultipleChoiceQuestionRepository multipleChoiceQuestionRepo = DataContext.GetMultipleChoiceQuestionRepository();
 				IFreeResponseQuestionRepository freeResponseQuestionRepo = DataContext.GetFreeResponseQuestionRepository();
+				IFreeDrawQuestionRepository freeDrawQuestionRepo = DataContext.GetFreeDrawQuestionRepository();
 				
 				multipleChoiceQuestionRepo.DeleteByFormID(form.ID);
 				freeResponseQuestionRepo.DeleteByFormID(form.ID);
+				freeDrawQuestionRepo.DeleteByFormID(form.ID);
 			}
 			
 			return result;

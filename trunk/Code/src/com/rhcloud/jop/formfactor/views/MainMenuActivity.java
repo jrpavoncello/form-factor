@@ -7,15 +7,17 @@ import com.rhcloud.jop.formfactor.domain.UnitOfWork;
 import com.rhcloud.jop.formfactor.domain.User;
 import com.rhcloud.jop.formfactor.domain.dal.lite.FormFactorDataContext;
 import com.rhcloud.jop.formfactor.domain.services.UserService;
-import com.rhcloud.jop.formfactor.sqlite.FormFactorDb;
+import com.rhcloud.jop.formfactor.sqlite.FormFactorDB;
 import com.rhcloud.jop.formfactor.views.MainMenuActivityFragment.DrawerListener;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -27,7 +29,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class MainMenuActivity extends FormFactorFragmentActivity implements ActionBar.TabListener, DrawerListener
+public class MainMenuActivity extends FormFactorFragmentActivity implements IDatabaseReadyListener, ActionBar.TabListener, DrawerListener
 {
     private ViewPager mViewPager;
 	private FormFactorPagerAdapter mAppSectionsPagerAdapter;
@@ -41,9 +43,9 @@ public class MainMenuActivity extends FormFactorFragmentActivity implements Acti
 		super.setData(this, R.id.activity_main);
 	}
 	
-	FormFactorDb getDatabaseInstance()
+	FormFactorDB getDatabaseInstance()
 	{
-		return super.formFactorDb;
+		return super.mFormFactorDb;
 	}
 
 	@Override
@@ -52,7 +54,7 @@ public class MainMenuActivity extends FormFactorFragmentActivity implements Acti
 		//setContentView must be called first so that super.onCreate has access to this activity's layout
 		setContentView(R.layout.activity_main_menu);
 		super.onCreate(savedInstanceState);
-		formFactorDb = FormFactorDb.getInstance(this);
+		mFormFactorDb = FormFactorDB.getInstance(this);
 
         // Create the adapter that will return a fragment for each of the sections
         mAppSectionsPagerAdapter = new FormFactorPagerAdapter(getSupportFragmentManager(), this);
@@ -94,47 +96,18 @@ public class MainMenuActivity extends FormFactorFragmentActivity implements Acti
         
         MainMenuActivity.mActivity = this;
     }
-	
-	public synchronized static void setData()
+
+	@Override
+	public void OnDatabaseReady()
 	{
-		try
-		{
-			UnitOfWork unitOfWork = new UnitOfWork(mActivity.getDatabaseInstance());
-			FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
-			
-			UserService userService = new UserService(dataContext);
-			
-			List<User> users = userService.GetAllUsers();
-			
-			if(!users.isEmpty())
-			{
-				mActivity.mCurrentUser = users.get(0);
-			}
-			else
-			{
-				mActivity.mCurrentUser = new User();
-				
-				mActivity.mCurrentUser.Username = "default";
-				mActivity.mCurrentUser.Email = "default";
-				
-				userService.CreateUpdateUser(mActivity.mCurrentUser);
-			}
-		}
-		catch(Exception ex)
-		{
-			
-		}
-		finally
-		{
-			
-		}
+
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main_menu, menu);
+		
 		return true;
 	}
 	
@@ -169,8 +142,12 @@ public class MainMenuActivity extends FormFactorFragmentActivity implements Acti
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		if (id == R.id.menu_create_settings)
-		{
+		if (id == R.id.activity_main_menu_settings)
+		{	
+			Intent intent = new Intent(this, SettingsActivity.class);
+
+			this.startActivity(intent);
+
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -186,14 +163,6 @@ public class MainMenuActivity extends FormFactorFragmentActivity implements Acti
     public void onConfigurationChanged(Configuration newConfig)
     {
         super.onConfigurationChanged(newConfig);
-    }
-
-    /* Called whenever we call invalidateOptionsMenu() */
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu)
-    {
-        // If the nav drawer is open, hide action items related to the content view
-        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -218,7 +187,7 @@ public class MainMenuActivity extends FormFactorFragmentActivity implements Acti
 	@Override
 	public void prepareDrawerLayout(Menu menu)
 	{
-		this.onPrepareOptionsMenu(menu);
+		
 	}
 
     /**

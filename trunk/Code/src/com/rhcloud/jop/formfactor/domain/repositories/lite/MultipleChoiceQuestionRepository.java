@@ -8,7 +8,7 @@ import com.rhcloud.jop.formfactor.common.SQLiteHelper;
 import com.rhcloud.jop.formfactor.domain.MultipleChoiceQuestion;
 import com.rhcloud.jop.formfactor.domain.UnitOfWork;
 import com.rhcloud.jop.formfactor.domain.repositories.IMultipleChoiceQuestionRepository;
-import com.rhcloud.jop.formfactor.sqlite.FormFactorDb;
+import com.rhcloud.jop.formfactor.sqlite.FormFactorDB;
 import com.rhcloud.jop.formfactor.sqlite.datacontracts.*;
 
 public class MultipleChoiceQuestionRepository implements IMultipleChoiceQuestionRepository
@@ -20,7 +20,7 @@ public class MultipleChoiceQuestionRepository implements IMultipleChoiceQuestion
 	
 	public MultipleChoiceQuestionRepository(UnitOfWork unitOfWork)
 	{
-		FormFactorDb formFactorDB = (FormFactorDb)unitOfWork.GetDB();
+		FormFactorDB formFactorDB = (FormFactorDB)unitOfWork.GetDB();
 		this.unitOfWork = unitOfWork;
 		this.liteDB = formFactorDB.getDB();
 	}
@@ -161,7 +161,7 @@ public class MultipleChoiceQuestionRepository implements IMultipleChoiceQuestion
 			
 			String whereClause = tables.MultipleChoiceQuestionContract.QuestionID.GetName() + " IN (";
 			
-			whereClause += " SELECT " + tables.QuestionContract._ID + " FROM " + tables.QuestionContract.TABLE_NAME + " WHERE " + tables.QuestionContract.FormID.GetName() + " = ?";
+			whereClause += " SELECT " + tables.QuestionContract._ID + " FROM " + tables.QuestionContract.TABLE_NAME + " WHERE " + tables.QuestionContract.FormID.GetName() + " = ?)";
 	
 			SQLiteHelper.logDelete(TAG_NAME, this.liteDB.delete(tables.MultipleChoiceQuestionContract.TABLE_NAME, whereClause, new String[] { "" + formID }));
 			

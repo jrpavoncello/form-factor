@@ -42,7 +42,7 @@ public class UserService
 		return result;
 	}
 	
-	public boolean IsValidAuthentication(String username, byte[] passwordHash)
+	public boolean IsValidAuthentication(String username, char[] passwordHash)
 	{
 		User user = null;
 		
@@ -53,7 +53,7 @@ public class UserService
 		return user != null;
 	}
 	
-	public User GetUser(String username, byte[] passwordHash)
+	public User GetUser(String username, char[] passwordHash)
 	{
 		User user = null;
 		

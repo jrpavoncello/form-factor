@@ -6,9 +6,10 @@
 		android:summary="@string/pref_sync_summary"
 		android:defaultValue="true" />
 	
-	<Preference 
+	<ListPreference 
 		android:key="pref_user" 
-		android:title="@string/pref_sync"
-		android:summary="@string/pref_sync_summary"
-		android:defaultValue="true" />
+		android:title="@string/pref_username"
+		android:summary="@string/pref_username_summary"
+	    android:entries="@array/pref_username_entries"
+	    android:entryValues="@array/pref_username_values" />
 </PreferenceScreen>

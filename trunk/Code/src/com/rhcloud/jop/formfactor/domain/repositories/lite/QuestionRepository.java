@@ -12,7 +12,7 @@ import com.rhcloud.jop.formfactor.domain.Question;
 import com.rhcloud.jop.formfactor.domain.QuestionType;
 import com.rhcloud.jop.formfactor.domain.UnitOfWork;
 import com.rhcloud.jop.formfactor.domain.repositories.IQuestionRepository;
-import com.rhcloud.jop.formfactor.sqlite.FormFactorDb;
+import com.rhcloud.jop.formfactor.sqlite.FormFactorDB;
 import com.rhcloud.jop.formfactor.sqlite.datacontracts.*;
 
 public class QuestionRepository implements IQuestionRepository
@@ -24,7 +24,7 @@ public class QuestionRepository implements IQuestionRepository
 	
 	public QuestionRepository(UnitOfWork unitOfWork)
 	{
-		FormFactorDb formFactorDB = (FormFactorDb)unitOfWork.GetDB();
+		FormFactorDB formFactorDB = (FormFactorDB)unitOfWork.GetDB();
 		this.unitOfWork = unitOfWork;
 		this.liteDB = formFactorDB.getDB();
 	}
@@ -40,11 +40,8 @@ public class QuestionRepository implements IQuestionRepository
 			
 			values.put(tables.QuestionContract.Question.GetName(), question.Question);
 			values.put(tables.QuestionContract.Number.GetName(), question.Number);
-			values.put(tables.QuestionContract.FormID.GetName(), question.FormID);
-			
-			long index = question.Type.GetIndex();
-			
-			values.put(tables.QuestionContract.Type.GetName(), index);
+			values.put(tables.QuestionContract.FormID.GetName(), question.FormID);			
+			values.put(tables.QuestionContract.Type.GetName(), question.Type.GetIndex());
 			values.put(tables.QuestionContract.Image.GetName(), question.Image);
 	
 			question.ID = SQLiteHelper.logInsert(TAG_NAME, this.liteDB.insert(tables.QuestionContract.TABLE_NAME, null, values));

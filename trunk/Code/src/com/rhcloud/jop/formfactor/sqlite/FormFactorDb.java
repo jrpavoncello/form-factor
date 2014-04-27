@@ -2,25 +2,26 @@ package com.rhcloud.jop.formfactor.sqlite;
 
 import com.rhcloud.jop.formfactor.domain.Connection;
 import com.rhcloud.jop.formfactor.domain.IDatabase;
+import com.rhcloud.jop.formfactor.views.IDatabaseReadyListener;
 import com.rhcloud.jop.formfactor.views.MainMenuActivity;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 
-public class FormFactorDb implements IDatabase
+public class FormFactorDB implements IDatabase
 {
-	private static FormFactorDb formFactorDb;
+	private static FormFactorDB formFactorDb;
 	private SQLiteDatabase DB;
 	private boolean isReady;
 	
-	private FormFactorDb() { }
+	private FormFactorDB() { }
 	
-	public static FormFactorDb getInstance(Context context)
+	public static FormFactorDB getInstance(Context context)
 	{
 		if (formFactorDb == null)
 		{		
-			formFactorDb = new FormFactorDb();
+			formFactorDb = new FormFactorDB();
 			formFactorDb.isReady = false;
 			
 			// Open DB in an AsyncTask, since it may take a while
@@ -43,17 +44,13 @@ public class FormFactorDb implements IDatabase
 			FormFactorDbHelper dbHelper = new FormFactorDbHelper(params[0]);
 			DB = dbHelper.getWritableDatabase();
 			isReady = true;
-
+			
 			try
 			{
-				MainMenuActivity activity = (MainMenuActivity)params[0];
-				
-				if(activity != null)
-				{
-					MainMenuActivity.setData();
-				}
+				IDatabaseReadyListener listener = (IDatabaseReadyListener)params[0];
+				listener.OnDatabaseReady();
 			}
-			catch(Exception ex)
+			catch(ClassCastException ex)
 			{
 				
 			}

@@ -1,37 +1,41 @@
 package com.rhcloud.jop.formfactor.domain;
 
+import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class User implements Parcelable
+public class User implements IJSONSerializable
 {
+    @SerializedName("User_ID")
 	public long ID = 0;
+    
+    @SerializedName("User_Username")
 	public String Username = "";
+    
+    @SerializedName("User_Email")
 	public String Email = "";
-	public byte[] Password = null;
-	
-	public User(Parcel in)
-	{
-		this.ID = in.readLong();
-		this.Username = in.readString();
-		this.Email = in.readString();
-		in.readByteArray(this.Password);
-	}
-	
-	public User() { }
+    
+    @SerializedName("User_Password")
+	public char[] Password = null;
 
 	@Override
-	public int describeContents()
+	public String Serialize()
 	{
-		return 0;
+		Gson gson = new Gson();
+		return gson.toJson(this);
 	}
-	
+
 	@Override
-	public void writeToParcel(Parcel dest, int flags)
+	public void Read(String json)
 	{
-		dest.writeLong(this.ID);
-		dest.writeString(this.Username);
-		dest.writeString(this.Email);
-		dest.writeByteArray(Password);
+		Gson gson = new Gson();
+		User newUser = gson.fromJson(json, this.getClass());
+		
+		this.ID = newUser.ID;
+		this.Username = newUser.Username;
+		this.Email = newUser.Email;
+		this.Password = newUser.Password;
 	}
 }

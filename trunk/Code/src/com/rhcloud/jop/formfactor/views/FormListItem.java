@@ -1,25 +1,20 @@
 package com.rhcloud.jop.formfactor.views;
 
+import com.rhcloud.jop.formfactor.domain.Form;
+
 import android.graphics.drawable.Drawable;
 
 public class FormListItem
 {
-	Drawable mItemImage;
-	String mItemText;
+	Form mForm;
 	
-	public FormListItem(Drawable drawable, String itemText)
+	public FormListItem(Form form)
 	{
-		this.mItemImage = drawable;
-		mItemText = itemText;
+		mForm = form;
 	}
 	
 	public String getItemText()
 	{
-	      return mItemText;
-	}
-	
-	public Drawable getImage()
-	{
-		return mItemImage;
+	      return mForm.Title;
 	}
 }

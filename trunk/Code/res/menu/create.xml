@@ -1,6 +1,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.rhcloud.jop.formfactor.CreateActivity" >
+    
+    <item android:id="@+id/menu_create_edit_question_save"
+		android:title="@string/menu_create_edit_save"
+		android:icon="@drawable/ic_action_save"
+		android:showAsAction="always" />
 
     <item android:id="@+id/menu_create_edit_question_new"
 		android:title="@string/menu_create_add_new"

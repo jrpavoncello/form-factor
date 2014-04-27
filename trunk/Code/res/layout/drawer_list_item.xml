@@ -25,6 +25,7 @@
 	        android:paddingTop="9dp"
 	        android:paddingLeft="12dp"
 	        android:layout_gravity="center_vertical"
+	        android:textColor="@color/free_draw_color_white"
 	        android:text="@string/item_detail_title" />
 	</LinearLayout>
 	

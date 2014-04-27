@@ -5,7 +5,7 @@
  
 	<fragment 
 		android:id = "@+id/fragment_settings" 
-		class = "com.rhcloud.jop.formfactor.views.SettingsActivity$SettingsFragment" 
+		class = "com.rhcloud.jop.formfactor.views.SettingsActivity$SettingsFragmentInner" 
 		android:layout_width="match_parent" 
 		android:layout_height="match_parent"/> 
 

@@ -4,7 +4,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.rhcloud.jop.formfactor.domain.UnitOfWork;
 import com.rhcloud.jop.formfactor.domain.repositories.IResponseRepository;
-import com.rhcloud.jop.formfactor.sqlite.FormFactorDb;
+import com.rhcloud.jop.formfactor.sqlite.FormFactorDB;
 import com.rhcloud.jop.formfactor.sqlite.datacontracts.*;
 
 public class ResponseRepository implements IResponseRepository
@@ -16,7 +16,7 @@ public class ResponseRepository implements IResponseRepository
 	
 	public ResponseRepository(UnitOfWork unitOfWork)
 	{
-		FormFactorDb formFactorDB = (FormFactorDb)unitOfWork.GetDB();
+		FormFactorDB formFactorDB = (FormFactorDB)unitOfWork.GetDB();
 		this.unitOfWork = unitOfWork;
 		this.liteDB = formFactorDB.getDB();
 	}

@@ -5,7 +5,7 @@ import com.rhcloud.jop.formfactor.common.ActivityHelper;
 import com.rhcloud.jop.formfactor.domain.ResponseChoice;
 import com.rhcloud.jop.formfactor.domain.UnitOfWork;
 import com.rhcloud.jop.formfactor.domain.dal.lite.FormFactorDataContext;
-import com.rhcloud.jop.formfactor.sqlite.FormFactorDb;
+import com.rhcloud.jop.formfactor.sqlite.FormFactorDB;
 import com.rhcloud.jop.formfactor.views.BundleKeys;
 import com.rhcloud.jop.formfactor.views.FormFactorFragmentActivity;
 import com.rhcloud.jop.formfactor.views.MainMenuActivityFragment.DrawerListener;
@@ -76,7 +76,7 @@ public class MultipleChoiceResponseEditActivity extends FormFactorFragmentActivi
 	{
 		if(this.mResponseChoiceID != 0)
 		{
-			UnitOfWork unitOfWork = new UnitOfWork(FormFactorDb.getInstance(this));
+			UnitOfWork unitOfWork = new UnitOfWork(FormFactorDB.getInstance(this));
     		FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
     		
     		this.mResponseChoice = dataContext.GetResponseChoiceRepository().GetByID(this.mResponseChoiceID);
@@ -105,7 +105,7 @@ public class MultipleChoiceResponseEditActivity extends FormFactorFragmentActivi
 	{
 		if(this.mResponseChoice != null)
 		{
-    		UnitOfWork unitOfWork = new UnitOfWork(FormFactorDb.getInstance(this));
+    		UnitOfWork unitOfWork = new UnitOfWork(FormFactorDB.getInstance(this));
     		FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
 
     		this.mResponseChoice.Choice = this.mResponse.getText().toString();

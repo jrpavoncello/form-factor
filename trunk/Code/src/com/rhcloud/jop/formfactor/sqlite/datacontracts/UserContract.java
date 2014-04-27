@@ -16,7 +16,7 @@ public final class UserContract extends BaseTable
 	{
 		Username = new BaseColumn("sUsername", BaseColumn.TextType);
 		Email = new BaseColumn("sEmail", BaseColumn.TextType);
-		Password = new BaseColumn("blPassword", BaseColumn.BlobType);
+		Password = new BaseColumn("sPassword", BaseColumn.TextType);
 	}
 	
 	@Override

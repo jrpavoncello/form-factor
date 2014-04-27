@@ -28,7 +28,7 @@
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name="com.rhcloud.jop.formfactor.views.OpenImportForm"
+            android:name="com.rhcloud.jop.formfactor.views.OpenImportFormActivity"
             android:label="@string/app_name" >
         </activity>
         <activity

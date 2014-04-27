@@ -9,7 +9,7 @@ import com.rhcloud.jop.formfactor.domain.FreeDrawQuestion;
 import com.rhcloud.jop.formfactor.domain.UnitOfWork;
 import com.rhcloud.jop.formfactor.domain.repositories.IFreeDrawQuestionRepository;
 import com.rhcloud.jop.formfactor.domain.repositories.IFreeResponseQuestionRepository;
-import com.rhcloud.jop.formfactor.sqlite.FormFactorDb;
+import com.rhcloud.jop.formfactor.sqlite.FormFactorDB;
 import com.rhcloud.jop.formfactor.sqlite.datacontracts.*;
 
 public class FreeDrawQuestionRepository implements IFreeDrawQuestionRepository
@@ -21,7 +21,7 @@ public class FreeDrawQuestionRepository implements IFreeDrawQuestionRepository
 	
 	public FreeDrawQuestionRepository(UnitOfWork unitOfWork)
 	{
-		FormFactorDb formFactorDB = (FormFactorDb)unitOfWork.GetDB();
+		FormFactorDB formFactorDB = (FormFactorDB)unitOfWork.GetDB();
 		this.unitOfWork = unitOfWork;
 		this.liteDB = formFactorDB.getDB();
 	}
@@ -155,7 +155,7 @@ public class FreeDrawQuestionRepository implements IFreeDrawQuestionRepository
 			
 			String whereClause = tables.FreeResponseQuestionContract.QuestionID.GetName() + " IN (";
 			
-			whereClause += " SELECT " + tables.QuestionContract._ID + " FROM " + tables.QuestionContract.TABLE_NAME + " WHERE " + tables.QuestionContract.FormID.GetName() + " = ?";
+			whereClause += " SELECT " + tables.QuestionContract._ID + " FROM " + tables.QuestionContract.TABLE_NAME + " WHERE " + tables.QuestionContract.FormID.GetName() + " = ? )";
 	
 			SQLiteHelper.logDelete(TAG_NAME, this.liteDB.delete(tables.FreeResponseQuestionContract.TABLE_NAME, whereClause, new String[] { "" + formID }));
 			

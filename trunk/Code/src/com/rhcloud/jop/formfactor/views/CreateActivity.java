@@ -9,7 +9,7 @@ import com.rhcloud.jop.formfactor.domain.*;
 import com.rhcloud.jop.formfactor.domain.dal.lite.FormFactorDataContext;
 import com.rhcloud.jop.formfactor.domain.services.FormService;
 import com.rhcloud.jop.formfactor.domain.services.UserService;
-import com.rhcloud.jop.formfactor.sqlite.FormFactorDb;
+import com.rhcloud.jop.formfactor.sqlite.FormFactorDB;
 import com.rhcloud.jop.formfactor.views.MainMenuActivityFragment.DrawerListener;
 import com.rhcloud.jop.formfactor.views.questions.FreeDrawQuestionActivity;
 import com.rhcloud.jop.formfactor.views.questions.FreeResponseQuestionEditActivity;
@@ -21,7 +21,9 @@ import android.app.Activity;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Menu;
@@ -73,7 +75,7 @@ public class CreateActivity extends FormFactorFragmentActivity implements OnQues
 		
 		this.mQuestionsViewGroup.addView(viewGroup);
 		
-		UnitOfWork unitOfWork = new UnitOfWork(FormFactorDb.getInstance(this));
+		UnitOfWork unitOfWork = new UnitOfWork(FormFactorDB.getInstance(this));
 		FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
 		FormService formService = new FormService(dataContext);
 		
@@ -106,7 +108,7 @@ public class CreateActivity extends FormFactorFragmentActivity implements OnQues
 		
 		this.mQuestionsViewGroup.addView(freeResponseViewGroup);
 		
-		UnitOfWork unitOfWork = new UnitOfWork(FormFactorDb.getInstance(this));
+		UnitOfWork unitOfWork = new UnitOfWork(FormFactorDB.getInstance(this));
 		FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
 		FormService formService = new FormService(dataContext);
 		
@@ -138,7 +140,7 @@ public class CreateActivity extends FormFactorFragmentActivity implements OnQues
 		
 		this.mQuestionsViewGroup.addView(multipleChoiceViewGroup);
 		
-		UnitOfWork unitOfWork = new UnitOfWork(FormFactorDb.getInstance(this));
+		UnitOfWork unitOfWork = new UnitOfWork(FormFactorDB.getInstance(this));
 		FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
 		FormService formService = new FormService(dataContext);
 		
@@ -211,6 +213,10 @@ public class CreateActivity extends FormFactorFragmentActivity implements OnQues
 		
 		switch(id)
 		{
+			case R.id.menu_create_edit_question_save:
+				this.mHasSavedState = false;
+				this.saveCurrentForm();
+				return true;
 			case R.id.menu_create_settings:
 				return true;
 				
@@ -321,14 +327,14 @@ public class CreateActivity extends FormFactorFragmentActivity implements OnQues
 	@Override
 	public void prepareDrawerLayout(Menu menu)
 	{
-		// TODO Auto-generated method stub
+		
 	}
 
 	private void saveCurrentForm()
 	{
 		if(!this.mHasSavedState)
 		{
-			UnitOfWork unitOfWork = new UnitOfWork(FormFactorDb.getInstance(this));
+			UnitOfWork unitOfWork = new UnitOfWork(FormFactorDB.getInstance(this));
 			FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
 			try
 			{
@@ -365,75 +371,93 @@ public class CreateActivity extends FormFactorFragmentActivity implements OnQues
 	{
 		if(!this.mHasResumedState)
 		{
-			UnitOfWork unitOfWork = new UnitOfWork(FormFactorDb.getInstance(this));
-			FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
-	
-			try
+			boolean isCreateNew = false;
+			
+			if(savedInstanceState == null)
 			{
-				UserService userService = new UserService(dataContext);
-				
-				List<User> users = userService.GetAllUsers();
-				
-				if(!users.isEmpty())
-				{
-					mCurrentUser  = users.get(0);
-				}
-			}
-			catch(Exception ex)
-			{
-				Log.e(TAG_NAME, ex.getMessage() + "\r\n" + ex.getStackTrace());
-			}
-			finally
-			{
-				
+				savedInstanceState = this.getIntent().getExtras();
 			}
 			
 			if(savedInstanceState != null)
 			{
-				if(savedInstanceState.containsKey(BundleKeys.CreateFormID))
+				isCreateNew = savedInstanceState.containsKey(BundleKeys.CreateNew);
+			}
+			
+			UnitOfWork unitOfWork = new UnitOfWork(FormFactorDB.getInstance(this));
+			FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
+			
+			UserService userService = new UserService(dataContext);
+			
+			SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+			
+			String username = pref.getString("pref_username", null);
+			
+			String temp = pref.getString("pref_password", null);
+			
+			if(temp != null && !temp.equals(""))
+			{
+				char[] password = temp.toCharArray();
+				
+				User user = userService.GetUser(username, password);
+				
+				if(user != null && user.ID != 0)
 				{
-					long formID = savedInstanceState.getLong(BundleKeys.CreateFormID);
-					
-					try
+					this.mCurrentUser = user;
+				}
+				else
+				{
+					this.mCurrentUser = null;
+				}
+				
+				if(savedInstanceState != null)
+				{
+					if(!savedInstanceState.containsKey(BundleKeys.CreateNew))
 					{
-						FormService formService = new FormService(dataContext);
-						this.mForm = formService.GetFormByID(formID);
-					}
-					catch(Exception ex)
-					{
-						Log.e(TAG_NAME, ex.getMessage() + "\r\n" + ex.getStackTrace());
-					}
-					finally
-					{
-						
+						if(savedInstanceState.containsKey(BundleKeys.CreateFormID))
+						{
+							long formID = savedInstanceState.getLong(BundleKeys.CreateFormID);
+							
+							try
+							{
+								FormService formService = new FormService(dataContext);
+								this.mForm = formService.GetFormByID(formID);
+							}
+							catch(Exception ex)
+							{
+								Log.e(TAG_NAME, ex.getMessage() + "\r\n" + ex.getStackTrace());
+							}
+							finally
+							{
+								
+							}
+						}
 					}
 				}
-			}
-			else
-			{
+				
 				FormService formService = new FormService(dataContext);
 				
-				if(this.mForm == null)
+				if(this.mForm == null || isCreateNew)
 				{
 					try
 					{
 						if(mCurrentUser != null)
 						{
-							List<Form> lastForms = formService.GetFormsByUserID(mCurrentUser.ID);
-							
-							if(!lastForms.isEmpty())
+							if(!isCreateNew)
 							{
-								this.mForm = lastForms.get(0);
+								List<Form> lastForms = formService.GetFormsByUserID(mCurrentUser.ID);
+								
+								if(!lastForms.isEmpty())
+								{
+									this.mForm = lastForms.get(0);
+								}
 							}
 							else
 							{
-								if(mCurrentUser.ID != 0)
-								{
-									this.mForm = new Form();
-									this.mForm.UserID = mCurrentUser.ID;
-	
-									formService.CreateUpdateForm(mForm);
-								}
+								this.mForm = new Form();
+								this.mForm.UserID = mCurrentUser.ID;
+								this.mForm.Title = getResources().getString(R.string.default_new_form_title);
+
+								formService.CreateUpdateForm(mForm);
 							}
 						}
 					}
@@ -514,7 +538,7 @@ public class CreateActivity extends FormFactorFragmentActivity implements OnQues
 			}
 		}
 		
-		UnitOfWork unitOfWork = new UnitOfWork(FormFactorDb.getInstance(this));
+		UnitOfWork unitOfWork = new UnitOfWork(FormFactorDB.getInstance(this));
 		FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
 		
 		dataContext.GetQuestionRepository().DeleteByID(question.ID);

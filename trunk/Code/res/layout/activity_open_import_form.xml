@@ -6,15 +6,15 @@
     android:layout_height="match_parent"
     android:layout_gravity="left">
     
-    <include layout="@layout/drawer_menu" />
-    
-    <include layout="@layout/view_pager" />
-    
     <ListView 
         android:id="@+id/activity_open_import_items"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         
     </ListView>
+    
+    <include layout="@layout/drawer_menu" />
+    
+    <include layout="@layout/view_pager" />
     
 </android.support.v4.widget.DrawerLayout>
