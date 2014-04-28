@@ -31,11 +31,11 @@ public class User implements IJSONSerializable
 	public void Read(String json)
 	{
 		Gson gson = new Gson();
-		User newUser = gson.fromJson(json, this.getClass());
+		User user = gson.fromJson(json, this.getClass());
 		
-		this.ID = newUser.ID;
-		this.Username = newUser.Username;
-		this.Email = newUser.Email;
-		this.Password = newUser.Password;
+		this.ID = user.ID;
+		this.Username = user.Username;
+		this.Email = user.Email;
+		this.Password = user.Password;
 	}
 }

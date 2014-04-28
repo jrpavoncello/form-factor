@@ -15,4 +15,6 @@ public interface IFormRepository
 	public Form GetByID(long ID);
 
 	public void Update(Form form);
+	
+	public long GetCountByUser(long userID);
 }

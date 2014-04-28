@@ -31,6 +31,11 @@ public class FormService
 
 	public Result CreateUpdateForm(Form form)
 	{
+		return CreateUpdateForm(form, false);
+	}
+
+	public Result CreateUpdateForm(Form form, boolean createNew)
+	{
 		Result result = new Result();
 
 		IFormRepository formRepo = DataContext.GetFormRepository();
@@ -41,7 +46,7 @@ public class FormService
 		{
 			try
 			{
-				if(form.Logo.ID == 0)
+				if(form.Logo.ID == 0 || createNew)
 				{
 					logoRepo.Add(form.Logo);
 				}
@@ -58,7 +63,7 @@ public class FormService
 			
 			try
 			{
-				if(form.ID == 0)
+				if(form.ID == 0 || createNew)
 				{
 					formRepo.Add(form);
 				}
@@ -77,7 +82,7 @@ public class FormService
 			
 			if(size > 0)
 			{
-				result.Merge(AddUpdateQuestions(form.Questions, form.ID));
+				result.Merge(AddUpdateQuestions(form.Questions, form.ID, createNew));
 			}
 			else
 			{
@@ -105,6 +110,11 @@ public class FormService
 	
 	public Result AddUpdateQuestions(List<Question> questions, long formID)
 	{
+		return AddUpdateQuestions(questions, formID, false);
+	}
+	
+	public Result AddUpdateQuestions(List<Question> questions, long formID, boolean createNew)
+	{
 		Result result = new Result();
 		
 		int size = questions.size();
@@ -115,7 +125,7 @@ public class FormService
 		{
 			Question question = questions.get(i);
 			question.FormID = formID;
-			result.Merge(AddUpdateQuestion(question));
+			result.Merge(AddUpdateQuestion(question, createNew));
 			
 			IDs[i] = question.ID;
 		}
@@ -128,6 +138,11 @@ public class FormService
 	}
 	
 	public Result AddUpdateQuestion(Question question)
+	{
+		return AddUpdateQuestion(question, false);
+	}
+	
+	public Result AddUpdateQuestion(Question question, boolean createNew)
 	{
 		Result result = new Result();
 		
@@ -158,7 +173,7 @@ public class FormService
 				
 				MultipleChoiceQuestion q = (MultipleChoiceQuestion)question;
 				
-				if(q.MultipleChoiceQuestionID == 0)
+				if(q.MultipleChoiceQuestionID == 0 || createNew)
 				{
 					multipleChoiceQuestionRepo.Add(q);
 				}
@@ -184,15 +199,15 @@ public class FormService
 					
 					for(ResponseChoice choice : q.ResponseChoices)
 					{
-						if(choice.ID != 0)
+						if(choice.ID == 0 || createNew)
+						{
+							responseRepo.Add(choice);
+						}
+						else
 						{
 							choice.QuestionID = question.ID;
 
 							responseRepo.Update(choice);
-						}
-						else
-						{
-							responseRepo.Add(choice);
 						}
 					}
 				}
@@ -209,7 +224,7 @@ public class FormService
 
 					FreeResponseQuestion q = (FreeResponseQuestion)question;
 					
-					if(q.FreeResponseQuestionID == 0)
+					if(q.FreeResponseQuestionID == 0 || createNew)
 					{
 						freeResponseQuestionRepo.Add(q);
 					}
@@ -224,7 +239,7 @@ public class FormService
 
 					FreeDrawQuestion q = (FreeDrawQuestion)question;
 					
-					if(q.FreeDrawQuestionID == 0)
+					if(q.FreeDrawQuestionID == 0 || createNew)
 					{
 						freeDrawQuestionRepo.Add(q);
 					}

@@ -45,7 +45,7 @@ public class MainMenuActivity extends FormFactorFragmentActivity implements IDat
 	
 	FormFactorDB getDatabaseInstance()
 	{
-		return super.mFormFactorDb;
+		return super.mFormFactorDB;
 	}
 
 	@Override
@@ -54,7 +54,7 @@ public class MainMenuActivity extends FormFactorFragmentActivity implements IDat
 		//setContentView must be called first so that super.onCreate has access to this activity's layout
 		setContentView(R.layout.activity_main_menu);
 		super.onCreate(savedInstanceState);
-		mFormFactorDb = FormFactorDB.getInstance(this);
+		mFormFactorDB = FormFactorDB.getInstance(this);
 
         // Create the adapter that will return a fragment for each of the sections
         mAppSectionsPagerAdapter = new FormFactorPagerAdapter(getSupportFragmentManager(), this);

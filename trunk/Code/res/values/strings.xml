@@ -36,6 +36,7 @@
 	<string name="menu_create_question_delete">Delete Question</string>
 	<string name="menu_create_question_image">Set Image</string>
 	<string name="menu_create_edit_save">Save</string>
+	<string name="menu_create_edit_export">Export</string>
 	<string name="question_hint">Ask me anything&#8230;</string>
 	<string name="free_response_settings_response_max_text">Max Length</string>
 	<string name="free_response_settings_response_min_text">Min Length</string>

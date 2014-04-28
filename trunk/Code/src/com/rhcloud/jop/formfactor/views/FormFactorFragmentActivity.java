@@ -30,7 +30,7 @@ public class FormFactorFragmentActivity extends FragmentActivity
 
 	private int mDrawerResourceID;
 
-	protected FormFactorDB mFormFactorDb;
+	protected FormFactorDB mFormFactorDB;
 
 	private DrawerItem[] gatherDrawerItems()
 	{
@@ -76,7 +76,6 @@ public class FormFactorFragmentActivity extends FragmentActivity
 				R.drawable.ic_navigation_drawer, R.string.action_open,
 				R.string.action_close) {
 
-			/** Called when a drawer has settled in a completely closed state. */
 			public void onDrawerClosed(View view) 
 			{
 				super.onDrawerClosed(view);
@@ -140,53 +139,55 @@ public class FormFactorFragmentActivity extends FragmentActivity
 		switch (position) {
 		case 0: // Home
 		{
-			if (!this.mActivity.getClass().isInstance(MainActivity.class))
-			{
-				Intent intent = new Intent(this.mActivity, MainActivity.class);
-				this.startActivity(intent);
-			}
+			Intent intent = new Intent(this.mActivity, MainActivity.class);
+			this.startActivity(intent);
 
 			break;
 		}
 		case 1: // Create Form
-			if (!this.mActivity.getClass().isInstance(CreateActivity.class))
-			{
-				Intent intent = new Intent(this.mActivity, CreateActivity.class);
-				intent.putExtra(BundleKeys.CreateNew, true);
-				this.startActivity(intent);
-			}
+		{
+			Intent intent = new Intent(this.mActivity, CreateActivity.class);
+			intent.putExtra(BundleKeys.CreateNew, true);
+			this.startActivity(intent);
 
 			break;
+		}
 		case 2: // Open Local
-			if (!this.mActivity.getClass().isInstance(OpenImportFormActivity.class))
-			{
-				Intent intent = new Intent(this.mActivity, OpenImportFormActivity.class);
-				intent.putExtra(BundleKeys.OpenFormActionID, OpenImportActionType.OpenCreate.GetIndex());
-				this.startActivity(intent);
-			}
+		{
+			Intent intent = new Intent(this.mActivity, OpenImportFormActivity.class);
+			intent.putExtra(BundleKeys.OpenFormActionID, OpenImportActionType.OpenCreate.GetIndex());
+			this.startActivity(intent);
 
 			break;
+		}
 		case 3: // Import
+		{
+			Intent intent = new Intent(this.mActivity, OpenImportFormActivity.class);
+			intent.putExtra(BundleKeys.OpenFormActionID, OpenImportActionType.ImportCreate.GetIndex());
+			this.startActivity(intent);
+
 			break;
+		}
 		case 4: // Export
+		{
 			break;
+		}
 		case 5: // Log off
-			if (!this.mActivity.getClass().isInstance(MainActivity.class))
-			{
-				Intent intent = new Intent(this.mActivity, MainActivity.class);
+		{
+			Intent intent = new Intent(this.mActivity, MainActivity.class);
 
-				Editor editor = PreferenceManager.getDefaultSharedPreferences(getBaseContext()).edit();
+			Editor editor = PreferenceManager.getDefaultSharedPreferences(getBaseContext()).edit();
 
-				editor.remove("pref_username");
+			editor.remove("pref_username");
 
-				editor.remove("pref_password");
+			editor.remove("pref_password");
 
-				editor.commit();
+			editor.commit();
 
-				this.startActivity(intent);
-			}
+			this.startActivity(intent);
 
 			break;
+		}
 		}
 	}
 

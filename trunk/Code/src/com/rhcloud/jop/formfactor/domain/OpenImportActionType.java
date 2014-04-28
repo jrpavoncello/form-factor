@@ -4,7 +4,8 @@ public enum OpenImportActionType
 {
 	OpenCreate(1),
 	OpenComplete(2), 
-	ImportComplete(3);
+	ImportComplete(3),
+	ImportCreate(4);
 	
 	private long index = 0;
 	

@@ -1,7 +1,20 @@
 package com.rhcloud.jop.formfactor.views;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 
 import com.rhcloud.jop.formfactor.R;
 import com.rhcloud.jop.formfactor.common.ActivityHelper;
@@ -22,6 +35,7 @@ import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
@@ -217,6 +231,11 @@ public class CreateActivity extends FormFactorFragmentActivity implements OnQues
 				this.mHasSavedState = false;
 				this.saveCurrentForm();
 				return true;
+			case R.id.menu_create_edit_question_export:
+				this.mHasSavedState = false;
+				this.saveCurrentForm();
+				this.exportCurrentForm();
+				return true;
 			case R.id.menu_create_settings:
 				return true;
 				
@@ -235,6 +254,12 @@ public class CreateActivity extends FormFactorFragmentActivity implements OnQues
 			default:
 				return super.onOptionsItemSelected(item);
 		}
+	}
+
+	private void exportCurrentForm()
+	{
+		FormUploader formUploader = new FormUploader();
+		formUploader.execute(this.mForm);
 	}
 
 	@Override
@@ -442,7 +467,7 @@ public class CreateActivity extends FormFactorFragmentActivity implements OnQues
 					{
 						if(mCurrentUser != null)
 						{
-							if(!isCreateNew)
+							if(!isCreateNew && dataContext.GetFormRepository().GetCountByUser(this.mCurrentUser.ID) > 0)
 							{
 								List<Form> lastForms = formService.GetFormsByUserID(mCurrentUser.ID);
 								
@@ -544,5 +569,77 @@ public class CreateActivity extends FormFactorFragmentActivity implements OnQues
 		dataContext.GetQuestionRepository().DeleteByID(question.ID);
 		
 		this.setQuestionNumbers();
+	}
+	
+	public class FormUploader extends AsyncTask<Form, Integer, Void>
+	{
+		public FormUploader(){ }
+		
+		@Override
+	    protected Void doInBackground(Form... forms)
+		{
+			try
+			{
+		        HttpClient httpclient = new DefaultHttpClient(); 
+		        HttpPost httppost = new HttpPost("http://formfactor-jop.rhcloud.com/create.php");
+		        
+		        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(forms.length);
+		        
+		        int size = forms.length;
+		        int i = 0;
+		        for(Form form : forms)
+		        {
+		            if (isCancelled())
+		            {
+		            	break;
+		            }
+					
+		            String superCerealForm = form.Serialize();
+		            
+					nameValuePairs.add(new BasicNameValuePair("FormJSON", superCerealForm));
+			    	
+		            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+		            
+		            HttpResponse response = httpclient.execute(httppost);
+					HttpEntity entity = response.getEntity();
+					
+					BufferedReader in = new BufferedReader(new InputStreamReader(entity.getContent()));
+					
+					String responseWithID = "";
+					while((responseWithID = in.readLine()) != null)
+					{
+						form.ExternalID = Long.parseLong(responseWithID);
+					}
+					
+					in.close();
+					
+		            publishProgress(Integer.valueOf((int)(((float)(i + 1))/((float)(size + 1))*100)));
+		        }
+		        
+		        i++;
+			}
+	        catch (ClientProtocolException ex)
+	        {
+				Log.e(TAG_NAME , ex.getMessage() + "\r\n" + ex.getStackTrace());
+	        } 
+	        catch (IOException ex)
+	        {
+				Log.e(TAG_NAME , ex.getMessage() + "\r\n" + ex.getStackTrace());
+	        }
+			
+			return null;
+	    }
+
+		@Override
+	    protected void onProgressUpdate(Integer... progress)
+	    {
+	    	//progress[0];
+	    }
+
+		@Override
+	    protected void onPostExecute(Void result)
+	    {
+	    	
+	    }
 	}
 }

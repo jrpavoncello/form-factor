@@ -41,6 +41,7 @@ public class FormRepository implements IFormRepository
 			values.put(tables.FormsContract.Description.GetName(), form.Description);
 			values.put(tables.FormsContract.UserID.GetName(), form.UserID);
 			values.put(tables.FormsContract.Logo.GetName(), form.Logo.ID);
+			values.put(tables.FormsContract.ExternalID.GetName(), form.ExternalID);
 	
 			form.ID = SQLiteHelper.logInsert(TAG_NAME, this.liteDB.insert(tables.FormsContract.TABLE_NAME, null, values));
 			
@@ -74,6 +75,7 @@ public class FormRepository implements IFormRepository
 					form.Title = cursor.getString(tables.FormsContract.Title.Index);
 					form.Description = cursor.getString(tables.FormsContract.Description.Index);
 					form.Logo.ID = cursor.getInt(tables.FormsContract.Logo.Index);
+					form.ExternalID = cursor.getInt(tables.FormsContract.ExternalID.Index);
 					
 					questions.add(form);
 				}
@@ -116,6 +118,7 @@ public class FormRepository implements IFormRepository
 					form.Title = cursor.getString(tables.FormsContract.Title.Index);
 					form.Description = cursor.getString(tables.FormsContract.Description.Index);
 					form.Logo.ID = cursor.getInt(tables.FormsContract.Logo.Index);
+					form.ExternalID = cursor.getInt(tables.FormsContract.ExternalID.Index);
 					
 					forms.add(form);
 				}
@@ -154,6 +157,7 @@ public class FormRepository implements IFormRepository
 				form.Title = cursor.getString(tables.FormsContract.Title.Index);
 				form.Description = cursor.getString(tables.FormsContract.Description.Index);
 				form.Logo.ID = cursor.getInt(tables.FormsContract.Logo.Index);
+				form.ExternalID = cursor.getInt(tables.FormsContract.ExternalID.Index);
 			}
 			
 			this.unitOfWork.CommitTransaction();
@@ -180,6 +184,7 @@ public class FormRepository implements IFormRepository
 			values.put(tables.FormsContract.Title.GetName(), form.Title);
 			values.put(tables.FormsContract.Description.GetName(), form.Description);
 			values.put(tables.FormsContract.Logo.GetName(), form.Logo.ID);
+			values.put(tables.FormsContract.ExternalID.GetName(), form.ExternalID);
 	
 			String whereClause = FormsContract._ID + " = ?";
 	
@@ -191,5 +196,35 @@ public class FormRepository implements IFormRepository
 		{
 			this.unitOfWork.AbortTransaction();
 		}
+	}
+
+	@Override
+	public long GetCountByUser(long userID)
+	{
+		long count = 0;
+
+		try
+		{
+			this.unitOfWork.BeginTransaction();
+			
+			String whereClause = " WHERE " + tables.FormsContract.UserID.GetName() + " = " + userID;
+			
+			String query = "SELECT COUNT(*) FROM " + tables.FormsContract.TABLE_NAME + whereClause;
+			
+			Cursor cursor = this.liteDB.rawQuery(query, null);
+			
+			if(cursor.moveToFirst())
+			{
+				count = cursor.getInt(0);
+			}
+			
+			this.unitOfWork.CommitTransaction();
+		}
+		catch(Exception ex)
+		{
+			this.unitOfWork.AbortTransaction();
+		}
+		
+		return count;
 	}
 }

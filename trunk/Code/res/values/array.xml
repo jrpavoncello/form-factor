@@ -2,10 +2,9 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
     <string-array android:id="@+id/drawer_items_text" name="drawer_items_text" >
         <item>Home</item>
-        <item>Create Form</item>
+        <item>New</item>
         <item>Open Local</item>
         <item>Import</item>
-        <item>Export</item>
         <item>Log Off</item>
     </string-array>
     <array android:id="@+id/drawer_items_image" name="drawer_items_image" >
@@ -13,7 +12,6 @@
         <item>@drawable/ic_action_new_small</item>
         <item>@drawable/ic_action_collection</item>
         <item>@drawable/ic_action_cloud</item>
-        <item>@drawable/ic_action_add_to_queue</item>
         <item>@drawable/ic_action_logoff</item>
     </array>
     <string-array android:id="@+id/pref_username_entries" name="pref_username_entries"></string-array>

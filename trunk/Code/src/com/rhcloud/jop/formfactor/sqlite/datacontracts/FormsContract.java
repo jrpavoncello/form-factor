@@ -10,6 +10,7 @@ public final class FormsContract extends BaseTable
 	public BaseColumn Title;
 	public BaseColumn Description;
 	public BaseColumn Logo;
+	public BaseColumn ExternalID;
 	
 	@Override
 	protected void InitTables()
@@ -18,6 +19,7 @@ public final class FormsContract extends BaseTable
 		Title = new BaseColumn("sTitle", BaseColumn.TextType);
 		Description = new BaseColumn("sDescription", BaseColumn.TextType);
 		Logo = new BaseColumn("iLogoID", BaseColumn.IntegerType);
+		ExternalID = new BaseColumn("iExternalID", BaseColumn.IntegerType);
 	}
 
 	@Override
@@ -33,5 +35,6 @@ public final class FormsContract extends BaseTable
 		super.AddColumnCreate(Title);
 		super.AddColumnCreate(Description);
 		super.AddColumnCreate(Logo);
+		super.AddColumnCreate(ExternalID);
 	}
 }
