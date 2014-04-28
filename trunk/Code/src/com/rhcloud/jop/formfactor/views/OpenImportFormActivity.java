@@ -28,23 +28,31 @@ import com.rhcloud.jop.formfactor.domain.User;
 import com.rhcloud.jop.formfactor.domain.dal.lite.FormFactorDataContext;
 import com.rhcloud.jop.formfactor.domain.services.FormService;
 import com.rhcloud.jop.formfactor.domain.services.UserService;
-import com.rhcloud.jop.formfactor.sqlite.FormFactorDB;
+import com.rhcloud.jop.formfactor.sqlite.FormFactorDb;
 import com.rhcloud.jop.formfactor.views.MainMenuActivity.FormFactorPagerAdapter;
 import com.rhcloud.jop.formfactor.views.MainMenuActivityFragment.DrawerListener;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnFocusChangeListener;
+import android.view.View.OnKeyListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class OpenImportFormActivity extends FormFactorFragmentActivity implements DrawerListener, OnItemClickListener, IDatabaseReadyListener
 {
@@ -54,6 +62,12 @@ public class OpenImportFormActivity extends FormFactorFragmentActivity implement
 	private final String TAG_NAME = "com.rhcloud.jop.formfactor.views.OpenImportFormActivity";
 	private FormListItem[] mFormItems;
 	private OpenImportActionType mActionType;
+	private View mDownloadStatusView;
+	private TextView mDownloadStatusMessageView;
+	private EditText mDownloadLocation;
+	private String mDownloadURL = "";
+	private FormRetriever mRetriever = null;
+	private String mIntentURL = null;
 	
 	public OpenImportFormActivity()
 	{
@@ -71,14 +85,17 @@ public class OpenImportFormActivity extends FormFactorFragmentActivity implement
 			savedInstanceState = this.getIntent().getExtras();
 		}
 		
-        this.setTitle(this.getResources().getString(R.string.activity_open_import_form));
+        this.setTitle(this.getResources().getString(R.string.drawer_menu_title));
 		
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(new FormFactorPagerAdapter(getSupportFragmentManager(), this));
+
+		mDownloadStatusMessageView = (TextView)findViewById(R.id.activity_open_import_download_status_message);
+		mDownloadStatusView = findViewById(R.id.activity_open_import_download_status);
         
         mFormList = (ListView)this.findViewById((R.id.activity_open_import_items));
 
-        this.mFormFactorDB = FormFactorDB.getInstance(this);
+        this.mFormFactorDB = FormFactorDb.getInstance(this);
         
 		UnitOfWork unitOfWork = new UnitOfWork(this.mFormFactorDB);
 		FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
@@ -103,6 +120,27 @@ public class OpenImportFormActivity extends FormFactorFragmentActivity implement
 			}
 		}
 		
+		mDownloadLocation = (EditText)this.findViewById(R.id.activity_open_import_location);
+		mDownloadLocation.setOnKeyListener(new OnKeyListener()
+		{
+		    public boolean onKey(View v, int keyCode, KeyEvent event)
+		    {
+		        if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER))
+		        {
+		        	retrieveFormFromURL();
+		        	return true;
+		        }
+		        
+		        return false;
+		    }
+		});
+		
+		if(savedInstanceState.containsKey(BundleKeys.IntentURL))
+		{
+			this.mIntentURL = savedInstanceState.getString(BundleKeys.IntentURL);
+			this.mDownloadLocation.setText(this.mIntentURL);
+		}
+		
         this.mActionType = OpenImportActionType.GetByIndex(savedInstanceState.getLong(BundleKeys.OpenFormActionID));
 		
 		if(this.mActionType == OpenImportActionType.OpenCreate)
@@ -119,14 +157,45 @@ public class OpenImportFormActivity extends FormFactorFragmentActivity implement
 		}
 		else if(this.mActionType == OpenImportActionType.ImportCreate)
 		{
-			FormRetriever formRetriever = new FormRetriever();
-			formRetriever.execute();
+			mDownloadLocation.setVisibility(View.VISIBLE);
+			showProgress(true);
+			
+			if(this.mIntentURL != null)
+			{
+				this.executeRetriever(new String[] { this.mIntentURL });
+			}
+			else
+			{
+				this.executeRetriever(new String[] { });
+			}
 		}
 		else if(this.mActionType == OpenImportActionType.ImportComplete)
 		{
-			FormRetriever formRetriever = new FormRetriever();
-			formRetriever.execute();
+			mDownloadLocation.setVisibility(View.VISIBLE);
+			showProgress(true);
+			mDownloadStatusMessageView.setText(R.string.activity_open_import_download_status_message);
+			
+			this.executeRetriever(new String[] { });
 		}
+	}
+	
+	private void executeRetriever(String...params)
+	{
+		if(this.mRetriever == null)
+		{
+			this.mRetriever = new FormRetriever();
+		}
+		else
+		{
+			while(!this.mRetriever.isCancelled())
+			{
+				this.mRetriever.cancel(true);
+			}
+			
+			this.mRetriever = new FormRetriever();
+		}
+		
+		this.mRetriever.execute(params);
 	}
 	
 	private FormListItem[] gatherLocalForms()
@@ -251,52 +320,148 @@ public class OpenImportFormActivity extends FormFactorFragmentActivity implement
 	{
 		
 	}
+
+	private void showProgress(final boolean show)
+	{
+		// On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+		// for very easy animations. If available, use these APIs to fade-in
+		// the progress spinner.
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) 
+		{
+			int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+			mDownloadStatusView.setVisibility(show ? View.VISIBLE : View.GONE );
+			mDownloadStatusView.animate().setDuration(shortAnimTime)
+				.alpha(show ? 1 : 0)
+				.setListener(new AnimatorListenerAdapter()
+				{
+					@Override
+					public void onAnimationEnd(Animator animation) 
+					{
+						mDownloadStatusView.setVisibility(show ? View.VISIBLE : View.GONE);
+					}
+				});
+
+			mFormList.setVisibility(show ? View.GONE : View.VISIBLE);
+			mFormList.animate().setDuration(shortAnimTime)
+				.alpha(show ? 0 : 1)
+				.setListener(new AnimatorListenerAdapter()
+				{
+					@Override
+					public void onAnimationEnd(Animator animation) 
+					{
+						mFormList.setVisibility(show ? View.GONE : View.VISIBLE);
+					}
+				});
+		} 
+		else
+		{
+			// The ViewPropertyAnimator APIs are not available, so simply show
+			// and hide the relevant UI components.
+			mDownloadStatusView.setVisibility(show ? View.VISIBLE : View.GONE);
+			mFormList.setVisibility(show ? View.GONE : View.VISIBLE);
+		}
+	}
 	
-	public class FormRetriever extends AsyncTask<Long, Integer, List<Form>>
+	public class FormRetriever extends AsyncTask<String, Integer, List<Form>>
 	{
 		public FormRetriever(){ }
 		
 		@Override
-	    protected List<Form> doInBackground(Long... extFormIDs)
+	    protected List<Form> doInBackground(String... URLs)
 		{
-			int size = extFormIDs.length;
+			int size = URLs.length;
 			
 			List<Form> forms = new ArrayList<Form>(size);
 			
-			try
+			int retry = 0;
+			boolean success = false;
+			while(retry < 2 && !success)
 			{
-				if(size > 0)
+				try
 				{
-					for(Long id : extFormIDs)
+					if(size > 0)
+					{
+				        int i = 0;
+						for(String url : URLs)
+						{
+					        HttpClient httpclient = new DefaultHttpClient(); 
+					        HttpGet httpGet = new HttpGet(url);
+	
+				            if (isCancelled())
+				            {
+				            	break;
+				            }
+				            
+				            HttpResponse response = httpclient.execute(httpGet);
+							HttpEntity entity = response.getEntity();
+							
+							BufferedReader in = new BufferedReader(new InputStreamReader(entity.getContent()));
+							
+							Form form = new Form();
+							
+							String formResponse = "";
+							while((formResponse = in.readLine()) != null)
+							{
+								JSONObject responseJSON = new JSONObject(formResponse);
+								long externalID = responseJSON.getLong("ID");
+								
+								String formJSON = responseJSON.getString("Form");
+								
+								form.Read(formJSON);
+								form.ExternalID = externalID;
+								
+								forms.add(form);
+							}
+							
+							in.close();
+							
+				            publishProgress(Integer.valueOf((int)(((float)(i + 1))/((float)(size + 1))*100)));
+					        
+					        i++;
+					        
+					        success = true;
+						}
+					}
+					else
 					{
 				        HttpClient httpclient = new DefaultHttpClient(); 
-				        HttpGet httpGet = new HttpGet("http://formfactor-jop.rhcloud.com/form.php?id=" + id);
-
+				        HttpGet httpGet = new HttpGet("http://formfactor-jop.rhcloud.com/form.php");
+	
 				        int i = 0;
-
-			            if (isCancelled())
-			            {
-			            	break;
-			            }
 			            
 			            HttpResponse response = httpclient.execute(httpGet);
 						HttpEntity entity = response.getEntity();
 						
 						BufferedReader in = new BufferedReader(new InputStreamReader(entity.getContent()));
 						
-						Form form = new Form();
-						
 						String formResponse = "";
 						while((formResponse = in.readLine()) != null)
 						{
+				            if (isCancelled())
+				            {
+				            	break;
+				            }
+				            
 							JSONObject responseJSON = new JSONObject(formResponse);
-							long externalID = responseJSON.getLong("ID");
-							JSONObject formJSON = responseJSON.getJSONObject("Form");
+							JSONArray formsReponseJSON = responseJSON.getJSONArray("Forms");
 							
-							form.Read(formJSON.toString());
-							form.ExternalID = externalID;
-							
-							forms.add(form);
+							size = formsReponseJSON.length();
+							for(; i < size; i++)
+							{
+								Form form = new Form();
+								
+								String unparsedJSON = formsReponseJSON.getString(i);
+								
+								JSONObject formResponseJSON = new JSONObject(unparsedJSON);
+								
+								String formJSON = formResponseJSON.getString("Form");
+								
+								form.Read(formJSON);
+								form.ExternalID = formResponseJSON.getLong("ID");
+								
+								forms.add(form);
+							}
 						}
 						
 						in.close();
@@ -305,66 +470,26 @@ public class OpenImportFormActivity extends FormFactorFragmentActivity implement
 				        
 				        i++;
 					}
+					
+			        success = true;
 				}
-				else
+		        catch (ClientProtocolException ex)
+		        {
+		        	size = 0;
+					Log.e(TAG_NAME , ex.getMessage() + "\r\n" + ex.getStackTrace());
+		        } 
+		        catch (IOException ex)
+		        {
+		        	size = 0;
+					Log.e(TAG_NAME , ex.getMessage() + "\r\n" + ex.getStackTrace());
+		        } 
+				catch (JSONException ex) 
 				{
-			        HttpClient httpclient = new DefaultHttpClient(); 
-			        HttpGet httpGet = new HttpGet("http://formfactor-jop.rhcloud.com/form.php");
-
-			        int i = 0;
-		            
-		            HttpResponse response = httpclient.execute(httpGet);
-					HttpEntity entity = response.getEntity();
-					
-					BufferedReader in = new BufferedReader(new InputStreamReader(entity.getContent()));
-					
-					String formResponse = "";
-					while((formResponse = in.readLine()) != null)
-					{
-			            if (isCancelled())
-			            {
-			            	break;
-			            }
-			            
-						JSONObject responseJSON = new JSONObject(formResponse);
-						JSONArray formsReponseJSON = responseJSON.getJSONArray("Forms");
-						
-						size = formsReponseJSON.length();
-						for(; i < size; i++)
-						{
-							Form form = new Form();
-							
-							String unparsedJSON = formsReponseJSON.getString(i);
-							
-							JSONObject formResponseJSON = new JSONObject(unparsedJSON);
-							
-							String formJSON = formResponseJSON.getString("Form");
-							
-							form.Read(formJSON);
-							form.ExternalID = formResponseJSON.getLong("ID");
-							
-							forms.add(form);
-						}
-					}
-					
-					in.close();
-					
-		            publishProgress(Integer.valueOf((int)(((float)(i + 1))/((float)(size + 1))*100)));
-			        
-			        i++;
+		        	size = 0;
+					Log.e(TAG_NAME , ex.getMessage() + "\r\n" + ex.getStackTrace());
 				}
-			}
-	        catch (ClientProtocolException ex)
-	        {
-				Log.e(TAG_NAME , ex.getMessage() + "\r\n" + ex.getStackTrace());
-	        } 
-	        catch (IOException ex)
-	        {
-				Log.e(TAG_NAME , ex.getMessage() + "\r\n" + ex.getStackTrace());
-	        } 
-			catch (JSONException ex) 
-			{
-				Log.e(TAG_NAME , ex.getMessage() + "\r\n" + ex.getStackTrace());
+				
+				retry++;
 			}
 			
 			return forms;
@@ -379,13 +504,29 @@ public class OpenImportFormActivity extends FormFactorFragmentActivity implement
 		@Override
 	    protected void onPostExecute(List<Form> result)
 	    {
+			showProgress(false);
 			populateList(result);
 	    }
+
+		@Override
+		protected void onCancelled()
+		{
+			showProgress(false);
+			mDownloadURL = "";
+			mDownloadLocation.setText("");
+		}
 	}
 
 	@Override
-	public void OnDatabaseReady() {
+	public void OnDatabaseReady()
+	{
 		// TODO Auto-generated method stub
-		
+	}
+
+	private void retrieveFormFromURL()
+	{
+		this.mDownloadURL = this.mDownloadLocation.getText().toString();
+
+		this.executeRetriever(new String[] { this.mDownloadURL });
 	}
 }

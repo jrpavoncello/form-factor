@@ -3,14 +3,16 @@ package com.rhcloud.jop.formfactor.views;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 import com.rhcloud.jop.formfactor.R;
 import com.rhcloud.jop.formfactor.common.Result;
+import com.rhcloud.jop.formfactor.domain.OpenImportActionType;
 import com.rhcloud.jop.formfactor.domain.UnitOfWork;
 import com.rhcloud.jop.formfactor.domain.User;
 import com.rhcloud.jop.formfactor.domain.dal.lite.FormFactorDataContext;
 import com.rhcloud.jop.formfactor.domain.services.UserService;
-import com.rhcloud.jop.formfactor.sqlite.FormFactorDB;
+import com.rhcloud.jop.formfactor.sqlite.FormFactorDb;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -18,6 +20,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -53,16 +56,35 @@ public class MainActivity extends Activity implements IDatabaseReadyListener
 	private View mLoginFormView;
 	private View mLoginStatusView;
 	private TextView mLoginStatusMessageView;
-	private FormFactorDB mFormFactorDB = null;
+	private FormFactorDb mFormFactorDB = null;
+	private boolean mHasLoggedOff = false;
+	private String mIntentURL;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+		
+		mHasLoggedOff  = false;
+		if(savedInstanceState == null)
+		{
+			savedInstanceState = this.getIntent().getExtras();
+			
+			if(savedInstanceState != null && savedInstanceState.containsKey(BundleKeys.LoggedOff))
+			{
+				mHasLoggedOff = savedInstanceState.getBoolean(BundleKeys.LoggedOff);
+			}
+			Intent intent = this.getIntent();
+			if (intent.getAction().equals(Intent.ACTION_VIEW))
+			{
+		        Uri data = intent.getData();
+		        this.mIntentURL = data.toString();
+		    }
+		}
 
 		setContentView(R.layout.activity_main);
 		
-		this.mFormFactorDB = FormFactorDB.getInstance(this);
+		this.mFormFactorDB = FormFactorDb.getInstance(this);
 		
 		if(this.mFormFactorDB != null && this.mFormFactorDB.getDB() != null)
 		{
@@ -140,11 +162,68 @@ public class MainActivity extends Activity implements IDatabaseReadyListener
 			char[] password = temp.toCharArray();
 			
 			User user = userService.GetUser(username, password);
-			
+
 			if(user != null && user.ID != 0)
 			{
-				Intent intent = new Intent(this, MainMenuActivity.class);
-				this.startActivity(intent);
+				if(this.mIntentURL != null && !this.mIntentURL.equals(""))
+				{
+					Intent intent = new Intent(this, OpenImportFormActivity.class);
+					intent.putExtra(BundleKeys.OpenFormActionID, OpenImportActionType.ImportCreate.GetIndex());
+					intent.putExtra(BundleKeys.IntentURL, this.mIntentURL);
+					this.startActivity(intent);
+				}
+				else
+				{
+					Intent intent = new Intent(this, MainMenuActivity.class);
+					this.startActivity(intent);
+				}
+			}
+		}
+		else
+		{
+			if(!mHasLoggedOff)
+			{
+				User user = userService.GetDefaultUser();
+				
+				if(user != null && user.ID != 0)
+				{
+					if(this.mIntentURL != null && !this.mIntentURL.equals(""))
+					{
+						Intent intent = new Intent(this, OpenImportFormActivity.class);
+						intent.putExtra(BundleKeys.OpenFormActionID, OpenImportActionType.ImportCreate.GetIndex());
+						intent.putExtra(BundleKeys.IntentURL, this.mIntentURL);
+						this.startActivity(intent);
+					}
+					else
+					{
+						Intent intent = new Intent(this, MainMenuActivity.class);
+						this.startActivity(intent);
+					}
+				}
+			}
+		}
+	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState)
+	{
+		savedInstanceState.putBoolean(BundleKeys.LoggedOff, this.mHasLoggedOff);
+		savedInstanceState.putString(BundleKeys.IntentURL, this.mIntentURL);
+	}
+	
+	@Override
+	public void onRestoreInstanceState(Bundle savedInstanceState)
+	{
+		if(savedInstanceState != null)
+		{
+			if(savedInstanceState.containsKey(BundleKeys.LoggedOff))
+			{
+				this.mHasLoggedOff = savedInstanceState.getBoolean(BundleKeys.LoggedOff);
+			}
+			
+			if(savedInstanceState.containsKey(BundleKeys.IntentURL))
+			{
+				this.mIntentURL = savedInstanceState.getString(BundleKeys.IntentURL);
 			}
 		}
 	}
@@ -387,8 +466,18 @@ public class MainActivity extends Activity implements IDatabaseReadyListener
 
 			if (success)
 			{
-				Intent intent = new Intent(MainActivity.this, MainMenuActivity.class);
-				MainActivity.this.startActivity(intent);
+				if(mIntentURL != null && !mIntentURL.equals(""))
+				{
+					Intent intent = new Intent(MainActivity.this, OpenImportFormActivity.class);
+					intent.putExtra(BundleKeys.OpenFormActionID, OpenImportActionType.ImportCreate.GetIndex());
+					intent.putExtra(BundleKeys.IntentURL, mIntentURL);
+					startActivity(intent);
+				}
+				else
+				{
+					Intent intent = new Intent(MainActivity.this, MainMenuActivity.class);
+					startActivity(intent);
+				}
 				
 				mIsRegistering = false;
 			} 

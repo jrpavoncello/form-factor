@@ -12,7 +12,7 @@ import com.rhcloud.jop.formfactor.common.SQLiteHelper;
 import com.rhcloud.jop.formfactor.domain.UnitOfWork;
 import com.rhcloud.jop.formfactor.domain.User;
 import com.rhcloud.jop.formfactor.domain.repositories.IUserRepository;
-import com.rhcloud.jop.formfactor.sqlite.FormFactorDB;
+import com.rhcloud.jop.formfactor.sqlite.FormFactorDb;
 import com.rhcloud.jop.formfactor.sqlite.datacontracts.*;
 
 public class UserRepository implements IUserRepository
@@ -24,7 +24,7 @@ public class UserRepository implements IUserRepository
 	
 	public UserRepository(UnitOfWork unitOfWork)
 	{
-		FormFactorDB formFactorDB = (FormFactorDB)unitOfWork.GetDB();
+		FormFactorDb formFactorDB = (FormFactorDb)unitOfWork.GetDB();
 		this.unitOfWork = unitOfWork;
 		this.liteDB = formFactorDB.getDB();
 	}
@@ -41,6 +41,7 @@ public class UserRepository implements IUserRepository
 			values.put(tables.UserContract.Email.GetName(), user.Email);
 			values.put(tables.UserContract.Username.GetName(), user.Username);
 			values.put(tables.UserContract.Password.GetName(), new String(user.Password));
+			values.put(tables.UserContract.IsDefault.GetName(), user.IsDefault ? 1 : 0);
 	
 			user.ID = SQLiteHelper.logInsert(TAG_NAME, this.liteDB.insert(tables.UserContract.TABLE_NAME, null, values));
 			
@@ -73,6 +74,7 @@ public class UserRepository implements IUserRepository
 					user.Email = cursor.getString(tables.UserContract.Email.Index);
 					user.Username = cursor.getString(tables.UserContract.Username.Index);
 					user.Password = cursor.getString(tables.UserContract.Password.Index).toCharArray();
+					user.IsDefault = cursor.getInt(tables.UserContract.IsDefault.Index) == 1;
 					
 					users.add(user);
 				}
@@ -102,6 +104,7 @@ public class UserRepository implements IUserRepository
 			values.put(tables.UserContract.Email.GetName(), user.Email);
 			values.put(tables.UserContract.Username.GetName(), user.Username);
 			values.put(tables.UserContract.Password.GetName(), new String(user.Password));
+			values.put(tables.UserContract.IsDefault.GetName(), user.IsDefault ? 1 : 0);
 	
 			String whereClause = UserContract._ID + " = ?";
 	
@@ -137,6 +140,7 @@ public class UserRepository implements IUserRepository
 				user.Email = cursor.getString(tables.UserContract.Email.Index);
 				user.Username = cursor.getString(tables.UserContract.Username.Index);
 				user.Password = cursor.getString(tables.UserContract.Password.Index).toCharArray();
+				user.IsDefault = cursor.getInt(tables.UserContract.IsDefault.Index) == 1;
 			}
 			
 			this.unitOfWork.CommitTransaction();
@@ -147,5 +151,63 @@ public class UserRepository implements IUserRepository
 		}
 		
 		return user;
+	}
+
+	@Override
+	public User GetDefaultUser()
+	{
+		User user = null;
+
+		try
+		{
+			this.unitOfWork.BeginTransaction();
+			
+			String whereClause = " WHERE " + tables.UserContract.IsDefault.GetName() + " = 1";
+			
+			String query = "SELECT * FROM " + tables.UserContract.TABLE_NAME + whereClause;
+			
+			Cursor cursor = this.liteDB.rawQuery(query, null);
+			
+			if(cursor.moveToFirst())
+			{
+				user = new User();
+				user.ID = cursor.getInt(0);
+				user.Email = cursor.getString(tables.UserContract.Email.Index);
+				user.Username = cursor.getString(tables.UserContract.Username.Index);
+				user.Password = cursor.getString(tables.UserContract.Password.Index).toCharArray();
+				user.IsDefault = cursor.getInt(tables.UserContract.IsDefault.Index) == 1;
+			}
+			
+			this.unitOfWork.CommitTransaction();
+		}
+		catch(Exception ex)
+		{
+			this.unitOfWork.AbortTransaction();
+		}
+		
+		return user;
+	}
+
+	@Override
+	public void SetDefaultUser(User user)
+	{		
+		try
+		{
+			this.unitOfWork.BeginTransaction();
+			
+			String query = "UPDATE " + tables.UserContract.TABLE_NAME + " SET " + tables.UserContract.IsDefault.GetName() + " = 0";
+			
+			this.liteDB.execSQL(query);
+			
+			query = "UPDATE " + tables.UserContract.TABLE_NAME + " SET " + tables.UserContract.IsDefault.GetName() + " = 1 WHERE " + tables.UserContract._ID + " = " + user.ID;
+			
+			this.liteDB.execSQL(query);
+			
+			this.unitOfWork.CommitTransaction();
+		}
+		catch(Exception ex)
+		{
+			this.unitOfWork.AbortTransaction();
+		}
 	}
 }

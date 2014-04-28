@@ -10,6 +10,7 @@ public final class UserContract extends BaseTable
 	public BaseColumn Username;
 	public BaseColumn Email;
 	public BaseColumn Password;
+	public BaseColumn IsDefault;
 
 	@Override
 	protected void InitTables()
@@ -17,6 +18,7 @@ public final class UserContract extends BaseTable
 		Username = new BaseColumn("sUsername", BaseColumn.TextType);
 		Email = new BaseColumn("sEmail", BaseColumn.TextType);
 		Password = new BaseColumn("sPassword", BaseColumn.TextType);
+		IsDefault = new BaseColumn("bIsDefault", BaseColumn.IntegerType);
 	}
 	
 	@Override
@@ -31,5 +33,6 @@ public final class UserContract extends BaseTable
 		super.AddColumnCreate(Username);
 		super.AddColumnCreate(Email);
 		super.AddColumnCreate(Password);
+		super.AddColumnCreate(IsDefault);
 	}
 }

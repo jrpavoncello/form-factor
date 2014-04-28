@@ -6,9 +6,113 @@
     android:layout_height="match_parent"
     android:layout_gravity="left">
     
+    
+    <ScrollView
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent">
+	    
+		<LinearLayout
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical" 
+			tools:context="com.rhcloud.jop.formfactor.views.MainMenuActivity"
+			tools:ignore="MergeRootFrame" >
+			
+		    <EditText
+		        android:id="@+id/activity_complete_title"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:paddingLeft="20dp"
+				android:textCursorDrawable="@null"
+	        	android:inputType="textCapSentences|textAutoCorrect"
+		        android:textSize="30sp"
+		        android:paddingTop="10dp"
+		        android:textStyle="bold"
+		        android:textColor="@color/text_view_text_primary"
+		        android:background="@color/activity_main_window_background"
+		        android:textAppearance="?android:attr/textAppearanceLarge" />
+			
+			<LinearLayout
+				android:id="@+id/activity_complete_description"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="vertical">
+		      	
+			    <FrameLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:paddingLeft="10dp">
+					
+					<TextView
+						android:id="@+id/activity_complete_description_header"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:paddingLeft="15dp"
+						android:layout_gravity="left"
+	        			android:textAppearance="?android:attr/textAppearanceMedium"
+						android:text="@string/activity_complete_description_header" />
+					
+					
+					<ImageButton 
+					    android:id="@+id/activity_complete_description_collapse"
+					    android:layout_width="40dp"
+					    android:layout_height="40dp"
+					    android:layout_gravity="right|center_vertical"
+					    android:src="@drawable/ic_collapse"
+		   	    		android:layout_margin="4dp"
+					    android:visibility="visible" 
+					    android:contentDescription="@string/default_content_description"
+					    android:onClick="onDescriptionCollapse"/>
+					
+					<ImageButton 
+					    android:id="@+id/activity_complete_description_expand"
+					    android:layout_width="40dp"
+					    android:layout_height="40dp"
+					    android:layout_gravity="right|center_vertical"
+					    android:src="@drawable/ic_expand"
+		   	    		android:layout_margin="4dp"
+					    android:contentDescription="@string/default_content_description"
+					    android:visibility="gone"
+					    android:onClick="onDescriptionExpand" />
+				</FrameLayout>
+
+		      	<View
+				    android:layout_width="fill_parent"
+				    android:layout_height="1dp"
+				    android:background="@color/drawer_menu_divider" />
+			    
+				<EditText
+					android:id="@+id/activity_complete_description_full"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+		        	android:inputType="textCapSentences|textAutoCorrect|textMultiLine"
+					android:textCursorDrawable="@null"
+					android:paddingLeft="10dp"
+					android:paddingRight="10dp"
+					android:background="@color/text_view_text_background" />
+				
+		      	<View
+				    android:layout_width="fill_parent"
+				    android:layout_height="1dp"
+				    android:background="@color/drawer_menu_divider" />
+			</LinearLayout>
+	    
+			<LinearLayout
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:paddingTop="20dp"
+				android:paddingBottom="20dp"
+				android:orientation="vertical" 
+				android:id="@+id/activity_complete_questions"
+				tools:context="com.rhcloud.jop.formfactor.views.MainMenuActivity"
+				tools:ignore="MergeRootFrame" >
+				
+		    </LinearLayout>
+	    </LinearLayout>
+    </ScrollView>
+    
     <include layout="@layout/drawer_menu" />
     
     <include layout="@layout/view_pager" />
     
 </android.support.v4.widget.DrawerLayout>
-

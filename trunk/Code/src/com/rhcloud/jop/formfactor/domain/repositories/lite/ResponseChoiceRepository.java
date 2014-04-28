@@ -11,7 +11,7 @@ import com.rhcloud.jop.formfactor.common.SQLiteHelper;
 import com.rhcloud.jop.formfactor.domain.ResponseChoice;
 import com.rhcloud.jop.formfactor.domain.UnitOfWork;
 import com.rhcloud.jop.formfactor.domain.repositories.IResponseChoiceRepository;
-import com.rhcloud.jop.formfactor.sqlite.FormFactorDB;
+import com.rhcloud.jop.formfactor.sqlite.FormFactorDb;
 import com.rhcloud.jop.formfactor.sqlite.datacontracts.FormFactorTables;
 import com.rhcloud.jop.formfactor.sqlite.datacontracts.ResponseChoicesContract;
 
@@ -25,7 +25,7 @@ public class ResponseChoiceRepository implements IResponseChoiceRepository
 	
 	public ResponseChoiceRepository(UnitOfWork unitOfWork)
 	{
-		FormFactorDB formFactorDB = (FormFactorDB)unitOfWork.GetDB();
+		FormFactorDb formFactorDB = (FormFactorDb)unitOfWork.GetDB();
 		this.unitOfWork = unitOfWork;
 		this.liteDB = formFactorDB.getDB();
 	}

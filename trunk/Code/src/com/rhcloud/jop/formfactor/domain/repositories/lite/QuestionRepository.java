@@ -12,7 +12,7 @@ import com.rhcloud.jop.formfactor.domain.Question;
 import com.rhcloud.jop.formfactor.domain.QuestionType;
 import com.rhcloud.jop.formfactor.domain.UnitOfWork;
 import com.rhcloud.jop.formfactor.domain.repositories.IQuestionRepository;
-import com.rhcloud.jop.formfactor.sqlite.FormFactorDB;
+import com.rhcloud.jop.formfactor.sqlite.FormFactorDb;
 import com.rhcloud.jop.formfactor.sqlite.datacontracts.*;
 
 public class QuestionRepository implements IQuestionRepository
@@ -24,7 +24,7 @@ public class QuestionRepository implements IQuestionRepository
 	
 	public QuestionRepository(UnitOfWork unitOfWork)
 	{
-		FormFactorDB formFactorDB = (FormFactorDB)unitOfWork.GetDB();
+		FormFactorDb formFactorDB = (FormFactorDb)unitOfWork.GetDB();
 		this.unitOfWork = unitOfWork;
 		this.liteDB = formFactorDB.getDB();
 	}

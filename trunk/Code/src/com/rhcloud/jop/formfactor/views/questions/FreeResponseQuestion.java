@@ -8,7 +8,7 @@ import com.rhcloud.jop.formfactor.domain.ResponseChoice;
 import com.rhcloud.jop.formfactor.domain.UnitOfWork;
 import com.rhcloud.jop.formfactor.domain.dal.lite.FormFactorDataContext;
 import com.rhcloud.jop.formfactor.domain.services.FormService;
-import com.rhcloud.jop.formfactor.sqlite.FormFactorDB;
+import com.rhcloud.jop.formfactor.sqlite.FormFactorDb;
 import com.rhcloud.jop.formfactor.views.BundleKeys;
 import com.rhcloud.jop.formfactor.views.OnQuestionDeleteListener;
 
@@ -118,7 +118,7 @@ public class FreeResponseQuestion extends QuestionViewGroup implements OnMenuIte
 		
 		case R.id.menu_create_free_response_question_edit:
 			
-			UnitOfWork unitOfWork = new UnitOfWork(FormFactorDB.getInstance(this.getContext()));
+			UnitOfWork unitOfWork = new UnitOfWork(FormFactorDb.getInstance(this.getContext()));
 			FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
 			FormService formService = new FormService(dataContext);
 			

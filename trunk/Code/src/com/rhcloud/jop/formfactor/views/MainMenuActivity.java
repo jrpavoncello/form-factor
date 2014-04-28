@@ -1,28 +1,20 @@
 package com.rhcloud.jop.formfactor.views;
 
-import java.util.List;
-
 import com.rhcloud.jop.formfactor.R;
-import com.rhcloud.jop.formfactor.domain.UnitOfWork;
 import com.rhcloud.jop.formfactor.domain.User;
-import com.rhcloud.jop.formfactor.domain.dal.lite.FormFactorDataContext;
-import com.rhcloud.jop.formfactor.domain.services.UserService;
-import com.rhcloud.jop.formfactor.sqlite.FormFactorDB;
+import com.rhcloud.jop.formfactor.sqlite.FormFactorDb;
 import com.rhcloud.jop.formfactor.views.MainMenuActivityFragment.DrawerListener;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,7 +35,7 @@ public class MainMenuActivity extends FormFactorFragmentActivity implements IDat
 		super.setData(this, R.id.activity_main);
 	}
 	
-	FormFactorDB getDatabaseInstance()
+	FormFactorDb getDatabaseInstance()
 	{
 		return super.mFormFactorDB;
 	}
@@ -54,7 +46,7 @@ public class MainMenuActivity extends FormFactorFragmentActivity implements IDat
 		//setContentView must be called first so that super.onCreate has access to this activity's layout
 		setContentView(R.layout.activity_main_menu);
 		super.onCreate(savedInstanceState);
-		mFormFactorDB = FormFactorDB.getInstance(this);
+		mFormFactorDB = FormFactorDb.getInstance(this);
 
         // Create the adapter that will return a fragment for each of the sections
         mAppSectionsPagerAdapter = new FormFactorPagerAdapter(getSupportFragmentManager(), this);
@@ -79,6 +71,10 @@ public class MainMenuActivity extends FormFactorFragmentActivity implements IDat
                 if(position == 0)
                 {
                 	MainMenuActivity.launchCreateActivity();
+                }
+                else if(position == 2)
+                {
+                	MainMenuActivity.launchCompleteActivity();
                 }
             }
         });
@@ -112,6 +108,15 @@ public class MainMenuActivity extends FormFactorFragmentActivity implements IDat
 	}
 	
 	public static void launchCreateActivity()
+	{
+		if(mActivity != null)
+		{
+			Intent intent = new Intent(mActivity, CreateActivity.class);
+			mActivity.startActivity(intent);
+		}
+	}
+	
+	public static void launchCompleteActivity()
 	{
 		if(mActivity != null)
 		{
@@ -251,7 +256,7 @@ public class MainMenuActivity extends FormFactorFragmentActivity implements IDat
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
-            View rootView = inflater.inflate(R.layout.activity_complete, container, false);
+            View rootView = inflater.inflate(R.layout.activity_complete_placeholder, container, false);
             return rootView;
         }
     }

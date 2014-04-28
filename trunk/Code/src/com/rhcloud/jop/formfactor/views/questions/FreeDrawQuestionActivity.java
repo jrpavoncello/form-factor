@@ -9,7 +9,7 @@ import com.rhcloud.jop.formfactor.domain.Question;
 import com.rhcloud.jop.formfactor.domain.UnitOfWork;
 import com.rhcloud.jop.formfactor.domain.dal.lite.FormFactorDataContext;
 import com.rhcloud.jop.formfactor.domain.services.FormService;
-import com.rhcloud.jop.formfactor.sqlite.FormFactorDB;
+import com.rhcloud.jop.formfactor.sqlite.FormFactorDb;
 import com.rhcloud.jop.formfactor.views.BundleKeys;
 import com.rhcloud.jop.formfactor.views.FormFactorFragmentActivity;
 import com.rhcloud.jop.formfactor.views.MainMenuActivityFragment.DrawerListener;
@@ -71,7 +71,7 @@ public class FreeDrawQuestionActivity extends FormFactorFragmentActivity impleme
         	{
             	this.mQuestionID = savedInstanceState.getLong(BundleKeys.QuestionID, 0);
         		
-        		UnitOfWork unitOfWork = new UnitOfWork(FormFactorDB.getInstance(this));
+        		UnitOfWork unitOfWork = new UnitOfWork(FormFactorDb.getInstance(this));
         		FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
         		FormService formService = new FormService(dataContext);
         		
@@ -152,7 +152,7 @@ public class FreeDrawQuestionActivity extends FormFactorFragmentActivity impleme
 	
 	public void pencilClicked(View v)
 	{
-		
+		FreeDrawQuestionActivity.mFreeDrawCanvas.setErase(false);
 	}
 	
 	public void eraserClicked(View v)
@@ -171,8 +171,8 @@ public class FreeDrawQuestionActivity extends FormFactorFragmentActivity impleme
 		if(color.substring(0, 1).contains("#"))
 		{
 			FreeDrawQuestionActivity.mFreeDrawCanvas.setColor(color);
-			pressed.setImageDrawable(getResources().getDrawable(R.drawable.palette_rectangle_pressed));
 			currPaint.setImageDrawable(getResources().getDrawable(R.drawable.palette_rectangle));
+			pressed.setImageDrawable(getResources().getDrawable(R.drawable.palette_rectangle_pressed));
 			
 			currPaint = pressed;
 		}
@@ -184,7 +184,7 @@ public class FreeDrawQuestionActivity extends FormFactorFragmentActivity impleme
 	{
 		if(this.mQuestion != null)
 		{
-    		UnitOfWork unitOfWork = new UnitOfWork(FormFactorDB.getInstance(this));
+    		UnitOfWork unitOfWork = new UnitOfWork(FormFactorDb.getInstance(this));
     		FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
     		
     		if(this.validateInput(false))

@@ -11,6 +11,10 @@ public interface IUserRepository
 	public List<User> GetAll();
 	
 	public User GetByUserNamePassword(String username, char[] password);
+	
+	public User GetDefaultUser();
+	
+	public void SetDefaultUser(User user);
 
 	public void Update(User user);
 }

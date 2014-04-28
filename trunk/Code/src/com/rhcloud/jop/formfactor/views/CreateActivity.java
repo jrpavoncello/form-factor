@@ -22,10 +22,8 @@ import com.rhcloud.jop.formfactor.domain.*;
 import com.rhcloud.jop.formfactor.domain.dal.lite.FormFactorDataContext;
 import com.rhcloud.jop.formfactor.domain.services.FormService;
 import com.rhcloud.jop.formfactor.domain.services.UserService;
-import com.rhcloud.jop.formfactor.sqlite.FormFactorDB;
+import com.rhcloud.jop.formfactor.sqlite.FormFactorDb;
 import com.rhcloud.jop.formfactor.views.MainMenuActivityFragment.DrawerListener;
-import com.rhcloud.jop.formfactor.views.questions.FreeDrawQuestionActivity;
-import com.rhcloud.jop.formfactor.views.questions.FreeResponseQuestionEditActivity;
 import com.rhcloud.jop.formfactor.views.questions.MultipleChoiceQuestion;
 import com.rhcloud.jop.formfactor.views.questions.QuestionViewGroup;
 
@@ -33,7 +31,6 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -49,7 +46,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 
 public class CreateActivity extends FormFactorFragmentActivity implements OnQuestionDeleteListener, ActionBar.TabListener, DrawerListener, OnTouchListener
 {
@@ -89,7 +85,7 @@ public class CreateActivity extends FormFactorFragmentActivity implements OnQues
 		
 		this.mQuestionsViewGroup.addView(viewGroup);
 		
-		UnitOfWork unitOfWork = new UnitOfWork(FormFactorDB.getInstance(this));
+		UnitOfWork unitOfWork = new UnitOfWork(FormFactorDb.getInstance(this));
 		FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
 		FormService formService = new FormService(dataContext);
 		
@@ -122,7 +118,7 @@ public class CreateActivity extends FormFactorFragmentActivity implements OnQues
 		
 		this.mQuestionsViewGroup.addView(freeResponseViewGroup);
 		
-		UnitOfWork unitOfWork = new UnitOfWork(FormFactorDB.getInstance(this));
+		UnitOfWork unitOfWork = new UnitOfWork(FormFactorDb.getInstance(this));
 		FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
 		FormService formService = new FormService(dataContext);
 		
@@ -154,7 +150,7 @@ public class CreateActivity extends FormFactorFragmentActivity implements OnQues
 		
 		this.mQuestionsViewGroup.addView(multipleChoiceViewGroup);
 		
-		UnitOfWork unitOfWork = new UnitOfWork(FormFactorDB.getInstance(this));
+		UnitOfWork unitOfWork = new UnitOfWork(FormFactorDb.getInstance(this));
 		FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
 		FormService formService = new FormService(dataContext);
 		
@@ -243,11 +239,11 @@ public class CreateActivity extends FormFactorFragmentActivity implements OnQues
 				this.addMultipleChoice();
 				return true;
 				
-			case R.id.activity_create_add_new_free_draw:
+			case R.id.menu_create_add_new_free_draw:
 				this.addFreeDraw();
 				return true;
 				
-			case R.id.activity_create_add_new_free_response:
+			case R.id.menu_create_add_new_free_response:
 				this.addFreeResponse();
 				return true;
 				
@@ -359,7 +355,7 @@ public class CreateActivity extends FormFactorFragmentActivity implements OnQues
 	{
 		if(!this.mHasSavedState)
 		{
-			UnitOfWork unitOfWork = new UnitOfWork(FormFactorDB.getInstance(this));
+			UnitOfWork unitOfWork = new UnitOfWork(FormFactorDb.getInstance(this));
 			FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
 			try
 			{
@@ -408,7 +404,7 @@ public class CreateActivity extends FormFactorFragmentActivity implements OnQues
 				isCreateNew = savedInstanceState.containsKey(BundleKeys.CreateNew);
 			}
 			
-			UnitOfWork unitOfWork = new UnitOfWork(FormFactorDB.getInstance(this));
+			UnitOfWork unitOfWork = new UnitOfWork(FormFactorDb.getInstance(this));
 			FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
 			
 			UserService userService = new UserService(dataContext);
@@ -563,7 +559,7 @@ public class CreateActivity extends FormFactorFragmentActivity implements OnQues
 			}
 		}
 		
-		UnitOfWork unitOfWork = new UnitOfWork(FormFactorDB.getInstance(this));
+		UnitOfWork unitOfWork = new UnitOfWork(FormFactorDb.getInstance(this));
 		FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
 		
 		dataContext.GetQuestionRepository().DeleteByID(question.ID);

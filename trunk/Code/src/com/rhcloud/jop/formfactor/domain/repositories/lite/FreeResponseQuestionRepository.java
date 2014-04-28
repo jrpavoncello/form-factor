@@ -8,7 +8,7 @@ import com.rhcloud.jop.formfactor.common.SQLiteHelper;
 import com.rhcloud.jop.formfactor.domain.FreeResponseQuestion;
 import com.rhcloud.jop.formfactor.domain.UnitOfWork;
 import com.rhcloud.jop.formfactor.domain.repositories.IFreeResponseQuestionRepository;
-import com.rhcloud.jop.formfactor.sqlite.FormFactorDB;
+import com.rhcloud.jop.formfactor.sqlite.FormFactorDb;
 import com.rhcloud.jop.formfactor.sqlite.datacontracts.*;
 
 public class FreeResponseQuestionRepository implements IFreeResponseQuestionRepository
@@ -20,7 +20,7 @@ public class FreeResponseQuestionRepository implements IFreeResponseQuestionRepo
 	
 	public FreeResponseQuestionRepository(UnitOfWork unitOfWork)
 	{
-		FormFactorDB formFactorDB = (FormFactorDB)unitOfWork.GetDB();
+		FormFactorDb formFactorDB = (FormFactorDb)unitOfWork.GetDB();
 		this.unitOfWork = unitOfWork;
 		this.liteDB = formFactorDB.getDB();
 	}

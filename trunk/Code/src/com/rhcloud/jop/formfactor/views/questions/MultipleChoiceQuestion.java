@@ -9,7 +9,7 @@ import com.rhcloud.jop.formfactor.domain.ResponseChoice;
 import com.rhcloud.jop.formfactor.domain.UnitOfWork;
 import com.rhcloud.jop.formfactor.domain.dal.lite.FormFactorDataContext;
 import com.rhcloud.jop.formfactor.domain.services.FormService;
-import com.rhcloud.jop.formfactor.sqlite.FormFactorDB;
+import com.rhcloud.jop.formfactor.sqlite.FormFactorDb;
 import com.rhcloud.jop.formfactor.views.BundleKeys;
 import com.rhcloud.jop.formfactor.views.OnQuestionDeleteListener;
 
@@ -77,7 +77,7 @@ public class MultipleChoiceQuestion extends QuestionViewGroup implements OnCheck
 				
 		CheckBox checkBox = (CheckBox)inflater.inflate(R.layout.view_multiple_choice_checkbox, null);
 
-		UnitOfWork unitOfWork = new UnitOfWork(FormFactorDB.getInstance(this.getContext()));
+		UnitOfWork unitOfWork = new UnitOfWork(FormFactorDb.getInstance(this.getContext()));
 		FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
 
 		if(this.mQuestion != null)
@@ -295,7 +295,7 @@ public class MultipleChoiceQuestion extends QuestionViewGroup implements OnCheck
 			return true;
 			
 		case R.id.menu_create_multiple_choice_question_edit:
-			UnitOfWork unitOfWork = new UnitOfWork(FormFactorDB.getInstance(this.getContext()));
+			UnitOfWork unitOfWork = new UnitOfWork(FormFactorDb.getInstance(this.getContext()));
 			FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
 			FormService formService = new FormService(dataContext);
 			

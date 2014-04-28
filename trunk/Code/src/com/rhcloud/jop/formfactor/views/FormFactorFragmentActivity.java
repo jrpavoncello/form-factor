@@ -2,7 +2,7 @@ package com.rhcloud.jop.formfactor.views;
 
 import com.rhcloud.jop.formfactor.R;
 import com.rhcloud.jop.formfactor.domain.OpenImportActionType;
-import com.rhcloud.jop.formfactor.sqlite.FormFactorDB;
+import com.rhcloud.jop.formfactor.sqlite.FormFactorDb;
 
 import android.content.Intent;
 import android.content.SharedPreferences.Editor;
@@ -30,7 +30,7 @@ public class FormFactorFragmentActivity extends FragmentActivity
 
 	private int mDrawerResourceID;
 
-	protected FormFactorDB mFormFactorDB;
+	protected FormFactorDb mFormFactorDB;
 
 	private DrawerItem[] gatherDrawerItems()
 	{
@@ -128,13 +128,11 @@ public class FormFactorFragmentActivity extends FragmentActivity
 	protected void selectItem(DrawerItem item, int position)
 	{
 		/*
-        <item>@drawable/ic_home</item>
-        <item>@drawable/ic_action_new_small</item>
-        <item>@drawable/ic_action_collection</item>
-        <item>@drawable/ic_action_save</item>
-        <item>@drawable/ic_action_cloud</item>
-        <item>@drawable/ic_action_add_to_queue</item>
-        <item>@drawable/ic_action_logoff</item>*/
+        <item>Home</item>
+        <item>New</item>
+        <item>Open Local</item>
+        <item>Import</item>
+        <item>Log Off</item>*/
 		
 		switch (position) {
 		case 0: // Home
@@ -144,7 +142,7 @@ public class FormFactorFragmentActivity extends FragmentActivity
 
 			break;
 		}
-		case 1: // Create Form
+		case 1: // New
 		{
 			Intent intent = new Intent(this.mActivity, CreateActivity.class);
 			intent.putExtra(BundleKeys.CreateNew, true);
@@ -168,13 +166,10 @@ public class FormFactorFragmentActivity extends FragmentActivity
 
 			break;
 		}
-		case 4: // Export
-		{
-			break;
-		}
-		case 5: // Log off
+		case 4: // Log off
 		{
 			Intent intent = new Intent(this.mActivity, MainActivity.class);
+			intent.putExtra(BundleKeys.LoggedOff, true);
 
 			Editor editor = PreferenceManager.getDefaultSharedPreferences(getBaseContext()).edit();
 

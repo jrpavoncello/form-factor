@@ -42,6 +42,20 @@ public class UserService
 		return result;
 	}
 	
+	public User GetDefaultUser()
+	{
+		IUserRepository userRepo = this.DataContext.GetUserRepository();
+		
+		return userRepo.GetDefaultUser();
+	}
+	
+	public void SetDefaultUser(User user)
+	{
+		IUserRepository userRepo = this.DataContext.GetUserRepository();
+		
+		userRepo.SetDefaultUser(user);
+	}
+	
 	public boolean IsValidAuthentication(String username, char[] passwordHash)
 	{
 		User user = null;

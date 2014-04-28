@@ -64,10 +64,7 @@ public class FreeDrawQuestionView extends View
 		
 		if(erase)
 		{
-			this.paintColor = getResources().getColor(R.color.free_draw_color_white);
-
 			drawPaint.setStrokeWidth(60);
-			drawPaint.setColor(this.paintColor);
 			drawPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
 			this.invalidate();
 		}

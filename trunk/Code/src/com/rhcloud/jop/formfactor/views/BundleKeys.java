@@ -11,4 +11,6 @@ public class BundleKeys
 	public static final String LoginEmail = "LoginEmail";
 	public static final String OpenFormActionID = "OpenFormActionID";
 	public static final String CreateNew = "CreateNew";
+	public static final String LoggedOff = "LoggedOff";
+	public static final String IntentURL = "IntentURL";
 }

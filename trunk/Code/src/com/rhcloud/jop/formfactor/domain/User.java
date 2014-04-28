@@ -19,6 +19,9 @@ public class User implements IJSONSerializable
     
     @SerializedName("User_Password")
 	public char[] Password = null;
+    
+    @SerializedName("User_IsDefault")
+	public boolean IsDefault = false;
 
 	@Override
 	public String Serialize()
