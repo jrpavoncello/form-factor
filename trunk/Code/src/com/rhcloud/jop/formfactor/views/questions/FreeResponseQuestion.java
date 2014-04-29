@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.rhcloud.jop.formfactor.R;
 import com.rhcloud.jop.formfactor.domain.Question;
-import com.rhcloud.jop.formfactor.domain.ResponseChoice;
 import com.rhcloud.jop.formfactor.domain.UnitOfWork;
 import com.rhcloud.jop.formfactor.domain.dal.lite.FormFactorDataContext;
 import com.rhcloud.jop.formfactor.domain.services.FormService;

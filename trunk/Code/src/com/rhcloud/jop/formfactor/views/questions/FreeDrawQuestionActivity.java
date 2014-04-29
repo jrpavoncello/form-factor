@@ -5,7 +5,6 @@ import java.util.HashSet;
 import com.rhcloud.jop.formfactor.R;
 import com.rhcloud.jop.formfactor.common.ActivityHelper;
 import com.rhcloud.jop.formfactor.common.Result;
-import com.rhcloud.jop.formfactor.domain.Question;
 import com.rhcloud.jop.formfactor.domain.UnitOfWork;
 import com.rhcloud.jop.formfactor.domain.dal.lite.FormFactorDataContext;
 import com.rhcloud.jop.formfactor.domain.services.FormService;
@@ -199,9 +198,6 @@ public class FreeDrawQuestionActivity extends FormFactorFragmentActivity impleme
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		
 		if (id == R.id.action_settings)

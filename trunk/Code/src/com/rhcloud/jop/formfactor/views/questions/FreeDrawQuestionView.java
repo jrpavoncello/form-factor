@@ -16,17 +16,13 @@ import android.view.MotionEvent;
 
 public class FreeDrawQuestionView extends View
 {
-	//drawing path
-	private Path drawPath;
-	//drawing and canvas paint
-	private Paint drawPaint, canvasPaint;
-	//initial color
-	private int paintColor = 0xFF000000;
-	//canvas
-	private Canvas drawCanvas;
-	//canvas bitmap
-	private Bitmap canvasBitmap;
-	private boolean erase = false;
+	private Path mDrawPath;
+	private Paint mDrawPaint;
+	private Paint mCanvasPaint;
+	private int mPaintColorValue = 0xFF000000;
+	private Canvas mDrawCanvas;
+	private Bitmap mCanvasBitmap;
+	private boolean mIsErasing = false;
 	
 	public FreeDrawQuestionView(Context context)
 	{
@@ -60,63 +56,63 @@ public class FreeDrawQuestionView extends View
 	
 	public void setErase(boolean isErasing)
 	{
-		erase = isErasing;
+		mIsErasing = isErasing;
 		
-		if(erase)
+		if(mIsErasing)
 		{
-			drawPaint.setStrokeWidth(60);
-			drawPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+			mDrawPaint.setStrokeWidth(60);
+			mDrawPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
 			this.invalidate();
 		}
 		else 
 		{
-			drawPaint.setStrokeWidth(10);
-			drawPaint.setColor(paintColor);
-			drawPaint.setXfermode(null);
+			mDrawPaint.setStrokeWidth(10);
+			mDrawPaint.setColor(mPaintColorValue);
+			mDrawPaint.setXfermode(null);
 		}
 	}
 	
 	public void clearDrawing()
 	{
-	    this.drawCanvas.drawColor(0, PorterDuff.Mode.CLEAR);
+	    this.mDrawCanvas.drawColor(0, PorterDuff.Mode.CLEAR);
 	    this.invalidate();
 	}
 	
 	public boolean isErasing()
 	{
-		return erase;
+		return mIsErasing;
 	}
 	
 	public void setupDrawing()
 	{
-		drawPath = new Path();
-		drawPaint = new Paint();
-		drawPaint.setColor(getResources().getColor(R.color.free_draw_color_black));
-		drawPaint.setAntiAlias(true);
-		drawPaint.setStrokeWidth(10);
-		drawPaint.setStyle(Paint.Style.STROKE);
-		drawPaint.setStrokeJoin(Paint.Join.ROUND);
-		drawPaint.setStrokeCap(Paint.Cap.ROUND);
+		mDrawPath = new Path();
+		mDrawPaint = new Paint();
+		mDrawPaint.setColor(getResources().getColor(R.color.free_draw_color_black));
+		mDrawPaint.setAntiAlias(true);
+		mDrawPaint.setStrokeWidth(10);
+		mDrawPaint.setStyle(Paint.Style.STROKE);
+		mDrawPaint.setStrokeJoin(Paint.Join.ROUND);
+		mDrawPaint.setStrokeCap(Paint.Cap.ROUND);
 		
-		canvasPaint = new Paint(Paint.DITHER_FLAG);
+		mCanvasPaint = new Paint(Paint.DITHER_FLAG);
 	}
 	
 	public void setExistingBitmap(Bitmap bmp)
 	{
-		canvasBitmap = Bitmap.createBitmap(this.getWidth(), this.getHeight(), Bitmap.Config.ARGB_8888);
-		drawCanvas = new Canvas(canvasBitmap);
+		mCanvasBitmap = Bitmap.createBitmap(this.getWidth(), this.getHeight(), Bitmap.Config.ARGB_8888);
+		mDrawCanvas = new Canvas(mCanvasBitmap);
 		
 		if(bmp != null)
 		{
-			drawCanvas.drawBitmap(bmp, 0, 0, canvasPaint);
+			mDrawCanvas.drawBitmap(bmp, 0, 0, mCanvasPaint);
 		}
 	}
 	
 	public void setColor(String newColor)
 	{
 		this.invalidate();
-		paintColor = Color.parseColor(newColor);
-		drawPaint.setColor(paintColor);
+		mPaintColorValue = Color.parseColor(newColor);
+		mDrawPaint.setColor(mPaintColorValue);
 	}
 	
 	@Override
@@ -124,8 +120,8 @@ public class FreeDrawQuestionView extends View
 	{
 		super.onSizeChanged(w, h, oldw, oldh);
 		
-		canvasBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-		drawCanvas = new Canvas(canvasBitmap);
+		mCanvasBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+		mDrawCanvas = new Canvas(mCanvasBitmap);
 	}
 	
 	@Override
@@ -133,8 +129,8 @@ public class FreeDrawQuestionView extends View
 	{
 		if(!this.isInEditMode())
 		{
-			canvas.drawBitmap(canvasBitmap, 0, 0, canvasPaint);
-			canvas.drawPath(drawPath, drawPaint);
+			canvas.drawBitmap(mCanvasBitmap, 0, 0, mCanvasPaint);
+			canvas.drawPath(mDrawPath, mDrawPaint);
 		}
 	}
 	
@@ -147,15 +143,18 @@ public class FreeDrawQuestionView extends View
 		switch (event.getAction())
 		{
 		case MotionEvent.ACTION_DOWN:
-		    drawPath.moveTo(touchX, touchY);
+		    mDrawPath.moveTo(touchX, touchY);
 		    break;
+		    
 		case MotionEvent.ACTION_MOVE:
-		    drawPath.lineTo(touchX, touchY);
+		    mDrawPath.lineTo(touchX, touchY);
 		    break;
+		    
 		case MotionEvent.ACTION_UP:
-		    drawCanvas.drawPath(drawPath, drawPaint);
-		    drawPath.reset();
+		    mDrawCanvas.drawPath(mDrawPath, mDrawPaint);
+		    mDrawPath.reset();
 		    break;
+		    
 		default:
 		    return false;
 		}

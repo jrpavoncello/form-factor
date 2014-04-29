@@ -193,11 +193,8 @@ public abstract class QuestionViewGroup extends LinearLayout implements OnMenuIt
 	
 	private void setData()
 	{
-		// Load attributes
 		final TypedArray a = this.mActivity.obtainStyledAttributes(attrs, R.styleable.view_group_question, defStyle, 0);
 		
-		// Use getDimensionPixelSize or getDimensionPixelOffset when dealing with
-		// values that should fall on pixel boundaries.
 		mImageDimensions = a.getDimension(R.styleable.view_group_question_image_dimensions, mImageDimensions);
 
 		if (a.hasValue(R.styleable.view_group_question_image))

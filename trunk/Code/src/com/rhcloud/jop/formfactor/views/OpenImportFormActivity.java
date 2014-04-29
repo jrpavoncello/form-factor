@@ -257,7 +257,6 @@ public class OpenImportFormActivity extends FormFactorFragmentActivity implement
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.open_import_form, menu);
 		return true;
 	}
@@ -265,9 +264,6 @@ public class OpenImportFormActivity extends FormFactorFragmentActivity implement
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.menu_create_settings)
 		{
@@ -323,9 +319,6 @@ public class OpenImportFormActivity extends FormFactorFragmentActivity implement
 
 	private void showProgress(final boolean show)
 	{
-		// On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-		// for very easy animations. If available, use these APIs to fade-in
-		// the progress spinner.
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) 
 		{
 			int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
@@ -356,8 +349,6 @@ public class OpenImportFormActivity extends FormFactorFragmentActivity implement
 		} 
 		else
 		{
-			// The ViewPropertyAnimator APIs are not available, so simply show
-			// and hide the relevant UI components.
 			mDownloadStatusView.setVisibility(show ? View.VISIBLE : View.GONE);
 			mFormList.setVisibility(show ? View.GONE : View.VISIBLE);
 		}

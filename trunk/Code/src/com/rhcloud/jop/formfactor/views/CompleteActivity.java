@@ -234,11 +234,13 @@ public class CompleteActivity extends FormFactorFragmentActivity implements OnQu
 				this.mHasSavedState = false;
 				this.saveCurrentForm();
 				return true;
+				
 			case R.id.menu_create_edit_question_export:
 				this.mHasSavedState = false;
 				this.saveCurrentForm();
 				this.exportCurrentForm();
 				return true;
+				
 			case R.id.menu_create_settings:
 				return true;
 				
