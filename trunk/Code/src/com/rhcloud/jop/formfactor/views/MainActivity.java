@@ -68,18 +68,29 @@ public class MainActivity extends Activity implements IDatabaseReadyListener
 		mHasLoggedOff  = false;
 		if(savedInstanceState == null)
 		{
-			savedInstanceState = this.getIntent().getExtras();
+			Intent intent = this.getIntent();
+			if(intent != null)
+			{
+				savedInstanceState = intent.getExtras();
+			}
 			
 			if(savedInstanceState != null && savedInstanceState.containsKey(BundleKeys.LoggedOff))
 			{
 				mHasLoggedOff = savedInstanceState.getBoolean(BundleKeys.LoggedOff);
 			}
-			Intent intent = this.getIntent();
-			if (intent.getAction().equals(Intent.ACTION_VIEW))
+
+			if(intent != null)
 			{
-		        Uri data = intent.getData();
-		        this.mIntentURL = data.toString();
-		    }
+				String action = intent.getAction();
+				if (action != null && action.equals(Intent.ACTION_VIEW))
+				{
+			        Uri data = intent.getData();
+			        if(data != null)
+			        {
+			        	this.mIntentURL = data.toString();
+			        }
+			    }
+			}
 		}
 
 		setContentView(R.layout.activity_main);

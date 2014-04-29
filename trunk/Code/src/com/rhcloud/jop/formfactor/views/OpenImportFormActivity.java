@@ -527,6 +527,13 @@ public class OpenImportFormActivity extends FormFactorFragmentActivity implement
 	{
 		this.mDownloadURL = this.mDownloadLocation.getText().toString();
 
-		this.executeRetriever(new String[] { this.mDownloadURL });
+		if(this.mDownloadURL != null && !this.mDownloadURL.equals(""))
+		{
+			this.executeRetriever(new String[] { this.mDownloadURL });
+		}
+		else
+		{
+			this.executeRetriever(new String[] { });
+		}
 	}
 }
