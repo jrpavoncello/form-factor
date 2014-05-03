@@ -11,7 +11,7 @@ import android.os.AsyncTask;
 
 public class FormFactorDB implements IDatabase
 {
-	private static FormFactorDB formFactorDb;
+	private static FormFactorDB formFactorDB;
 	private SQLiteDatabase DB;
 	private boolean isReady;
 	
@@ -19,16 +19,16 @@ public class FormFactorDB implements IDatabase
 	
 	public static FormFactorDB getInstance(Context context)
 	{
-		if (formFactorDb == null)
+		if (formFactorDB == null)
 		{		
-			formFactorDb = new FormFactorDB();
-			formFactorDb.isReady = false;
+			formFactorDB = new FormFactorDB();
+			formFactorDB.isReady = false;
 			
 			// Open DB in an AsyncTask, since it may take a while
-			formFactorDb.new OpenDbAsyncTask().execute(context);
+			formFactorDB.new OpenDbAsyncTask().execute(context);
 		}
 		
-		return formFactorDb;
+		return formFactorDB;
 	}
 	
 	public boolean initialized()
