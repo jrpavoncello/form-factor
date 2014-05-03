@@ -16,7 +16,7 @@ import com.rhcloud.jop.formfactor.domain.UnitOfWork;
 import com.rhcloud.jop.formfactor.domain.User;
 import com.rhcloud.jop.formfactor.domain.dal.lite.FormFactorDataContext;
 import com.rhcloud.jop.formfactor.domain.services.UserService;
-import com.rhcloud.jop.formfactor.sqlite.FormFactorDb;
+import com.rhcloud.jop.formfactor.sqlite.FormFactorDB;
 
 public class SettingsActivity extends PreferenceActivity implements OnPreferenceChangeListener
 {
@@ -145,7 +145,7 @@ public class SettingsActivity extends PreferenceActivity implements OnPreference
         	char[] pass = selectedPassHash.toCharArray();
 			this.setUserPreference(username, pass);
 
-			UnitOfWork unitOfWork = new UnitOfWork(FormFactorDb.getInstance(SettingsActivity.mSettingsActivity));
+			UnitOfWork unitOfWork = new UnitOfWork(FormFactorDB.getInstance(SettingsActivity.mSettingsActivity));
 			FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
 			
 			UserService userService = new UserService(dataContext);
@@ -184,7 +184,7 @@ public class SettingsActivity extends PreferenceActivity implements OnPreference
 			
 			SettingsActivity.mUserPreference = (ListPreference)findPreference("pref_user");
 
-			UnitOfWork unitOfWork = new UnitOfWork(FormFactorDb.getInstance(SettingsActivity.mSettingsActivity));
+			UnitOfWork unitOfWork = new UnitOfWork(FormFactorDB.getInstance(SettingsActivity.mSettingsActivity));
 			FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
 			
 			List<User> users = dataContext.GetUserRepository().GetAll();

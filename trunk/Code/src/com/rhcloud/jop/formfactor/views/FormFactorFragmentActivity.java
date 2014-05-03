@@ -2,7 +2,7 @@ package com.rhcloud.jop.formfactor.views;
 
 import com.rhcloud.jop.formfactor.R;
 import com.rhcloud.jop.formfactor.domain.OpenImportActionType;
-import com.rhcloud.jop.formfactor.sqlite.FormFactorDb;
+import com.rhcloud.jop.formfactor.sqlite.FormFactorDB;
 
 import android.content.Intent;
 import android.content.SharedPreferences.Editor;
@@ -30,7 +30,7 @@ public class FormFactorFragmentActivity extends FragmentActivity
 
 	private int mDrawerResourceID;
 
-	protected FormFactorDb mFormFactorDB;
+	protected FormFactorDB mFormFactorDB;
 
 	private DrawerItem[] gatherDrawerItems()
 	{

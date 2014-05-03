@@ -9,19 +9,19 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 
-public class FormFactorDb implements IDatabase
+public class FormFactorDB implements IDatabase
 {
-	private static FormFactorDb formFactorDb;
+	private static FormFactorDB formFactorDb;
 	private SQLiteDatabase DB;
 	private boolean isReady;
 	
-	private FormFactorDb() { }
+	private FormFactorDB() { }
 	
-	public static FormFactorDb getInstance(Context context)
+	public static FormFactorDB getInstance(Context context)
 	{
 		if (formFactorDb == null)
 		{		
-			formFactorDb = new FormFactorDb();
+			formFactorDb = new FormFactorDB();
 			formFactorDb.isReady = false;
 			
 			// Open DB in an AsyncTask, since it may take a while
@@ -41,7 +41,7 @@ public class FormFactorDb implements IDatabase
 		@Override
 		protected Void doInBackground(Context... params) 
 		{
-			FormFactorDbHelper dbHelper = new FormFactorDbHelper(params[0]);
+			FormFactorDBHelper dbHelper = new FormFactorDBHelper(params[0]);
 			DB = dbHelper.getWritableDatabase();
 			isReady = true;
 			

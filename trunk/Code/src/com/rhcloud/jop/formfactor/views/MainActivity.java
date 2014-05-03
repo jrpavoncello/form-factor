@@ -12,7 +12,7 @@ import com.rhcloud.jop.formfactor.domain.UnitOfWork;
 import com.rhcloud.jop.formfactor.domain.User;
 import com.rhcloud.jop.formfactor.domain.dal.lite.FormFactorDataContext;
 import com.rhcloud.jop.formfactor.domain.services.UserService;
-import com.rhcloud.jop.formfactor.sqlite.FormFactorDb;
+import com.rhcloud.jop.formfactor.sqlite.FormFactorDB;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -56,7 +56,7 @@ public class MainActivity extends Activity implements IDatabaseReadyListener
 	private View mLoginFormView;
 	private View mLoginStatusView;
 	private TextView mLoginStatusMessageView;
-	private FormFactorDb mFormFactorDB = null;
+	private FormFactorDB mFormFactorDB = null;
 	private boolean mHasLoggedOff = false;
 	private String mIntentURL;
 
@@ -95,7 +95,7 @@ public class MainActivity extends Activity implements IDatabaseReadyListener
 
 		setContentView(R.layout.activity_main);
 		
-		this.mFormFactorDB = FormFactorDb.getInstance(this);
+		this.mFormFactorDB = FormFactorDB.getInstance(this);
 		
 		if(this.mFormFactorDB != null && this.mFormFactorDB.getDB() != null)
 		{

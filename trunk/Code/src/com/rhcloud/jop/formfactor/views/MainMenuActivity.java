@@ -2,7 +2,7 @@ package com.rhcloud.jop.formfactor.views;
 
 import com.rhcloud.jop.formfactor.R;
 import com.rhcloud.jop.formfactor.domain.User;
-import com.rhcloud.jop.formfactor.sqlite.FormFactorDb;
+import com.rhcloud.jop.formfactor.sqlite.FormFactorDB;
 import com.rhcloud.jop.formfactor.views.MainMenuActivityFragment.DrawerListener;
 
 import android.app.ActionBar;
@@ -35,7 +35,7 @@ public class MainMenuActivity extends FormFactorFragmentActivity implements IDat
 		super.setData(this, R.id.activity_main);
 	}
 	
-	FormFactorDb getDatabaseInstance()
+	FormFactorDB getDatabaseInstance()
 	{
 		return super.mFormFactorDB;
 	}
@@ -46,7 +46,7 @@ public class MainMenuActivity extends FormFactorFragmentActivity implements IDat
 		//setContentView must be called first so that super.onCreate has access to this activity's layout
 		setContentView(R.layout.activity_main_menu);
 		super.onCreate(savedInstanceState);
-		mFormFactorDB = FormFactorDb.getInstance(this);
+		mFormFactorDB = FormFactorDB.getInstance(this);
 
         // Create the adapter that will return a fragment for each of the sections
         mAppSectionsPagerAdapter = new FormFactorPagerAdapter(getSupportFragmentManager(), this);

@@ -12,7 +12,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public final class FormFactorDbHelper extends SQLiteOpenHelper
+public final class FormFactorDBHelper extends SQLiteOpenHelper
 {        
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "FormFactor.db";
@@ -24,7 +24,7 @@ public final class FormFactorDbHelper extends SQLiteOpenHelper
 	
     private Context context;
 	
-    public FormFactorDbHelper(Context context)
+    public FormFactorDBHelper(Context context)
     {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;

@@ -28,7 +28,7 @@ import com.rhcloud.jop.formfactor.domain.User;
 import com.rhcloud.jop.formfactor.domain.dal.lite.FormFactorDataContext;
 import com.rhcloud.jop.formfactor.domain.services.FormService;
 import com.rhcloud.jop.formfactor.domain.services.UserService;
-import com.rhcloud.jop.formfactor.sqlite.FormFactorDb;
+import com.rhcloud.jop.formfactor.sqlite.FormFactorDB;
 import com.rhcloud.jop.formfactor.views.MainMenuActivity.FormFactorPagerAdapter;
 import com.rhcloud.jop.formfactor.views.MainMenuActivityFragment.DrawerListener;
 
@@ -95,7 +95,7 @@ public class OpenImportFormActivity extends FormFactorFragmentActivity implement
         
         mFormList = (ListView)this.findViewById((R.id.activity_open_import_items));
 
-        this.mFormFactorDB = FormFactorDb.getInstance(this);
+        this.mFormFactorDB = FormFactorDB.getInstance(this);
         
 		UnitOfWork unitOfWork = new UnitOfWork(this.mFormFactorDB);
 		FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
