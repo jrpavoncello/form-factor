@@ -13,6 +13,7 @@
 	        android:layout_height="wrap_content"
 	        android:hint="@string/activity_open_import_location_hint"
 	        android:textAppearance="?android:attr/textAppearanceLarge"
+	        android:imeOptions="actionSearch"
 	        android:singleLine="true"
 	        android:inputType="textUri"
 	        android:visibility="gone" />

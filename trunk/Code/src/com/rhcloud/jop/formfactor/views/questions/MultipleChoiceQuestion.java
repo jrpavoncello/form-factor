@@ -38,37 +38,39 @@ public class MultipleChoiceQuestion extends QuestionViewGroup implements OnCheck
 	
 	private com.rhcloud.jop.formfactor.domain.MultipleChoiceQuestion mQuestion;
 
-	public MultipleChoiceQuestion(Context context)
+	public MultipleChoiceQuestion(Context context, boolean isCreateMode)
 	{
 		super(context);
-
-		LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		inflater.inflate(R.layout.view_group_multiple_choice, (LinearLayout)super.findViewById(R.id.question_response_section));
-		
-		this.mChoicesSection = (LinearLayout)this.findViewById(R.id.question_response_section);
-		super.setOnClickListener(this);
+		this.setupLayout(isCreateMode);
 	}
 
-	public MultipleChoiceQuestion(Context context, AttributeSet attrs)
+	public MultipleChoiceQuestion(Context context, AttributeSet attrs, boolean isCreateMode)
 	{
 		super(context, attrs);
-
-		LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		inflater.inflate(R.layout.view_group_multiple_choice, (LinearLayout)super.findViewById(R.id.question_response_section));
-		
-		this.mChoicesSection = (LinearLayout)this.findViewById(R.id.question_response_section);
-		super.setOnClickListener(this);
+		this.setupLayout(isCreateMode);
 	}
 
-	public MultipleChoiceQuestion(Context context, AttributeSet attrs, int defStyle)
+	public MultipleChoiceQuestion(Context context, AttributeSet attrs, int defStyle, boolean isCreateMode)
 	{
 		super(context, attrs, defStyle);
-
-		LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		this.setupLayout(isCreateMode);
+	}
+	
+	private void setupLayout(boolean isCreateMode)
+	{
+		LayoutInflater inflater = (LayoutInflater)this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		inflater.inflate(R.layout.view_group_multiple_choice, (LinearLayout)super.findViewById(R.id.question_response_section));
 		
 		this.mChoicesSection = (LinearLayout)this.findViewById(R.id.question_response_section);
 		super.setOnClickListener(this);
+		
+		this.mIsCreateMode = isCreateMode;
+		
+		if(!isCreateMode)
+		{
+			View settingsButton = this.findViewById(R.id.question_overflow_button);
+			settingsButton.setVisibility(View.GONE);
+		}
 	}
 
 	private void addResponseChoice(ResponseChoice response)

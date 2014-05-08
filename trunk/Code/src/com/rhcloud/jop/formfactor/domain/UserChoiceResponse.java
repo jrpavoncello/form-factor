@@ -4,22 +4,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
 
-public class UserChoiceResponse implements IJSONSerializable
+public class UserChoiceResponse extends UserResponse implements IJSONSerializable
 {
-    @SerializedName("UserDrawResponses_ID")
-	public long ID = 0;
-    
-    @SerializedName("UserDrawResponses_UserID")
-	public long UserID = 0;
-    
-    @SerializedName("UserOpenResponse_QuestionID")
-	public long QuestionID = 0;
-    
-    @SerializedName("UserDrawResponses_Description")
-	public String Description = "";
-    
-    @SerializedName("UserDrawResponses_Image")
-	public byte[] Image = null;
+    @SerializedName("UserOpenResponse_ResponseChoiceID")
+	public long ResponseChoiceID = 0;
 
 	@Override
 	public String Serialize()
@@ -37,7 +25,6 @@ public class UserChoiceResponse implements IJSONSerializable
 		this.ID = response.ID;
 		this.UserID = response.UserID;
 		this.QuestionID = response.QuestionID;
-		this.Description = response.Description;
-		this.Image = response.Image;
+		this.ResponseChoiceID = response.ResponseChoiceID;
 	}
 }

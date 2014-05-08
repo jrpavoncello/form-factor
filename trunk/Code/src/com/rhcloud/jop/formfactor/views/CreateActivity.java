@@ -75,7 +75,7 @@ public class CreateActivity extends FormFactorFragmentActivity implements OnQues
 	{
 		question.Number = this.mQuestionsViewGroup.getChildCount() + 1;
 		
-		com.rhcloud.jop.formfactor.views.questions.FreeDrawQuestion viewGroup = new com.rhcloud.jop.formfactor.views.questions.FreeDrawQuestion(this);
+		com.rhcloud.jop.formfactor.views.questions.FreeDrawQuestion viewGroup = new com.rhcloud.jop.formfactor.views.questions.FreeDrawQuestion(this, true);
 		
 		viewGroup.setOnQuestionDeleteListener(this);
 		
@@ -108,7 +108,7 @@ public class CreateActivity extends FormFactorFragmentActivity implements OnQues
 	{
 		question.Number = this.mQuestionsViewGroup.getChildCount() + 1;
 		
-		com.rhcloud.jop.formfactor.views.questions.FreeResponseQuestion freeResponseViewGroup = new com.rhcloud.jop.formfactor.views.questions.FreeResponseQuestion(this);
+		com.rhcloud.jop.formfactor.views.questions.FreeResponseQuestion freeResponseViewGroup = new com.rhcloud.jop.formfactor.views.questions.FreeResponseQuestion(this, true);
 		
 		freeResponseViewGroup.setOnQuestionDeleteListener(this);
 		
@@ -140,7 +140,7 @@ public class CreateActivity extends FormFactorFragmentActivity implements OnQues
 	{
 		question.Number = this.mQuestionsViewGroup.getChildCount() + 1;
 		
-		MultipleChoiceQuestion multipleChoiceViewGroup = new MultipleChoiceQuestion(this);
+		MultipleChoiceQuestion multipleChoiceViewGroup = new MultipleChoiceQuestion(this, true);
 		
 		multipleChoiceViewGroup.setOnQuestionDeleteListener(this);
 		

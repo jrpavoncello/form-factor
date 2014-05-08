@@ -27,28 +27,32 @@ public class FreeDrawQuestion extends QuestionViewGroup implements OnMenuItemCli
 
 	private boolean mIsCreateMode = true;
 
-	public FreeDrawQuestion(Context context)
+	public FreeDrawQuestion(Context context, boolean isCreateMode)
 	{
 		super(context);
 		
-		this.setupLayout(context);
+		this.mIsCreateMode = isCreateMode;
+		
+		this.setupLayout(context, isCreateMode);
 	}
 
-	public FreeDrawQuestion(Context context, AttributeSet attrs)
+	public FreeDrawQuestion(Context context, AttributeSet attrs, boolean isCreateMode)
 	{
 		super(context, attrs);
 		
-		this.setupLayout(context);
+		this.mIsCreateMode = isCreateMode;
+		
+		this.setupLayout(context, isCreateMode);
 	}
 
-	public FreeDrawQuestion(Context context, AttributeSet attrs, int defStyle)
+	public FreeDrawQuestion(Context context, AttributeSet attrs, int defStyle, boolean isCreateMode)
 	{
 		super(context, attrs, defStyle);
 		
-		this.setupLayout(context);
+		this.setupLayout(context, isCreateMode);
 	}
 	
-	private void setupLayout(Context context)
+	private void setupLayout(Context context, boolean isCreateMode)
 	{
 		LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -59,6 +63,14 @@ public class FreeDrawQuestion extends QuestionViewGroup implements OnMenuItemCli
 		this.mImage = (ImageView)this.findViewById(R.id.view_group_free_draw_image);
 		
 		this.mImage.setOnClickListener(this);
+		
+		this.mIsCreateMode = isCreateMode;
+		
+		if(!isCreateMode)
+		{
+			View settingsButton = this.findViewById(R.id.question_overflow_button);
+			settingsButton.setVisibility(View.GONE);
+		}
 		
 		super.setOnClickListener(this);
 	}

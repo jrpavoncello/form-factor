@@ -27,8 +27,6 @@ import com.rhcloud.jop.formfactor.domain.dal.lite.FormFactorDataContext;
 import com.rhcloud.jop.formfactor.domain.services.FormService;
 import com.rhcloud.jop.formfactor.domain.services.UserService;
 import com.rhcloud.jop.formfactor.sqlite.FormFactorDB;
-import com.rhcloud.jop.formfactor.views.CreateActivity.FormUploader;
-import com.rhcloud.jop.formfactor.views.MainMenuActivity.FormFactorPagerAdapter;
 import com.rhcloud.jop.formfactor.views.MainMenuActivityFragment.DrawerListener;
 import com.rhcloud.jop.formfactor.views.questions.MultipleChoiceQuestion;
 import com.rhcloud.jop.formfactor.views.questions.QuestionViewGroup;
@@ -41,7 +39,6 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Menu;
@@ -53,13 +50,14 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
-public class CompleteActivity extends FormFactorFragmentActivity implements OnQuestionDeleteListener, ActionBar.TabListener, DrawerListener, OnTouchListener
+public class CompleteActivity extends FormFactorFragmentActivity implements ActionBar.TabListener, DrawerListener, OnTouchListener
 {
 	private Form mForm;
 	private User mCurrentUser = null;
 	private List<QuestionViewGroup> mQuestions = new ArrayList<QuestionViewGroup>();
-	private static final String TAG_NAME = "CreateActivity";
+	private static final String TAG_NAME = "CompleteActivity";
 	private boolean mHasResumedState = false;
 	private boolean mHasSavedState = false;
 	private LinearLayout mQuestionsViewGroup;
@@ -82,9 +80,7 @@ public class CompleteActivity extends FormFactorFragmentActivity implements OnQu
 	{
 		question.Number = this.mQuestionsViewGroup.getChildCount() + 1;
 		
-		com.rhcloud.jop.formfactor.views.questions.FreeDrawQuestion viewGroup = new com.rhcloud.jop.formfactor.views.questions.FreeDrawQuestion(this);
-		
-		viewGroup.setOnQuestionDeleteListener(this);
+		com.rhcloud.jop.formfactor.views.questions.FreeDrawQuestion viewGroup = new com.rhcloud.jop.formfactor.views.questions.FreeDrawQuestion(this, false);
 		
 		viewGroup.setData(question);
 		
@@ -115,9 +111,7 @@ public class CompleteActivity extends FormFactorFragmentActivity implements OnQu
 	{
 		question.Number = this.mQuestionsViewGroup.getChildCount() + 1;
 		
-		com.rhcloud.jop.formfactor.views.questions.FreeResponseQuestion freeResponseViewGroup = new com.rhcloud.jop.formfactor.views.questions.FreeResponseQuestion(this);
-		
-		freeResponseViewGroup.setOnQuestionDeleteListener(this);
+		com.rhcloud.jop.formfactor.views.questions.FreeResponseQuestion freeResponseViewGroup = new com.rhcloud.jop.formfactor.views.questions.FreeResponseQuestion(this, false);
 		
 		freeResponseViewGroup.setData(question);
 		
@@ -147,9 +141,7 @@ public class CompleteActivity extends FormFactorFragmentActivity implements OnQu
 	{
 		question.Number = this.mQuestionsViewGroup.getChildCount() + 1;
 		
-		MultipleChoiceQuestion multipleChoiceViewGroup = new MultipleChoiceQuestion(this);
-		
-		multipleChoiceViewGroup.setOnQuestionDeleteListener(this);
+		MultipleChoiceQuestion multipleChoiceViewGroup = new MultipleChoiceQuestion(this, false);
 		
 		multipleChoiceViewGroup.setData(question);
 		
@@ -366,14 +358,9 @@ public class CompleteActivity extends FormFactorFragmentActivity implements OnQu
 		{
 			UnitOfWork unitOfWork = new UnitOfWork(FormFactorDB.getInstance(this));
 			FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
+			
 			try
 			{
-				EditText titleView = (EditText)this.findViewById(R.id.activity_complete_title);
-				this.mForm.Title = titleView.getText().toString();
-				
-				EditText descriptionView = (EditText)this.findViewById(R.id.activity_complete_description_full);
-				this.mForm.Description = descriptionView.getText().toString();
-				
 				this.mForm.Questions.clear();
 				
 				for(QuestionViewGroup question : this.mQuestions)
@@ -401,16 +388,9 @@ public class CompleteActivity extends FormFactorFragmentActivity implements OnQu
 	{
 		if(!this.mHasResumedState)
 		{
-			boolean isCreateNew = false;
-			
 			if(savedInstanceState == null)
 			{
 				savedInstanceState = this.getIntent().getExtras();
-			}
-			
-			if(savedInstanceState != null)
-			{
-				isCreateNew = savedInstanceState.containsKey(BundleKeys.CreateNew);
 			}
 			
 			UnitOfWork unitOfWork = new UnitOfWork(FormFactorDB.getInstance(this));
@@ -441,80 +421,33 @@ public class CompleteActivity extends FormFactorFragmentActivity implements OnQu
 				
 				if(savedInstanceState != null)
 				{
-					if(!savedInstanceState.containsKey(BundleKeys.CreateNew))
+					if(savedInstanceState.containsKey(BundleKeys.CompleteFormID))
 					{
-						if(savedInstanceState.containsKey(BundleKeys.CreateFormID))
-						{
-							long formID = savedInstanceState.getLong(BundleKeys.CreateFormID);
-							
-							try
-							{
-								FormService formService = new FormService(dataContext);
-								this.mForm = formService.GetFormByID(formID);
-							}
-							catch(Exception ex)
-							{
-								Log.e(TAG_NAME, ex.getMessage() + "\r\n" + ex.getStackTrace());
-							}
-							finally
-							{
-								
-							}
-						}
-					}
-				}
-				
-				FormService formService = new FormService(dataContext);
-				
-				if(this.mForm == null || isCreateNew)
-				{
-					try
-					{
-						if(mCurrentUser != null)
-						{
-							if(!isCreateNew && dataContext.GetFormRepository().GetCountByUser(this.mCurrentUser.ID) > 0)
-							{
-								List<Form> lastForms = formService.GetFormsByUserID(mCurrentUser.ID);
-								
-								if(!lastForms.isEmpty())
-								{
-									this.mForm = lastForms.get(0);
-								}
-							}
-							else
-							{
-								this.mForm = new Form();
-								this.mForm.UserID = mCurrentUser.ID;
-								this.mForm.Title = getResources().getString(R.string.default_new_form_title);
-
-								formService.CreateUpdateForm(mForm);
-							}
-						}
-					}
-					catch(Exception ex)
-					{
-						Log.e(TAG_NAME, ex.getMessage() + "\r\n" + ex.getStackTrace());
-					}
-					finally
-					{
+						long formID = savedInstanceState.getLong(BundleKeys.CompleteFormID);
 						
+						try
+						{
+							FormService formService = new FormService(dataContext);
+							this.mForm = formService.GetFormByID(formID);
+						}
+						catch(Exception ex)
+						{
+							Log.e(TAG_NAME, ex.getMessage() + "\r\n" + ex.getStackTrace());
+						}
+						finally
+						{
+							
+						}
 					}
-				}
-				else
-				{
-			        this.mForm = formService.GetFormByID(this.mForm.ID);
-					
-			        LinearLayout questions = (LinearLayout)this.findViewById(R.id.activity_complete_questions);
-			        questions.removeAllViews();
 				}
 			}
 			
 			if(this.mForm != null)
 			{
-				EditText titleView = (EditText)this.findViewById(R.id.activity_complete_title);
+				TextView titleView = (TextView)this.findViewById(R.id.activity_complete_title);
 				titleView.setText(this.mForm.Title);
 				
-				EditText descriptionView = (EditText)this.findViewById(R.id.activity_complete_description_full);
+				TextView descriptionView = (TextView)this.findViewById(R.id.activity_complete_description_full);
 				descriptionView.setText(this.mForm.Description);
 				
 				for(Question question : this.mForm.Questions)
@@ -541,39 +474,12 @@ public class CompleteActivity extends FormFactorFragmentActivity implements OnQu
 			}
 			else
 			{
-				EditText titleView = (EditText)this.findViewById(R.id.activity_complete_title);
+				TextView titleView = (TextView)this.findViewById(R.id.activity_complete_title);
 				titleView.setText("Oops, you are not a valid user..");
 			}
 			
 			this.mHasResumedState = true;
 		}
-	}
-
-	@Override
-	public void deleteQuestion(QuestionViewGroup questionView)
-	{		
-		Question question = questionView.getQuestion();
-		
-		LinearLayout questionsView = (LinearLayout)this.findViewById(R.id.activity_complete_questions);
-		
-		int size = this.mQuestions.size();
-		
-		for(int i = 0; i < size; i++)
-		{
-			if(question.ID == this.mQuestions.get(i).getQuestion().ID)
-			{
-				questionsView.removeViewAt(i);
-				this.mQuestions.remove(i);
-				break;
-			}
-		}
-		
-		UnitOfWork unitOfWork = new UnitOfWork(FormFactorDB.getInstance(this));
-		FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
-		
-		dataContext.GetQuestionRepository().DeleteByID(question.ID);
-		
-		this.setQuestionNumbers();
 	}
 	
 	public class FormUploader extends AsyncTask<Form, Integer, Void>

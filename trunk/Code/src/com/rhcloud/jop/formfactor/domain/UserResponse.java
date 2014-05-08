@@ -4,23 +4,17 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
 
-public class UserDrawResponses implements IJSONSerializable
+public class UserResponse implements IJSONSerializable
 {
-    @SerializedName("UserDrawResponses_ID")
+    @SerializedName("UserResponse_ID")
 	public long ID = 0;
     
-    @SerializedName("UserDrawResponses_UserID")
+    @SerializedName("UserResponse_UserID")
 	public long UserID = 0;
     
-    @SerializedName("UserOpenResponse_QuestionID")
+    @SerializedName("UserResponse_QuestionID")
 	public long QuestionID = 0;
     
-    @SerializedName("UserDrawResponses_Description")
-	public String Description = "";
-    
-    @SerializedName("UserDrawResponses_Image")
-	public byte[] Image = null;
-
 	@Override
 	public String Serialize()
 	{
@@ -32,12 +26,10 @@ public class UserDrawResponses implements IJSONSerializable
 	public void Read(String json)
 	{
 		Gson gson = new GsonBuilder().serializeNulls().create();
-		UserDrawResponses response = gson.fromJson(json, this.getClass());
+		UserResponse response = gson.fromJson(json, this.getClass());
 		
 		this.ID = response.ID;
 		this.UserID = response.UserID;
 		this.QuestionID = response.QuestionID;
-		this.Description = response.Description;
-		this.Image = response.Image;
 	}
 }

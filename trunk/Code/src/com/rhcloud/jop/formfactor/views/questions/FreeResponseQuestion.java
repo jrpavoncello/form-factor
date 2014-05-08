@@ -30,40 +30,40 @@ public class FreeResponseQuestion extends QuestionViewGroup implements OnMenuIte
 
 	private boolean mIsCreateMode = true;
 
-	public FreeResponseQuestion(Context context)
+	public FreeResponseQuestion(Context context, boolean isCreateMode)
 	{
 		super(context);
-
-		LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		inflater.inflate(R.layout.view_group_free_response, (LinearLayout)super.findViewById(R.id.question_response_section));
-
-		this.mResponseSection = (LinearLayout)this.findViewById(R.id.question_response_section);
-		this.mResponse = (EditText)this.findViewById(R.id.view_group_free_response_edit_text);
-		super.setOnClickListener(this);
+		this.setupLayout(isCreateMode);
 	}
 
-	public FreeResponseQuestion(Context context, AttributeSet attrs)
+	public FreeResponseQuestion(Context context, AttributeSet attrs, boolean isCreateMode)
 	{
 		super(context, attrs);
-
-		LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		inflater.inflate(R.layout.view_group_free_response, (LinearLayout)super.findViewById(R.id.question_response_section));
-		
-		this.mResponseSection = (LinearLayout)this.findViewById(R.id.question_response_section);
-		this.mResponse = (EditText)this.findViewById(R.id.view_group_free_response_edit_text);
-		super.setOnClickListener(this);
+		this.setupLayout(isCreateMode);
 	}
 
-	public FreeResponseQuestion(Context context, AttributeSet attrs, int defStyle)
+	public FreeResponseQuestion(Context context, AttributeSet attrs, int defStyle, boolean isCreateMode)
 	{
 		super(context, attrs, defStyle);
-
-		LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		this.setupLayout(isCreateMode);
+	}
+	
+	private void setupLayout(boolean isCreateMode)
+	{
+		LayoutInflater inflater = (LayoutInflater)this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		inflater.inflate(R.layout.view_group_free_response, (LinearLayout)super.findViewById(R.id.question_response_section));
 		
 		this.mResponseSection = (LinearLayout)this.findViewById(R.id.question_response_section);
 		this.mResponse = (EditText)this.findViewById(R.id.view_group_free_response_edit_text);
 		super.setOnClickListener(this);
+		
+		this.mIsCreateMode = isCreateMode;
+		
+		if(!isCreateMode)
+		{
+			View settingsButton = this.findViewById(R.id.question_overflow_button);
+			settingsButton.setVisibility(View.GONE);
+		}
 	}
 	
 	public int getMaxLength()
