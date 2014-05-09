@@ -33,7 +33,15 @@ public class FormListItemArrayAdapter extends ArrayAdapter<FormListItem>
 
         TextView tv = (TextView)convertView.findViewById(R.id.form_list_item_text);
         
-        tv.setText(mFormListItems[position].getItemText());
+        if(mFormListItems != null && mFormListItems.length > 0 && position < mFormListItems.length)
+        {
+        	FormListItem item = mFormListItems[position];
+        	
+        	if(item != null)
+        	{
+        		tv.setText(item.getItemText());
+        	}
+        }
     	
     	return convertView;
     }

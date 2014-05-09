@@ -47,7 +47,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -186,7 +185,7 @@ public class CompleteActivity extends FormFactorFragmentActivity implements Acti
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.create, menu);
+		getMenuInflater().inflate(R.menu.complete, menu);
 	    
 		return true;
 	}
@@ -196,7 +195,7 @@ public class CompleteActivity extends FormFactorFragmentActivity implements Acti
 		ImageButton collapseButton = (ImageButton)v;
 		ImageButton expandButton = (ImageButton)this.findViewById(R.id.activity_complete_description_expand);
 		
-		EditText description = (EditText)this.findViewById(R.id.activity_complete_description_full);
+		TextView description = (TextView)this.findViewById(R.id.activity_complete_description_full);
 		
 		description.setVisibility(View.GONE);
 		collapseButton.setVisibility(View.GONE);
@@ -208,7 +207,7 @@ public class CompleteActivity extends FormFactorFragmentActivity implements Acti
 		ImageButton expandButton = (ImageButton)v;
 		ImageButton collapseButton = (ImageButton)this.findViewById(R.id.activity_complete_description_collapse);
 		
-		EditText description = (EditText)this.findViewById(R.id.activity_complete_description_full);
+		TextView description = (TextView)this.findViewById(R.id.activity_complete_description_full);
 		
 		description.setVisibility(View.VISIBLE);
 		expandButton.setVisibility(View.GONE);
@@ -222,30 +221,15 @@ public class CompleteActivity extends FormFactorFragmentActivity implements Acti
 		
 		switch(id)
 		{
-			case R.id.menu_create_edit_question_save:
+			case R.id.menu_complete_edit_question_save:
 				this.mHasSavedState = false;
 				this.saveCurrentForm();
 				return true;
 				
-			case R.id.menu_create_edit_question_export:
+			case R.id.menu_complete_edit_question_export:
 				this.mHasSavedState = false;
 				this.saveCurrentForm();
 				this.exportCurrentForm();
-				return true;
-				
-			case R.id.menu_create_settings:
-				return true;
-				
-			case R.id.menu_create_edit_response_delete:
-				this.addMultipleChoice();
-				return true;
-				
-			case R.id.menu_complete_add_new_free_draw:
-				this.addFreeDraw();
-				return true;
-				
-			case R.id.menu_complete_add_new_free_response:
-				this.addFreeResponse();
 				return true;
 				
 			default:

@@ -85,7 +85,6 @@
 					android:id="@+id/activity_complete_description_full"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					android:textCursorDrawable="@null"
 					android:paddingLeft="10dp"
 					android:paddingRight="10dp"
 					android:background="@color/text_view_text_background" />

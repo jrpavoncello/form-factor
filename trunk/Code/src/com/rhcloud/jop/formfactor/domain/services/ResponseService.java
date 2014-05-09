@@ -10,6 +10,7 @@ import com.rhcloud.jop.formfactor.domain.repositories.IFreeResponseQuestionRepos
 import com.rhcloud.jop.formfactor.domain.repositories.ILogoRepository;
 import com.rhcloud.jop.formfactor.domain.repositories.IMultipleChoiceQuestionRepository;
 import com.rhcloud.jop.formfactor.domain.repositories.IQuestionRepository;
+import com.rhcloud.jop.formfactor.domain.repositories.IResponseRepository;
 
 public class ResponseService
 {
@@ -24,20 +25,19 @@ public class ResponseService
 	{
 		Result result = new Result();
 
-		I formRepo = DataContext.GetFormRepository();
-		IQuestionRepository questionRepo = DataContext.GetQuestionRepository();
-		
+		IResponseRepository formRepo = DataContext.GetResponseRepository();
+		/*
 		if(formResponse != null)
 		{
 			try
 			{
 				if(formResponse.ID == 0)
 				{
-					logoRepo.Add(formResponse);
+					formRepo.Add(formResponse);
 				}
 				else
 				{
-					logoRepo.Update(formResponse);
+					formRepo.Update(formResponse);
 				}
 			}
 			catch(Exception ex)
@@ -71,7 +71,7 @@ public class ResponseService
 		{
 			result.Success = false;
 			result.Messages.add("No form to create.");
-		}
+		}*/
 		
 		return result;
 	}

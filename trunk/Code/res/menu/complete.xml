@@ -11,32 +11,4 @@
 		android:title="@string/menu_complete_edit_export"
 		android:icon="@drawable/ic_action_add_to_queue_large"
 		android:showAsAction="always" />
-
-    <item android:id="@+id/menu_complete_edit_question_new"
-		android:title="@string/menu_complete_add_new"
-		android:icon="@drawable/ic_action_new"
-		android:showAsAction="always" >
-
-	  	<menu>
-		    <item android:id="@+id/menu_complete_edit_response_delete"
-				android:title="@string/menu_complete_add_new_multiple_choice"
-				android:icon="@drawable/ic_action_multiple_choice"
-				android:showAsAction="never" />
-		    
-		    <item android:id="@+id/menu_complete_add_new_free_response"
-				android:title="@string/menu_complete_add_new_free_response"
-				android:icon="@drawable/ic_action_free_response"
-				android:showAsAction="never" />
-		
-		    <item android:id="@+id/menu_complete_add_new_free_draw"
-				android:title="@string/menu_complete_add_new_free_draw"
-				android:icon="@drawable/ic_action_free_draw"
-				android:showAsAction="never" />
-		</menu>
-	</item>
-
-    <item android:id="@+id/menu_complete_settings"
-		android:title="@string/settings_title"
-		android:icon="@drawable/ic_action_overflow"
-		android:showAsAction="never" />
 </menu>

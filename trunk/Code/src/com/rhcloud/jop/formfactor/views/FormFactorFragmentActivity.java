@@ -5,6 +5,7 @@ import com.rhcloud.jop.formfactor.domain.OpenImportActionType;
 import com.rhcloud.jop.formfactor.sqlite.FormFactorDB;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
@@ -126,14 +127,7 @@ public class FormFactorFragmentActivity extends FragmentActivity
 	}
 
 	protected void selectItem(DrawerItem item, int position)
-	{
-		/*
-        <item>Home</item>
-        <item>New</item>
-        <item>Open Local</item>
-        <item>Import</item>
-        <item>Log Off</item>*/
-		
+	{		
 		switch (position) {
 		case 0: // Home
 		{
@@ -142,7 +136,25 @@ public class FormFactorFragmentActivity extends FragmentActivity
 
 			break;
 		}
-		case 1: // New
+		case 1: // Complete
+		{
+			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+			
+			if(prefs.contains(BundleKeys.CompleteFormID))
+			{
+				Intent intent = new Intent(this.mActivity, CompleteActivity.class);
+				this.startActivity(intent);
+			}
+			else
+			{
+				Intent intent = new Intent(this.mActivity, OpenImportFormActivity.class);
+				intent.putExtra(BundleKeys.OpenFormActionID, OpenImportActionType.ImportComplete.GetIndex());
+				this.startActivity(intent);
+			}
+
+			break;
+		}
+		case 2: // New
 		{
 			Intent intent = new Intent(this.mActivity, CreateActivity.class);
 			intent.putExtra(BundleKeys.CreateNew, true);
@@ -150,7 +162,7 @@ public class FormFactorFragmentActivity extends FragmentActivity
 
 			break;
 		}
-		case 2: // Open Local
+		case 3: // Open Local
 		{
 			Intent intent = new Intent(this.mActivity, OpenImportFormActivity.class);
 			intent.putExtra(BundleKeys.OpenFormActionID, OpenImportActionType.OpenCreate.GetIndex());
@@ -158,7 +170,7 @@ public class FormFactorFragmentActivity extends FragmentActivity
 
 			break;
 		}
-		case 3: // Import
+		case 4: // Import
 		{
 			Intent intent = new Intent(this.mActivity, OpenImportFormActivity.class);
 			intent.putExtra(BundleKeys.OpenFormActionID, OpenImportActionType.ImportCreate.GetIndex());
@@ -166,7 +178,7 @@ public class FormFactorFragmentActivity extends FragmentActivity
 
 			break;
 		}
-		case 4: // Log off
+		case 5: // Log off
 		{
 			Intent intent = new Intent(this.mActivity, MainActivity.class);
 			intent.putExtra(BundleKeys.LoggedOff, true);

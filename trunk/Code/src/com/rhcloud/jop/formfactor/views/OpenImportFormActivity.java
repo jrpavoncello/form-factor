@@ -60,7 +60,7 @@ public class OpenImportFormActivity extends FormFactorFragmentActivity implement
 	private ListView mFormList;
 	private User mCurrentUser;
 	private final String TAG_NAME = "com.rhcloud.jop.formfactor.views.OpenImportFormActivity";
-	private FormListItem[] mFormItems;
+	private List<FormListItem> mFormItems;
 	private OpenImportActionType mActionType;
 	private View mDownloadStatusView;
 	private TextView mDownloadStatusMessageView;
@@ -87,13 +87,13 @@ public class OpenImportFormActivity extends FormFactorFragmentActivity implement
 		
         this.setTitle(this.getResources().getString(R.string.drawer_menu_title));
 		
-        mViewPager = (ViewPager) findViewById(R.id.pager);
-        mViewPager.setAdapter(new FormFactorPagerAdapter(getSupportFragmentManager(), this));
+        this.mViewPager = (ViewPager) findViewById(R.id.pager);
+        this.mViewPager.setAdapter(new FormFactorPagerAdapter(getSupportFragmentManager(), this));
 
-		mDownloadStatusMessageView = (TextView)findViewById(R.id.activity_open_import_download_status_message);
-		mDownloadStatusView = findViewById(R.id.activity_open_import_download_status);
+        this.mDownloadStatusMessageView = (TextView)findViewById(R.id.activity_open_import_download_status_message);
+		this.mDownloadStatusView = findViewById(R.id.activity_open_import_download_status);
         
-        mFormList = (ListView)this.findViewById((R.id.activity_open_import_items));
+		this.mFormList = (ListView)this.findViewById((R.id.activity_open_import_items));
 
         this.mFormFactorDB = FormFactorDB.getInstance(this);
         
@@ -120,8 +120,8 @@ public class OpenImportFormActivity extends FormFactorFragmentActivity implement
 			}
 		}
 		
-		mDownloadLocation = (EditText)this.findViewById(R.id.activity_open_import_location);
-		mDownloadLocation.setOnKeyListener(new OnKeyListener()
+		this.mDownloadLocation = (EditText)this.findViewById(R.id.activity_open_import_location);
+		this.mDownloadLocation.setOnKeyListener(new OnKeyListener()
 		{
 		    public boolean onKey(View v, int keyCode, KeyEvent event)
 		    {
@@ -145,19 +145,25 @@ public class OpenImportFormActivity extends FormFactorFragmentActivity implement
 		
 		if(this.mActionType == OpenImportActionType.OpenCreate)
 		{
-	        mFormList.setAdapter(new FormListItemArrayAdapter(this, R.layout.form_list_item, gatherLocalForms()));
-	        mFormList.setOnItemClickListener(this);
-	        mFormList.bringToFront();
+			List<FormListItem> items = gatherLocalForms();
+			FormListItem[] listItems = new FormListItem[items.size()];
+			
+	        this.mFormList.setAdapter(new FormListItemArrayAdapter(this, R.layout.form_list_item, items.toArray(listItems)));
+	        this.mFormList.setOnItemClickListener(this);
+	        this.mFormList.bringToFront();
 		}
 		else if(this.mActionType == OpenImportActionType.OpenComplete)
 		{
-	        mFormList.setAdapter(new FormListItemArrayAdapter(this, R.layout.form_list_item, gatherLocalForms()));
-	        mFormList.setOnItemClickListener(this);
-	        mFormList.bringToFront();
+			List<FormListItem> items = gatherLocalForms();
+			FormListItem[] listItems = new FormListItem[items.size()];
+			
+			this.mFormList.setAdapter(new FormListItemArrayAdapter(this, R.layout.form_list_item, items.toArray(listItems)));
+			this.mFormList.setOnItemClickListener(this);
+			this.mFormList.bringToFront();
 		}
 		else if(this.mActionType == OpenImportActionType.ImportCreate)
 		{
-			mDownloadLocation.setVisibility(View.VISIBLE);
+			this.mDownloadLocation.setVisibility(View.VISIBLE);
 			showProgress(true);
 			
 			if(this.mIntentURL != null)
@@ -173,9 +179,15 @@ public class OpenImportFormActivity extends FormFactorFragmentActivity implement
 		{
 			mDownloadLocation.setVisibility(View.VISIBLE);
 			showProgress(true);
-			mDownloadStatusMessageView.setText(R.string.activity_open_import_download_status_message);
 			
-			this.executeRetriever(new String[] { });
+			if(this.mIntentURL != null)
+			{
+				this.executeRetriever(new String[] { this.mIntentURL });
+			}
+			else
+			{
+				this.executeRetriever(new String[] { });
+			}
 		}
 	}
 	
@@ -198,7 +210,7 @@ public class OpenImportFormActivity extends FormFactorFragmentActivity implement
 		this.mRetriever.execute(params);
 	}
 	
-	private FormListItem[] gatherLocalForms()
+	private List<FormListItem> gatherLocalForms()
 	{
 		if(this.mCurrentUser != null)	
 		{
@@ -225,22 +237,22 @@ public class OpenImportFormActivity extends FormFactorFragmentActivity implement
 				
 			}
 			
-	        mFormItems = convertToListItems(localForms);
+			this.mFormItems = convertToListItems(localForms);
 		}
         
         return mFormItems;
 	}
 	
-	private FormListItem[] convertToListItems(List<Form> forms)
+	private List<FormListItem> convertToListItems(List<Form> forms)
 	{
 		int size = forms.size();
-        FormListItem[] formItems = new FormListItem[size];
+        List<FormListItem> formItems = new ArrayList<FormListItem>(size);
 		
 		for(int i = 0; i < size; i++)
 		{
 			Form form = forms.get(i);
         	FormListItem item = new FormListItem(form);
-        	formItems[i] = item;
+        	formItems.add(item);
 		}
 		
 		return formItems;
@@ -249,7 +261,16 @@ public class OpenImportFormActivity extends FormFactorFragmentActivity implement
 	private void populateList(List<Form> forms)
 	{
 		this.mFormItems = this.convertToListItems(forms);
-		mFormList.setAdapter(new FormListItemArrayAdapter(this, R.layout.form_list_item, this.mFormItems));
+		
+		if(mActionType == OpenImportActionType.ImportComplete)
+		{
+			List<FormListItem> items = gatherLocalForms();
+			this.mFormItems.addAll(items);
+		}
+		
+		FormListItem[] listItems = new FormListItem[this.mFormItems.size()];
+		
+		mFormList.setAdapter(new FormListItemArrayAdapter(this, R.layout.form_list_item, this.mFormItems.toArray(listItems)));
         mFormList.setOnItemClickListener(this);
         mFormList.bringToFront();
 	}
@@ -278,7 +299,7 @@ public class OpenImportFormActivity extends FormFactorFragmentActivity implement
 	{
 		if(this.mActionType == OpenImportActionType.OpenCreate)
 		{
-			FormListItem item = this.mFormItems[position];
+			FormListItem item = this.mFormItems.get(position);
 			Form form = item.mForm;
 
 			Intent intent = new Intent(this, CreateActivity.class);
@@ -287,11 +308,16 @@ public class OpenImportFormActivity extends FormFactorFragmentActivity implement
 		}
 		else if(this.mActionType == OpenImportActionType.OpenComplete)
 		{
-			
+			FormListItem item = this.mFormItems.get(position);
+			Form form = item.mForm;
+
+			Intent intent = new Intent(this, CompleteActivity.class);
+			intent.putExtra(BundleKeys.CompleteFormID, form.ID);
+			this.startActivity(intent);
 		}
 		else if(this.mActionType == OpenImportActionType.ImportCreate)
 		{
-			FormListItem item = this.mFormItems[position];
+			FormListItem item = this.mFormItems.get(position);
 			Form form = item.mForm;
 
 			UnitOfWork unitOfWork = new UnitOfWork(this.mFormFactorDB);
@@ -307,7 +333,36 @@ public class OpenImportFormActivity extends FormFactorFragmentActivity implement
 		}
 		else if(this.mActionType == OpenImportActionType.ImportComplete)
 		{
+			FormListItem item = this.mFormItems.get(position);
+			Form form = item.mForm;
+
+			UnitOfWork unitOfWork = new UnitOfWork(this.mFormFactorDB);
+			FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
 			
+			FormService formService = new FormService(dataContext);
+			
+			formService.CreateUpdateForm(form, true);
+
+			Intent intent = new Intent(this, CompleteActivity.class);
+			intent.putExtra(BundleKeys.CompleteFormID, form.ID);
+			this.startActivity(intent);
+		}
+	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle bundle)
+	{
+		super.onSaveInstanceState(bundle);
+		
+		bundle.putLong(BundleKeys.OpenFormActionID, this.mActionType.GetIndex());
+	}
+	
+	@Override
+	public void onRestoreInstanceState(Bundle bundle)
+	{
+		if(bundle.containsKey(BundleKeys.OpenFormActionID))
+		{
+			this.mActionType = OpenImportActionType.GetByIndex(bundle.getLong(BundleKeys.OpenFormActionID));
 		}
 	}
 

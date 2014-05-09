@@ -52,6 +52,14 @@
                 android:value="com.rhcloud.jop.formfactor.views.MainMenuActivity" />
         </activity>
         <activity
+            android:name="com.rhcloud.jop.formfactor.views.CompleteActivity"
+            android:label="@string/activity_create_title"
+            android:parentActivityName="com.rhcloud.jop.formfactor.views.MainMenuActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.rhcloud.jop.formfactor.views.MainMenuActivity" />
+        </activity>
+        <activity
             android:name="com.rhcloud.jop.formfactor.views.questions.MultipleChoiceQuestionEditActivity"
             android:label="@string/activity_multiple_choice_settings_title"
             android:parentActivityName="com.rhcloud.jop.formfactor.views.CreateActivity" >

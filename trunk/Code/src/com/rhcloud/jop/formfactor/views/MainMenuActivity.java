@@ -1,6 +1,7 @@
 package com.rhcloud.jop.formfactor.views;
 
 import com.rhcloud.jop.formfactor.R;
+import com.rhcloud.jop.formfactor.domain.OpenImportActionType;
 import com.rhcloud.jop.formfactor.domain.User;
 import com.rhcloud.jop.formfactor.sqlite.FormFactorDB;
 import com.rhcloud.jop.formfactor.views.MainMenuActivityFragment.DrawerListener;
@@ -9,8 +10,10 @@ import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -120,8 +123,19 @@ public class MainMenuActivity extends FormFactorFragmentActivity implements IDat
 	{
 		if(mActivity != null)
 		{
-			Intent intent = new Intent(mActivity, CreateActivity.class);
-			mActivity.startActivity(intent);
+			SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mActivity.getBaseContext());
+			
+			if(pref.contains(BundleKeys.CompleteFormID))
+			{
+				Intent intent = new Intent(mActivity, CompleteActivity.class);
+				mActivity.startActivity(intent);
+			}
+			else
+			{
+				Intent intent = new Intent(mActivity, OpenImportFormActivity.class);
+				intent.putExtra(BundleKeys.OpenFormActionID, OpenImportActionType.ImportComplete.GetIndex());
+				mActivity.startActivity(intent);
+			}
 		}
 	}
 	
