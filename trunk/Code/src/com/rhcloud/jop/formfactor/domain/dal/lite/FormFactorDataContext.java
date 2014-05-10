@@ -1,10 +1,7 @@
 package com.rhcloud.jop.formfactor.domain.dal.lite;
 
-import java.lang.reflect.InvocationTargetException;
-
 import com.rhcloud.jop.formfactor.domain.IFormFactorDataContext;
 import com.rhcloud.jop.formfactor.domain.IUnitOfWork;
-import com.rhcloud.jop.formfactor.domain.Question;
 import com.rhcloud.jop.formfactor.domain.UnitOfWork;
 import com.rhcloud.jop.formfactor.domain.repositories.*;
 import com.rhcloud.jop.formfactor.domain.repositories.lite.*;
@@ -18,24 +15,33 @@ public class FormFactorDataContext implements IFormFactorDataContext
 	private IMultipleChoiceQuestionRepository MultipleChoiceQuestionRepository;
 	private IFreeResponseQuestionRepository FreeResponseQuestionRepository;
 	private IFreeDrawQuestionRepository FreeDrawQuestionRepository;
-	private IResponseRepository ResponseRepo;
+	private IUserResponseRepository ResponseRepo;
 	private IResponseChoiceRepository ResponseChoiceRepo;
 	private ILogoRepository LogoRepo;
 	private IUserRepository UserRepo;
+	private IQuestionResponseRepository QuestionResponseRepository;
+	private IMultipleChoiceResponseRepository MultipleChoiceResponseRepository;
+	private IFreeResponseResponseRepository FreeResponseResponseRepository;
+	private IFreeDrawResponseRepository FreeDrawResponseRepository;
 	
 	public FormFactorDataContext(IUnitOfWork unitOfWork)
 	{
 		this.UnitOfWork = unitOfWork;
 		UnitOfWork unit = (UnitOfWork)unitOfWork;
+		
 		this.QuestionRepo = new QuestionRepository(unit);
 		this.MultipleChoiceQuestionRepository = new MultipleChoiceQuestionRepository(unit);
 		this.FreeResponseQuestionRepository = new FreeResponseQuestionRepository(unit);
 		this.FreeDrawQuestionRepository = new FreeDrawQuestionRepository(unit);
 		this.FormRepo = new FormRepository(unit);
-		this.ResponseRepo = new ResponseRepository(unit);
+		this.ResponseRepo = new UserResponseRepository(unit);
 		this.ResponseChoiceRepo = new ResponseChoiceRepository(unit);
 		this.LogoRepo = new LogoRepository(unit);
 		this.UserRepo = new UserRepository(unit);
+		this.QuestionResponseRepository = new QuestionResponseRepository(unit);
+		this.MultipleChoiceResponseRepository = new MultipleChoiceResponseRepository(unit);
+		this.FreeResponseResponseRepository = new FreeResponseResponseRepository(unit);
+		this.FreeDrawResponseRepository = new FreeDrawResponseRepository(unit);
 	}
 
 	@Override
@@ -51,7 +57,7 @@ public class FormFactorDataContext implements IFormFactorDataContext
 	}
 
 	@Override
-	public IResponseRepository GetResponseRepository()
+	public IUserResponseRepository GetResponseRepository()
 	{
 		return this.ResponseRepo;
 	}
@@ -96,5 +102,29 @@ public class FormFactorDataContext implements IFormFactorDataContext
 	public IFreeDrawQuestionRepository GetFreeDrawQuestionRepository()
 	{
 		return this.FreeDrawQuestionRepository;
+	}
+
+	@Override
+	public IQuestionResponseRepository GetQuestionResponseRepository()
+	{
+		return this.QuestionResponseRepository;
+	}
+
+	@Override
+	public IMultipleChoiceResponseRepository GetMultipleChoiceResponseRepository()
+	{
+		return this.MultipleChoiceResponseRepository;
+	}
+
+	@Override
+	public IFreeResponseResponseRepository GetFreeResponseResponseRepository()
+	{
+		return this.FreeResponseResponseRepository;
+	}
+
+	@Override
+	public IFreeDrawResponseRepository GetFreeDrawResponseRepository()
+	{
+		return this.FreeDrawResponseRepository;
 	}
 }

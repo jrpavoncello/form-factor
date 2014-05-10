@@ -16,7 +16,7 @@ public class LogoRepository implements ILogoRepository
 {
 	private SQLiteDatabase liteDB;
 	private IUnitOfWork unitOfWork;
-	private final String TAG_NAME = "com.rhcloud.jop.formfactor.domain.dal.repositories.LogoRepository";
+	private final String TAG_NAME = "com.rhcloud.jop.formfactor.domain.repositories.lite.LogoRepository";
 	private FormFactorTables tables = FormFactorTables.getInstance();
 	
 	public LogoRepository(UnitOfWork unitOfWork)

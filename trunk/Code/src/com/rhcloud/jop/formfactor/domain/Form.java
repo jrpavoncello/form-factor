@@ -9,25 +9,25 @@ import com.google.gson.annotations.SerializedName;
 
 public class Form implements IJSONSerializable
 {
-    @SerializedName("Form_ID")
+    @SerializedName("ID")
 	public long ID = 0;
     
-    @SerializedName("Form_UserID")
+    @SerializedName("UserID")
 	public long UserID = 0;
     
-    @SerializedName("Form_Title")
+    @SerializedName("Title")
 	public String Title = "";
     
-    @SerializedName("Form_Description")
+    @SerializedName("Description")
 	public String Description = "";
     
-    @SerializedName("Form_Logo")
+    @SerializedName("Logo")
 	public Logo Logo = new Logo();
     
-    @SerializedName("Form_ExternalID")
+    @SerializedName("ExternalID")
 	public long ExternalID = 0;
 
-    @SerializedName("Form_Questions")
+    @SerializedName("Questions")
 	public List<Question> Questions = new ArrayList<Question>();
 
 	@Override

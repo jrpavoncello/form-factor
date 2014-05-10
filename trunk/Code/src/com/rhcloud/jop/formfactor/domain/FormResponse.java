@@ -9,13 +9,13 @@ import com.google.gson.annotations.SerializedName;
 
 public class FormResponse implements IJSONSerializable
 {
-    @SerializedName("FormResponse_ID")
+    @SerializedName("ID")
 	public long ID = 0;
     
-    @SerializedName("FormResponse_UserID")
+    @SerializedName("UserID")
 	public long UserID = 0;
     
-    @SerializedName("FormResponse_UserResponses")
+    @SerializedName("UserResponses")
 	public List<UserResponse> UserResponses = new ArrayList<UserResponse>();
     
 	@Override

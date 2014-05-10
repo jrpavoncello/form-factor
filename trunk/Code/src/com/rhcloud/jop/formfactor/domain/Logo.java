@@ -6,13 +6,13 @@ import com.google.gson.annotations.SerializedName;
 
 public class Logo implements IJSONSerializable
 {
-    @SerializedName("Logo_ID")
+    @SerializedName("ID")
 	public long ID = 0;
     
-    @SerializedName("Logo_Image")
+    @SerializedName("Image")
 	public byte[] Image = null;
     
-    @SerializedName("Logo_Description")
+    @SerializedName("Description")
 	public String Description = "";
 
 	@Override

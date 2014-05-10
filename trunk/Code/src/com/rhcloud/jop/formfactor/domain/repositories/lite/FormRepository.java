@@ -18,7 +18,7 @@ public class FormRepository implements IFormRepository
 {
 	private SQLiteDatabase liteDB;
 	private UnitOfWork unitOfWork;
-	private final String TAG_NAME = "com.rhcloud.jop.formfactor.domain.dal.repositories.FormRepository";
+	private final String TAG_NAME = "com.rhcloud.jop.formfactor.domain.repositories.lite.FormRepository";
 	private FormFactorTables tables = FormFactorTables.getInstance();
 	
 	public FormRepository(UnitOfWork unitOfWork)
@@ -138,7 +138,7 @@ public class FormRepository implements IFormRepository
 	@Override
 	public Form GetByID(long ID)
 	{
-		Form form = new Form();
+		Form form = null;
 
 		try
 		{
@@ -152,6 +152,7 @@ public class FormRepository implements IFormRepository
 			
 			if(cursor.moveToFirst())
 			{
+				form = new Form();
 				form.ID = cursor.getInt(0);
 				form.UserID = cursor.getInt(tables.FormsContract.UserID.Index);
 				form.Title = cursor.getString(tables.FormsContract.Title.Index);

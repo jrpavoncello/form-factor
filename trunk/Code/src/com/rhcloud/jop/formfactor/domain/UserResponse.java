@@ -1,19 +1,22 @@
 package com.rhcloud.jop.formfactor.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
 
 public class UserResponse implements IJSONSerializable
 {
-    @SerializedName("UserResponse_ID")
+    @SerializedName("ID")
 	public long ID = 0;
     
-    @SerializedName("UserResponse_UserID")
+    @SerializedName("UserID")
 	public long UserID = 0;
     
-    @SerializedName("UserResponse_QuestionID")
-	public long QuestionID = 0;
+    @SerializedName("QuestionResponses")
+    public List<QuestionResponse> QuestionResponses = new ArrayList<QuestionResponse>();
     
 	@Override
 	public String Serialize()
@@ -30,6 +33,6 @@ public class UserResponse implements IJSONSerializable
 		
 		this.ID = response.ID;
 		this.UserID = response.UserID;
-		this.QuestionID = response.QuestionID;
+		this.QuestionResponses = response.QuestionResponses;
 	}
 }

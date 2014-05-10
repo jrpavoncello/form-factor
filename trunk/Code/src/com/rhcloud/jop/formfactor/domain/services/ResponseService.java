@@ -10,7 +10,7 @@ import com.rhcloud.jop.formfactor.domain.repositories.IFreeResponseQuestionRepos
 import com.rhcloud.jop.formfactor.domain.repositories.ILogoRepository;
 import com.rhcloud.jop.formfactor.domain.repositories.IMultipleChoiceQuestionRepository;
 import com.rhcloud.jop.formfactor.domain.repositories.IQuestionRepository;
-import com.rhcloud.jop.formfactor.domain.repositories.IResponseRepository;
+import com.rhcloud.jop.formfactor.domain.repositories.IUserResponseRepository;
 
 public class ResponseService
 {
@@ -25,7 +25,10 @@ public class ResponseService
 	{
 		Result result = new Result();
 
-		IResponseRepository formRepo = DataContext.GetResponseRepository();
+		IUserResponseRepository formRepo = DataContext.GetResponseRepository();
+		
+		
+		
 		/*
 		if(formResponse != null)
 		{

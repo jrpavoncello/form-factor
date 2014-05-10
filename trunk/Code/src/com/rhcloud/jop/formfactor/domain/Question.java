@@ -6,22 +6,22 @@ import com.google.gson.annotations.SerializedName;
 
 public class Question implements IJSONSerializable
 {
-    @SerializedName("Question_ID")
+    @SerializedName("ID")
 	public long ID = 0;
     
-    @SerializedName("Question_FormID")
+    @SerializedName("FormID")
 	public long FormID = 0;
     
-    @SerializedName("Question_Number")
+    @SerializedName("Number")
 	public int Number = 0;
     
-    @SerializedName("Question_Type")
+    @SerializedName("Type")
 	public QuestionType Type = QuestionType.None;
     
-    @SerializedName("Question_Question")
+    @SerializedName("Question")
 	public String Question = "";
     
-    @SerializedName("Question_Image")
+    @SerializedName("Image")
 	public byte[] Image = null;
 
 	@Override

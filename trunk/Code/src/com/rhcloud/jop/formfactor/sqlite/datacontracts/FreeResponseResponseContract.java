@@ -2,19 +2,17 @@ package com.rhcloud.jop.formfactor.sqlite.datacontracts;
 
 import com.rhcloud.jop.formfactor.sqlite.datacontracts.types.BaseColumn;
 
-public final class UserFreeResponsesContract extends BaseTable
+public final class FreeResponseResponseContract extends BaseTable
 {
-	public final String TABLE_NAME = "tUserFreeResponses";
+	public final String TABLE_NAME = "tFreeResponseResponse";
 
-	public BaseColumn UserID;
-	public BaseColumn QuestionID;
+	public BaseColumn QuestionResponseID;
 	public BaseColumn Response;
-
+	
 	@Override
 	protected void InitTables()
 	{
-		UserID = new BaseColumn("iUserID", BaseColumn.IntegerType);
-		QuestionID = new BaseColumn("iQuestionID", BaseColumn.IntegerType);
+		QuestionResponseID = new BaseColumn("iQuestionResponseID", BaseColumn.IntegerType);
 		Response = new BaseColumn("sResponse", BaseColumn.TextType);
 	}
 	
@@ -26,9 +24,8 @@ public final class UserFreeResponsesContract extends BaseTable
 	
 	@Override
 	protected void AddColumns()
-	{		
-		super.AddColumnCreate(UserID);
-		super.AddColumnCreate(QuestionID);
+	{
+		super.AddColumnCreate(QuestionResponseID);
 		super.AddColumnCreate(Response);
 	}
 }

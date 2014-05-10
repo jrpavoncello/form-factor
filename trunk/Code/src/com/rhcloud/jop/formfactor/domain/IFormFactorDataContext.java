@@ -5,7 +5,7 @@ import com.rhcloud.jop.formfactor.domain.repositories.*;
 public interface IFormFactorDataContext
 {
 	public IFormRepository GetFormRepository();
-	public IResponseRepository GetResponseRepository();
+	public IUserResponseRepository GetResponseRepository();
 	public IUnitOfWork GetUnitOfWork();
 	public ILogoRepository GetLogoRepository();
 	public IUserRepository GetUserRepository();
@@ -14,4 +14,8 @@ public interface IFormFactorDataContext
 	public IFreeResponseQuestionRepository GetFreeResponseQuestionRepository();
 	public IResponseChoiceRepository GetResponseChoiceRepository();
 	public IFreeDrawQuestionRepository GetFreeDrawQuestionRepository();
+	public IQuestionResponseRepository GetQuestionResponseRepository();
+	public IMultipleChoiceResponseRepository GetMultipleChoiceResponseRepository();
+	public IFreeResponseResponseRepository GetFreeResponseResponseRepository();
+	public IFreeDrawResponseRepository GetFreeDrawResponseRepository();
 }

@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class FreeDrawQuestion extends Question implements IJSONSerializable
 {
-    @SerializedName("FreeDrawQuestion_FreeDrawQuestionID")
+    @SerializedName("FreeDrawQuestionID")
 	public long FreeDrawQuestionID = 0;
 
 	@Override

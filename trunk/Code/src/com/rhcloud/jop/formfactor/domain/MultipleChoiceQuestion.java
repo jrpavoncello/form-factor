@@ -9,16 +9,16 @@ import com.google.gson.annotations.SerializedName;
 
 public class MultipleChoiceQuestion extends Question implements IJSONSerializable
 {
-    @SerializedName("UserDrawResponses_MultipleChoiceQuestionID")
+    @SerializedName("MultipleChoiceQuestionID")
 	public long MultipleChoiceQuestionID = 0;
     
-    @SerializedName("UserDrawResponses_MinResponses")
+    @SerializedName("MinResponses")
 	public int MinResponses = 0;
     
-    @SerializedName("UserDrawResponses_MaxResponses")
+    @SerializedName("MaxResponses")
 	public int MaxResponses = 0;
 
-    @SerializedName("UserDrawResponses_ResponseChoices")
+    @SerializedName("ResponseChoices")
 	public List<ResponseChoice> ResponseChoices = new ArrayList<ResponseChoice>();
 
 	@Override

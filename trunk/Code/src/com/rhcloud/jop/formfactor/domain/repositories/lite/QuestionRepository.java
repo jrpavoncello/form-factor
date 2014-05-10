@@ -19,7 +19,7 @@ public class QuestionRepository implements IQuestionRepository
 {
 	protected SQLiteDatabase liteDB;
 	protected UnitOfWork unitOfWork;
-	private final String TAG_NAME = "com.rhcloud.jop.formfactor.domain.dal.repositories.QuestionRepository";
+	private final String TAG_NAME = "com.rhcloud.jop.formfactor.domain.repositories.lite.QuestionRepository";
 	private FormFactorTables tables = FormFactorTables.getInstance();
 	
 	public QuestionRepository(UnitOfWork unitOfWork)
@@ -178,9 +178,7 @@ public class QuestionRepository implements IQuestionRepository
 		Question question = null;
 		
 		try
-		{
-			question = new Question();
-			
+		{			
 			this.unitOfWork.BeginTransaction();
 			
 			String whereClause = " WHERE " + tables.QuestionContract._ID + " = " + ID;
@@ -191,6 +189,7 @@ public class QuestionRepository implements IQuestionRepository
 			
 			if(cursor.moveToFirst())
 			{
+				question = new Question();
 				question.ID = cursor.getInt(0);
 				question.Question = cursor.getString(tables.QuestionContract.Question.Index);
 				question.Number = cursor.getInt(tables.QuestionContract.Number.Index);

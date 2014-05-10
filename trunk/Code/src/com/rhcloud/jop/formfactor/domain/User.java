@@ -8,19 +8,19 @@ import android.os.Parcelable;
 
 public class User implements IJSONSerializable
 {
-    @SerializedName("User_ID")
+    @SerializedName("ID")
 	public long ID = 0;
     
-    @SerializedName("User_Username")
+    @SerializedName("Username")
 	public String Username = "";
     
-    @SerializedName("User_Email")
+    @SerializedName("Email")
 	public String Email = "";
     
-    @SerializedName("User_Password")
+    @SerializedName("Password")
 	public char[] Password = null;
     
-    @SerializedName("User_IsDefault")
+    @SerializedName("IsDefault")
 	public boolean IsDefault = false;
 
 	@Override

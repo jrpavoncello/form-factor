@@ -6,13 +6,13 @@ import com.google.gson.annotations.SerializedName;
 
 public class ResponseChoice implements IJSONSerializable
 {
-    @SerializedName("ResponseChoice_ID")
+    @SerializedName("ID")
 	public long ID = 0;
     
-    @SerializedName("ResponseChoice_QuestionID")
+    @SerializedName("QuestionID")
 	public long QuestionID = 0;
     
-    @SerializedName("ResponseChoice_Choice")
+    @SerializedName("Choice")
 	public String Choice = "";
 
 	@Override

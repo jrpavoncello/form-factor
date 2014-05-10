@@ -19,20 +19,22 @@ public final class FormFactorTables
 	public final BaseTable[] GetAllTables()
 	{
 		return new BaseTable[]{ 
-				FormsContract, 
-				FormsQuestionsXRefContract, 
-				LogoContract, 
-				QuestionContract, 
-				FreeResponseQuestionContract, 
-				FreeDrawQuestionContract, 
-				MultipleChoiceQuestionContract, 
-				QuestionTypeContract, 
-				ResponseChoicesContract, 
-				UserChoiceResponsesContract, 
-				UserDrawResponsesContract, 
-				UserOpenResponsesContract, 
-				UserContract, 
-				UserActivityTypeContract };
+				FormsContract,
+				FormsQuestionsXRefContract,
+				LogoContract,
+				QuestionContract,
+				FreeResponseQuestionContract,
+				FreeDrawQuestionContract,
+				MultipleChoiceQuestionContract,
+				QuestionTypeContract,
+				QuestionResponseContract,
+				ResponseChoicesContract,
+				FreeDrawResponseContract,
+				FreeResponseResponseContract,
+				MultipleChoiceResponseContract,
+				UserContract,
+				UserActivityTypeContract,
+				UserResponseContract };
 	}
 	
     public final FormsContract FormsContract = new FormsContract();
@@ -43,10 +45,12 @@ public final class FormFactorTables
     public final FreeDrawQuestionContract FreeDrawQuestionContract = new FreeDrawQuestionContract();
     public final MultipleChoiceQuestionContract MultipleChoiceQuestionContract = new MultipleChoiceQuestionContract();
     public final QuestionTypeContract QuestionTypeContract = new QuestionTypeContract();
+    public final QuestionResponseContract QuestionResponseContract = new QuestionResponseContract();
     public final ResponseChoicesContract ResponseChoicesContract = new ResponseChoicesContract();
-    public final UserMultipleChoiceResponsesContract UserChoiceResponsesContract = new UserMultipleChoiceResponsesContract();
-    public final UserFreeDrawResponsesContract UserDrawResponsesContract = new UserFreeDrawResponsesContract();
-    public final UserFreeResponsesContract UserOpenResponsesContract = new UserFreeResponsesContract();
+    public final FreeDrawResponseContract FreeDrawResponseContract = new FreeDrawResponseContract();
+    public final FreeResponseResponseContract FreeResponseResponseContract = new FreeResponseResponseContract();
+    public final MultipleChoiceResponseContract MultipleChoiceResponseContract = new MultipleChoiceResponseContract();
     public final UserContract UserContract = new UserContract();
     public final UserActivityTypeContract UserActivityTypeContract = new UserActivityTypeContract();
+    public final UserResponseContract UserResponseContract = new UserResponseContract();
 }

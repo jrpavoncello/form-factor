@@ -13,14 +13,12 @@ import com.rhcloud.jop.formfactor.domain.UnitOfWork;
 import com.rhcloud.jop.formfactor.domain.repositories.IResponseChoiceRepository;
 import com.rhcloud.jop.formfactor.sqlite.FormFactorDB;
 import com.rhcloud.jop.formfactor.sqlite.datacontracts.FormFactorTables;
-import com.rhcloud.jop.formfactor.sqlite.datacontracts.ResponseChoicesContract;
 
-@SuppressWarnings("static-access")
 public class ResponseChoiceRepository implements IResponseChoiceRepository
 {
 	private SQLiteDatabase liteDB;
 	private UnitOfWork unitOfWork;
-	private final String TAG_NAME = "com.rhcloud.jop.formfactor.domain.dal.repositories.ResponseChoiceRepository";
+	private final String TAG_NAME = "com.rhcloud.jop.formfactor.domain.repositories.lite.ResponseChoiceRepository";
 	private FormFactorTables tables = FormFactorTables.getInstance();
 	
 	public ResponseChoiceRepository(UnitOfWork unitOfWork)

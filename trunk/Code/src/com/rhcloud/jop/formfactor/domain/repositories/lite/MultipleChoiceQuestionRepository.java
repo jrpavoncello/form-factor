@@ -15,7 +15,7 @@ public class MultipleChoiceQuestionRepository implements IMultipleChoiceQuestion
 {
 	private SQLiteDatabase liteDB;
 	private UnitOfWork unitOfWork;
-	private final String TAG_NAME = "com.rhcloud.jop.formfactor.domain.dal.repositories.MultipleChoiceQuestionRepository";
+	private final String TAG_NAME = "com.rhcloud.jop.formfactor.domain.repositories.lite.MultipleChoiceQuestionRepository";
 	private FormFactorTables tables = FormFactorTables.getInstance();
 	
 	public MultipleChoiceQuestionRepository(UnitOfWork unitOfWork)

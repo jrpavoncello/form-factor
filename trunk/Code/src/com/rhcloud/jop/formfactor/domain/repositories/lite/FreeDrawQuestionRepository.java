@@ -16,7 +16,7 @@ public class FreeDrawQuestionRepository implements IFreeDrawQuestionRepository
 {
 	private SQLiteDatabase liteDB;
 	private UnitOfWork unitOfWork;
-	private final String TAG_NAME = "com.rhcloud.jop.formfactor.domain.dal.repositories.FreeDrawQuestionRepository";
+	private final String TAG_NAME = "com.rhcloud.jop.formfactor.domain.repositories.lite.FreeDrawQuestionRepository";
 	private FormFactorTables tables = FormFactorTables.getInstance();
 	
 	public FreeDrawQuestionRepository(UnitOfWork unitOfWork)

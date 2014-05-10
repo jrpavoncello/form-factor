@@ -19,7 +19,7 @@ public class UserRepository implements IUserRepository
 {
 	private SQLiteDatabase liteDB;
 	private UnitOfWork unitOfWork;
-	private final String TAG_NAME = "com.rhcloud.jop.formfactor.domain.dal.repositories.UserRepository";
+	private final String TAG_NAME = "com.rhcloud.jop.formfactor.domain.repositories.lite.UserRepository";
 	private FormFactorTables tables = FormFactorTables.getInstance();
 	
 	public UserRepository(UnitOfWork unitOfWork)

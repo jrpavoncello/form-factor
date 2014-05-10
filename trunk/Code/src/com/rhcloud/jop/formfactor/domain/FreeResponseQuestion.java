@@ -6,16 +6,16 @@ import com.google.gson.annotations.SerializedName;
 
 public class FreeResponseQuestion extends Question implements IJSONSerializable
 {
-    @SerializedName("FreeResponseQuestion_FreeResponseQuestionID")
+    @SerializedName("FreeResponseQuestionID")
 	public long FreeResponseQuestionID = 0;
     
-    @SerializedName("FreeResponseQuestion_MaxLength")
+    @SerializedName("MaxLength")
 	public int MaxLength = 0;
     
-    @SerializedName("FreeResponseQuestion_MinLength")
+    @SerializedName("MinLength")
 	public int MinLength = 0;
     
-    @SerializedName("FreeResponseQuestion_Lines")
+    @SerializedName("Lines")
 	public int Lines = 0;
 
 	@Override

@@ -15,7 +15,7 @@ public class FreeResponseQuestionRepository implements IFreeResponseQuestionRepo
 {
 	private SQLiteDatabase liteDB;
 	private UnitOfWork unitOfWork;
-	private final String TAG_NAME = "com.rhcloud.jop.formfactor.domain.dal.repositories.FreeResponseQuestionRepository";
+	private final String TAG_NAME = "com.rhcloud.jop.formfactor.domain.repositories.lite.FreeResponseQuestionRepository";
 	private FormFactorTables tables = FormFactorTables.getInstance();
 	
 	public FreeResponseQuestionRepository(UnitOfWork unitOfWork)

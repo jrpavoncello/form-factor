@@ -2,13 +2,13 @@ package com.rhcloud.jop.formfactor.domain.repositories;
 
 import com.rhcloud.jop.formfactor.domain.UserResponse;
 
-public interface IResponseRepository
+public interface IUserResponseRepository
 {
 	public UserResponse GetByID(long ID);
 	
-	public void Add(UserResponse question);
+	public void Add(UserResponse response);
 	
-	public void DeleteByID(long formID);
+	public void DeleteByID(long ID);
 
-	public void Update(UserResponse question);
+	public void Update(UserResponse response);
 }

@@ -4,10 +4,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
 
-public class UserChoiceResponse extends UserResponse implements IJSONSerializable
+public class MultipleChoiceResponse extends QuestionResponse implements IJSONSerializable
 {
-    @SerializedName("UserOpenResponse_ResponseChoiceID")
-	public long ResponseChoiceID = 0;
+    @SerializedName("MultipleChoiceQuestionID")
+	public long MultipleChoiceResponseID = 0;
+
+    @SerializedName("ResponseChoiceID")
+    public long ResponseChoiceID = 0;
 
 	@Override
 	public String Serialize()
@@ -20,11 +23,13 @@ public class UserChoiceResponse extends UserResponse implements IJSONSerializabl
 	public void Read(String json)
 	{
 		Gson gson = new GsonBuilder().serializeNulls().create();
-		UserChoiceResponse response = gson.fromJson(json, this.getClass());
+		MultipleChoiceResponse response = gson.fromJson(json, this.getClass());
 		
 		this.ID = response.ID;
-		this.UserID = response.UserID;
+		this.UserResponseID = response.UserResponseID;
 		this.QuestionID = response.QuestionID;
+		
+		this.MultipleChoiceResponseID = response.MultipleChoiceResponseID;
 		this.ResponseChoiceID = response.ResponseChoiceID;
 	}
 }
