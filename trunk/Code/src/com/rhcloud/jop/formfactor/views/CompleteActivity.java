@@ -23,8 +23,10 @@ import com.rhcloud.jop.formfactor.domain.Question;
 import com.rhcloud.jop.formfactor.domain.QuestionType;
 import com.rhcloud.jop.formfactor.domain.UnitOfWork;
 import com.rhcloud.jop.formfactor.domain.User;
+import com.rhcloud.jop.formfactor.domain.UserResponse;
 import com.rhcloud.jop.formfactor.domain.dal.lite.FormFactorDataContext;
 import com.rhcloud.jop.formfactor.domain.services.FormService;
+import com.rhcloud.jop.formfactor.domain.services.ResponseService;
 import com.rhcloud.jop.formfactor.domain.services.UserService;
 import com.rhcloud.jop.formfactor.sqlite.FormFactorDB;
 import com.rhcloud.jop.formfactor.views.MainMenuActivityFragment.DrawerListener;
@@ -54,6 +56,7 @@ import android.widget.TextView;
 public class CompleteActivity extends FormFactorFragmentActivity implements ActionBar.TabListener, DrawerListener, OnTouchListener
 {
 	private Form mForm;
+	private UserResponse mUserResponse;
 	private User mCurrentUser = null;
 	private List<QuestionViewGroup> mQuestions = new ArrayList<QuestionViewGroup>();
 	private static final String TAG_NAME = "CompleteActivity";
@@ -86,12 +89,6 @@ public class CompleteActivity extends FormFactorFragmentActivity implements Acti
 		this.mQuestions.add(viewGroup);
 		
 		this.mQuestionsViewGroup.addView(viewGroup);
-		
-		UnitOfWork unitOfWork = new UnitOfWork(FormFactorDB.getInstance(this));
-		FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
-		FormService formService = new FormService(dataContext);
-		
-		formService.AddUpdateQuestion(question);
 	}
 	
 	public void addFreeResponse()
@@ -117,12 +114,6 @@ public class CompleteActivity extends FormFactorFragmentActivity implements Acti
 		this.mQuestions.add(freeResponseViewGroup);
 		
 		this.mQuestionsViewGroup.addView(freeResponseViewGroup);
-		
-		UnitOfWork unitOfWork = new UnitOfWork(FormFactorDB.getInstance(this));
-		FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
-		FormService formService = new FormService(dataContext);
-		
-		formService.AddUpdateQuestion(question);
 	}
 	
 	public void addMultipleChoice()
@@ -147,12 +138,6 @@ public class CompleteActivity extends FormFactorFragmentActivity implements Acti
 		this.mQuestions.add(multipleChoiceViewGroup);
 		
 		this.mQuestionsViewGroup.addView(multipleChoiceViewGroup);
-		
-		UnitOfWork unitOfWork = new UnitOfWork(FormFactorDB.getInstance(this));
-		FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
-		FormService formService = new FormService(dataContext);
-		
-		formService.AddUpdateQuestion(question);
 	}
 	
 	private void setQuestionNumbers()
@@ -223,13 +208,13 @@ public class CompleteActivity extends FormFactorFragmentActivity implements Acti
 		{
 			case R.id.menu_complete_edit_question_save:
 				this.mHasSavedState = false;
-				this.saveCurrentForm();
+				this.saveCurrentUserResponse();
 				return true;
 				
 			case R.id.menu_complete_edit_question_export:
 				this.mHasSavedState = false;
-				this.saveCurrentForm();
-				this.exportCurrentForm();
+				this.saveCurrentUserResponse();
+				this.sendUserResponse();
 				return true;
 				
 			default:
@@ -237,10 +222,10 @@ public class CompleteActivity extends FormFactorFragmentActivity implements Acti
 		}
 	}
 
-	private void exportCurrentForm()
+	private void sendUserResponse()
 	{
-		FormUploader formUploader = new FormUploader();
-		formUploader.execute(this.mForm);
+		ResponseUploader responseUploader = new ResponseUploader();
+		responseUploader.execute(this.mUserResponse);
 	}
 
 	@Override
@@ -283,14 +268,14 @@ public class CompleteActivity extends FormFactorFragmentActivity implements Acti
 		{
 			if(mForm != null)
 			{
-				this.saveCurrentForm();
+				this.saveCurrentUserResponse();
 				
-				if(savedInstanceState.containsKey(BundleKeys.CreateFormID))
+				if(savedInstanceState.containsKey(BundleKeys.CompleteFormID))
 				{
-					savedInstanceState.remove(BundleKeys.CreateFormID);
+					savedInstanceState.remove(BundleKeys.CompleteFormID);
 				}
 	
-				savedInstanceState.putLong(BundleKeys.CreateFormID, mForm.ID);
+				savedInstanceState.putLong(BundleKeys.CompleteFormID, mForm.ID);
 			}
 		}
 	}
@@ -298,7 +283,7 @@ public class CompleteActivity extends FormFactorFragmentActivity implements Acti
 	@Override
 	public void onStop()
 	{
-		this.saveCurrentForm();
+		this.saveCurrentUserResponse();
 		
 		super.onStop();
 	}
@@ -336,7 +321,7 @@ public class CompleteActivity extends FormFactorFragmentActivity implements Acti
 		
 	}
 
-	private void saveCurrentForm()
+	private void saveCurrentUserResponse()
 	{
 		if(!this.mHasSavedState)
 		{
@@ -344,16 +329,9 @@ public class CompleteActivity extends FormFactorFragmentActivity implements Acti
 			FormFactorDataContext dataContext = new FormFactorDataContext(unitOfWork);
 			
 			try
-			{
-				this.mForm.Questions.clear();
-				
-				for(QuestionViewGroup question : this.mQuestions)
-				{ 
-					this.mForm.Questions.add(question.getQuestion());
-				}
-				
-				FormService formService = new FormService(dataContext);
-				formService.CreateUpdateForm(mForm);
+			{				
+				ResponseService responseService = new ResponseService(dataContext);
+				responseService.CreateUpdateUserResponse(mUserResponse);
 				
 				this.mHasSavedState = true;
 			}
@@ -411,6 +389,9 @@ public class CompleteActivity extends FormFactorFragmentActivity implements Acti
 						
 						try
 						{
+							ResponseService responseService = new ResponseService(dataContext);
+							this.mUserResponse = responseService.GetUserResponseByID(formID);
+							
 							FormService formService = new FormService(dataContext);
 							this.mForm = formService.GetFormByID(formID);
 						}
@@ -466,30 +447,30 @@ public class CompleteActivity extends FormFactorFragmentActivity implements Acti
 		}
 	}
 	
-	public class FormUploader extends AsyncTask<Form, Integer, Void>
+	public class ResponseUploader extends AsyncTask<UserResponse, Integer, Void>
 	{
-		public FormUploader(){ }
+		public ResponseUploader(){ }
 		
 		@Override
-	    protected Void doInBackground(Form... forms)
+	    protected Void doInBackground(UserResponse... responses)
 		{
 			try
 			{
 		        HttpClient httpclient = new DefaultHttpClient(); 
 		        HttpPost httppost = new HttpPost("http://formfactor-jop.rhcloud.com/create.php");
 		        
-		        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(forms.length);
+		        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(responses.length);
 		        
-		        int size = forms.length;
+		        int size = responses.length;
 		        int i = 0;
-		        for(Form form : forms)
+		        for(UserResponse userResponse : responses)
 		        {
 		            if (isCancelled())
 		            {
 		            	break;
 		            }
 					
-		            String superCerealForm = form.Serialize();
+		            String superCerealForm = userResponse.Serialize();
 		            
 					nameValuePairs.add(new BasicNameValuePair("FormJSON", superCerealForm));
 			    	
@@ -503,7 +484,7 @@ public class CompleteActivity extends FormFactorFragmentActivity implements Acti
 					String responseWithID = "";
 					while((responseWithID = in.readLine()) != null)
 					{
-						form.ExternalID = Long.parseLong(responseWithID);
+						userResponse.ExternalID = Long.parseLong(responseWithID);
 					}
 					
 					in.close();

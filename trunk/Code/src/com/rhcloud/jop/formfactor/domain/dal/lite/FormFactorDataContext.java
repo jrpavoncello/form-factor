@@ -57,7 +57,7 @@ public class FormFactorDataContext implements IFormFactorDataContext
 	}
 
 	@Override
-	public IUserResponseRepository GetResponseRepository()
+	public IUserResponseRepository GetUserResponseRepository()
 	{
 		return this.ResponseRepo;
 	}
