@@ -4,18 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.rhcloud.jop.formfactor.common.Result;
-import com.rhcloud.jop.formfactor.domain.FreeDrawResponse;
-import com.rhcloud.jop.formfactor.domain.FreeResponseResponse;
-import com.rhcloud.jop.formfactor.domain.IFormFactorDataContext;
-import com.rhcloud.jop.formfactor.domain.MultipleChoiceResponse;
-import com.rhcloud.jop.formfactor.domain.QuestionResponse;
-import com.rhcloud.jop.formfactor.domain.UserResponse;
-import com.rhcloud.jop.formfactor.domain.repositories.IFreeDrawResponseRepository;
-import com.rhcloud.jop.formfactor.domain.repositories.IFreeResponseResponseRepository;
-import com.rhcloud.jop.formfactor.domain.repositories.IMultipleChoiceResponseRepository;
-import com.rhcloud.jop.formfactor.domain.repositories.IQuestionRepository;
-import com.rhcloud.jop.formfactor.domain.repositories.IQuestionResponseRepository;
-import com.rhcloud.jop.formfactor.domain.repositories.IUserResponseRepository;
+import com.rhcloud.jop.formfactor.domain.*;
+import com.rhcloud.jop.formfactor.domain.repositories.*;
 
 public class ResponseService
 {
@@ -24,6 +14,87 @@ public class ResponseService
 	public ResponseService(IFormFactorDataContext dataContext)
 	{
 		this.DataContext = dataContext;
+	}
+	
+	public UserResponse GetUserResponseByID(long userResponseID, List<Question> questions)
+	{
+		UserResponse response = null;
+
+		IUserResponseRepository userResponseRepo = DataContext.GetUserResponseRepository();
+		IQuestionResponseRepository questionResponseRepo = DataContext.GetQuestionResponseRepository();
+		IFreeDrawResponseRepository freeDrawResponseRepo = DataContext.GetFreeDrawResponseRepository();
+		IFreeResponseResponseRepository freeResponseResponseRepo = DataContext.GetFreeResponseResponseRepository();
+		IMultipleChoiceResponseRepository multipleChoiceResponseRepo = DataContext.GetMultipleChoiceResponseRepository();
+		
+		response = userResponseRepo.GetByID(userResponseID);
+		
+		response.QuestionResponses = questionResponseRepo.GetByUserResponseID(userResponseID);
+		
+		for(QuestionResponse questionResponse : response.QuestionResponses)
+		{
+			Question question = FindByID(questions, questionResponse.QuestionID);
+			
+			if(question != null)
+			{
+				switch(question.Type)
+				{
+				case FreeDraw:
+					
+					FreeDrawResponse fdResponse = new FreeDrawResponse();
+					
+					fdResponse.ID = questionResponse.ID;
+					fdResponse.UserResponseID = questionResponse.QuestionID;
+					fdResponse.QuestionID = questionResponse.QuestionID;
+					
+					freeDrawResponseRepo.GetByQuestionResponseID(fdResponse);
+					
+					questionResponse = fdResponse;
+					break;
+					
+				case FreeResponse:
+					
+					FreeResponseResponse frResponse = new FreeResponseResponse();
+					
+					frResponse.ID = questionResponse.ID;
+					frResponse.UserResponseID = questionResponse.QuestionID;
+					frResponse.QuestionID = questionResponse.QuestionID;
+					
+					freeResponseResponseRepo.GetByQuestionResponseID(frResponse);
+					
+					questionResponse = frResponse;
+					break;
+					
+				case MultipleChoice:
+					
+					MultipleChoiceResponse mcResponse = new MultipleChoiceResponse();
+					
+					mcResponse.ID = questionResponse.ID;
+					mcResponse.UserResponseID = questionResponse.QuestionID;
+					mcResponse.QuestionID = questionResponse.QuestionID;
+					
+					multipleChoiceResponseRepo.GetByQuestionResponseID(mcResponse);
+					
+					questionResponse = mcResponse;
+					break;
+					
+				default:
+					break;
+				}
+			}
+		}
+
+		return response;
+	}
+	
+	private Question FindByID(List<Question> questions, long ID)
+	{
+		for(Question question : questions)
+		{
+			if(question.ID == ID)
+				return question;
+		}
+		
+		return null;
 	}
 
 	public Result CreateUpdateUserResponse(UserResponse response)

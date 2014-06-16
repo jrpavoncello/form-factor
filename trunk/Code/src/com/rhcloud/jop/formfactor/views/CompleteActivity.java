@@ -386,11 +386,12 @@ public class CompleteActivity extends FormFactorFragmentActivity implements Acti
 					if(savedInstanceState.containsKey(BundleKeys.CompleteFormID))
 					{
 						long formID = savedInstanceState.getLong(BundleKeys.CompleteFormID);
+						long responseID = savedInstanceState.getLong(BundleKeys.CompleteResponseID);
 						
 						try
 						{
 							ResponseService responseService = new ResponseService(dataContext);
-							this.mUserResponse = responseService.GetUserResponseByID(formID);
+							this.mUserResponse = responseService.GetUserResponseByID(responseID);
 							
 							FormService formService = new FormService(dataContext);
 							this.mForm = formService.GetFormByID(formID);
