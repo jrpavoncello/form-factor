@@ -16,7 +16,7 @@ public class ResponseService
 		this.DataContext = dataContext;
 	}
 	
-	public UserResponse GetUserResponseByID(long userResponseID, List<Question> questions)
+	public UserResponse GetUserResponseByID(long userResponseID, Form form)
 	{
 		UserResponse response = null;
 
@@ -27,6 +27,8 @@ public class ResponseService
 		IMultipleChoiceResponseRepository multipleChoiceResponseRepo = DataContext.GetMultipleChoiceResponseRepository();
 		
 		response = userResponseRepo.GetByID(userResponseID);
+		
+		List<Question> questions = form.Questions;
 		
 		response.QuestionResponses = questionResponseRepo.GetByUserResponseID(userResponseID);
 		
@@ -92,6 +94,25 @@ public class ResponseService
 		{
 			if(question.ID == ID)
 				return question;
+		}
+		
+		return null;
+	}
+	
+	public UserResponse CreateNewUserResponse(User user, Form form)
+	{
+		UserResponse userResponse = new UserResponse();
+		userResponse.UserID = user.ID;
+
+		for(Question question : form.Questions)
+		{
+			QuestionResponse questionResponse = new QuestionResponse();
+			questionResponse.QuestionID = question.ID;
+		}
+		
+		if(CreateUpdateUserResponse(userResponse).Success)
+		{
+			return userResponse;
 		}
 		
 		return null;

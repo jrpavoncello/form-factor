@@ -390,11 +390,16 @@ public class CompleteActivity extends FormFactorFragmentActivity implements Acti
 						
 						try
 						{
-							ResponseService responseService = new ResponseService(dataContext);
-							this.mUserResponse = responseService.GetUserResponseByID(responseID);
-							
 							FormService formService = new FormService(dataContext);
 							this.mForm = formService.GetFormByID(formID);
+							
+							ResponseService responseService = new ResponseService(dataContext);
+							this.mUserResponse = responseService.GetUserResponseByID(responseID, this.mForm);
+							
+							if(this.mUserResponse == null)
+							{
+								this.mUserResponse = responseService.CreateNewUserResponse(this.mCurrentUser, this.mForm);
+							}
 						}
 						catch(Exception ex)
 						{
@@ -444,6 +449,12 @@ public class CompleteActivity extends FormFactorFragmentActivity implements Acti
 				titleView.setText("Oops, you are not a valid user..");
 			}
 			
+			if(this.mUserResponse == null)
+			{
+				TextView titleView = (TextView)this.findViewById(R.id.activity_complete_title);
+				titleView.setText("Something unexpected happened..");
+			}
+			
 			this.mHasResumedState = true;
 		}
 	}
@@ -485,7 +496,7 @@ public class CompleteActivity extends FormFactorFragmentActivity implements Acti
 					String responseWithID = "";
 					while((responseWithID = in.readLine()) != null)
 					{
-						userResponse.ExternalID = Long.parseLong(responseWithID);
+						//userResponse.ExternalID = Long.parseLong(responseWithID);
 					}
 					
 					in.close();
